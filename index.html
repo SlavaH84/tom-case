@@ -108,37 +108,100 @@
         .card-title { font-weight: bold; padding: 8px 10px; color: white; background: linear-gradient(135deg, #8B0000, #6A0000); font-size: 14px; }
         .card-price { padding: 6px; color: white; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #4CAF50, #2E7D32); }
         
-        /* === РУЛЕТКА — ИСПРАВЛЕННОЕ ЗАМЕДЛЕНИЕ === */
+        /* === 🔧 РУЛЕТКА — ИСПРАВЛЕННАЯ ВЕРСИЯ === */
         .roulette-container {
-            width: 100%; height: 200px; background: rgba(0,0,0,0.97);
-            position: absolute; top: 40%; overflow: hidden; display: flex; align-items: center;
-            border-top: 5px solid #FFD700; border-bottom: 5px solid #FFD700;
+            width: 100%; 
+            /* 🔧 АДАПТИВНОСТЬ: высота подстраивается под экран */
+            height: clamp(180px, 35vw, 220px); 
+            background: rgba(0,0,0,0.97);
+            position: absolute; 
+            top: 40%; 
+            overflow: hidden; 
+            display: flex; 
+            align-items: center;
+            border-top: 5px solid #FFD700; 
+            border-bottom: 5px solid #FFD700;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.5);
             border-radius: 10px;
+            /* 🔧 Маскировка краёв для плавного исчезновения */
+            mask: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+            -webkit-mask: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
         }
-        .roulette-track { display: flex; height: 100%; align-items: center; will-change: transform; }
-        .roulette-item {
-            min-width: 150px; height: 150px; background: white; margin: 0 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 60px;
-            border-bottom: 7px solid; border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25); transition: transform 0.2s, filter 0.2s;
-        }
-        .roulette-track.spinning .roulette-item { animation: motionBlur 0.06s infinite alternate; }
-        @keyframes motionBlur { 0% { filter: blur(0) brightness(1); } 100% { filter: blur(1px) brightness(0.95); } }
         
+        .roulette-track { 
+            display: flex; 
+            height: 100%; 
+            align-items: center; 
+            will-change: transform;
+            /* 🔧 ПЛАВНОЕ ЗАМЕДЛЕНИЕ: cubic-bezier(0.15, 0.9, 0.2, 1) */
+            transition: transform 10s cubic-bezier(0.15, 0.9, 0.2, 1);
+        }
+        
+        /* 🔧 АДАПТИВНЫЕ РАЗМЕРЫ ЭЛЕМЕНТОВ */
+        :root {
+            --item-width: clamp(120px, 28vw, 150px);
+            --item-gap: clamp(8px, 2vw, 10px);
+            --item-height: clamp(120px, 28vw, 150px);
+        }
+        
+        .roulette-item {
+            min-width: var(--item-width); 
+            height: var(--item-height); 
+            background: white; 
+            margin: 0 var(--item-gap);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: clamp(40px, 8vw, 60px);
+            border-bottom: 7px solid; 
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25); 
+            transition: transform 0.2s, filter 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .roulette-track.spinning .roulette-item { 
+            animation: motionBlur 0.06s infinite alternate; 
+        }
+        @keyframes motionBlur { 
+            0% { filter: blur(0) brightness(1); } 
+            100% { filter: blur(1px) brightness(0.95); } 
+        }
+        
+        /* 🔧 УКАЗАТЕЛЬ — ЦЕНТРАЛЬНАЯ СТРЕЛКА */
         .pointer {
-            position: absolute; top: 25%; left: 50%; transform: translateX(-50%);
-            width: 8px; height: 250px; background: linear-gradient(to bottom, #FFD700, #FF8C00, #FFD700);
-            z-index: 10; border-radius: 4px;
+            position: absolute; 
+            top: 25%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: clamp(6px, 1.5vw, 8px); 
+            height: clamp(200px, 45vw, 250px); 
+            background: linear-gradient(to bottom, #FFD700, #FF8C00, #FFD700);
+            z-index: 10; 
+            border-radius: 4px;
             box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700, 0 0 80px rgba(255, 215, 0, 0.6);
             animation: pointerPulse 1.5s infinite ease-in-out;
+            pointer-events: none; /* 🔧 Чтобы не мешал кликам */
         }
-        .pointer::before { content: '▼'; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 30px; color: #FFD700; text-shadow: 0 0 10px #FFD700; }
-        @keyframes pointerPulse { 0%, 100% { box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; } 50% { box-shadow: 0 0 35px #FFD700, 0 0 70px #FFD700, 0 0 100px rgba(255, 215, 0, 0.8); } }
+        .pointer::before { 
+            content: '▼'; 
+            position: absolute; 
+            top: -25px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            font-size: clamp(24px, 5vw, 30px); 
+            color: #FFD700; 
+            text-shadow: 0 0 10px #FFD700; 
+        }
+        @keyframes pointerPulse { 
+            0%, 100% { box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; } 
+            50% { box-shadow: 0 0 35px #FFD700, 0 0 70px #FFD700, 0 0 100px rgba(255, 215, 0, 0.8); } 
+        }
         
         .roulette-item.winner {
             animation: winnerPop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            z-index: 5; box-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 60px rgba(255, 215, 0, 0.5);
+            z-index: 5; 
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 60px rgba(255, 215, 0, 0.5);
             transform: scale(1.1);
         }
         @keyframes winnerPop {
@@ -478,13 +541,13 @@
 
         <!-- === OPENING (ROULETTE) === -->
         <div id="screen-opening" class="screen">
+            <!-- 🔧 УКАЗАТЕЛЬ — всегда по центру -->
             <div class="pointer"></div>
             <div class="roulette-container">
                 <div class="roulette-track" id="roulette-track"></div>
             </div>
-            <div style="position:absolute; bottom:20px; left:0; right:0; text-align:center; font-size:14px; color:#aaa;">
-                🎰 Крутится... ждём результат!
-            </div>
+            <!-- 🔧 Блок сообщений — текст ЗАМЕНЯЕТСЯ, не добавляется -->
+            <div id="roulette-message" style="position:absolute; bottom:20px; left:0; right:0; text-align:center; font-size:14px; color:#aaa; min-height:20px;"></div>
         </div>
 
         <!-- === RESULT === -->
@@ -634,13 +697,14 @@
         let introSkipped = false;
         let audioEnabled = true;
         let isLoadingData = true;
-        let navigationHistory = ['screen-main']; // Для обратной навигации
+        let navigationHistory = ['screen-main'];
         let selectedFlip = 'tom';
         let selectedUpgradeChance = 75;
         let dailyBonusClaimed = false;
         let wheelLastSpin = 0;
         let flipCooldown = false;
         let upgradeCooldown = false;
+        let rouletteSpinning = false; // 🔧 Блокировка повторного спина
 
         const caseItems = {
             backpack: [
@@ -719,12 +783,7 @@
 
         function loadData() {
             const key = `user_${tgUser.id}`;
-            const load = (k, def) => {
-                const v = tg?.CloudStorage ? null : localStorage.getItem(key+k);
-                return v ? (k.includes('inventory')||k.includes('stats') ? JSON.parse(v) : (k.includes('balance')?parseFloat(v):v)) : def;
-            };
             if (tg?.CloudStorage) {
-                // Упрощённая загрузка из облака
                 balance = 100; inventory = []; stats = {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0};
             } else {
                 balance = parseFloat(localStorage.getItem(key+'_balance')) || 100;
@@ -808,7 +867,6 @@
         function updateAllUI() { updateBalance(); updateProfileUI(); }
 
         function updateProfileUI() {
-            // Аватарка из Telegram
             const avatarPlaceholder = document.getElementById('avatar-placeholder');
             const avatarImg = document.getElementById('avatar-img');
             if (tgUser?.photo_url) {
@@ -833,46 +891,41 @@
         }
 
         // ============================================
-        // === НАПРАВЛЕННАЯ НАВИГАЦИЯ ===
+        // НАВИГАЦИЯ
         // ============================================
         function nav(screenId, direction) {
-            if (isLoadingData) { showToast('⏳ Загрузка...'); return; }
+            if (isLoadingData || rouletteSpinning) { showToast('⏳ Загрузка...'); return; }
             playSfx('click');
             
             const current = document.querySelector('.screen.active');
             const next = document.getElementById(screenId);
             if (!next) return;
             
-            // Обновляем историю
             if (direction === 'next') {
                 navigationHistory.push(screenId);
             } else if (direction === 'prev') {
                 navigationHistory.pop();
             }
             
-            // Анимация ухода текущего экрана
             if (current) {
                 current.classList.remove('active');
                 current.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
-                void current.offsetWidth; // reflow
+                void current.offsetWidth;
                 setTimeout(() => {
                     current.classList.remove('slide-next', 'slide-prev');
                 }, 350);
             }
             
-            // Анимация появления нового
             next.classList.remove('slide-next', 'slide-prev');
             next.classList.add('active');
             void next.offsetWidth;
             next.classList.add(direction === 'next' ? 'slide-in-next' : 'slide-in-prev');
             
-            // Зум-эффект для кейсов
             if (screenId === 'screen-opening') {
                 next.classList.add('zoom-enter');
                 setTimeout(() => next.classList.remove('zoom-enter'), 400);
             }
             
-            // Обновляем UI
             updateBalance();
             if (screenId === 'screen-inventory') renderInventory();
             if (screenId === 'screen-profile') updateProfileUI();
@@ -880,7 +933,7 @@
         }
 
         // ============================================
-        // === ИСПРАВЛЕННОЕ ИНТРО ===
+        // ИНТРО
         // ============================================
         function playIntro() {
             const t1 = document.getElementById('intro-text-1');
@@ -895,17 +948,11 @@
             
             if (introSkipped) return;
 
-            // Текст 1
             setTimeout(() => { if(!introSkipped && t1) t1.classList.add('intro-show'); }, 400);
-            // Текст 2
             setTimeout(() => { if(!introSkipped) { if(t1) t1.classList.remove('intro-show'); if(t2) t2.classList.add('intro-show'); } }, 2200);
-            // Имена появляются
             setTimeout(() => { if(!introSkipped && names) names.style.opacity = '1'; }, 4000);
-            // Зачёркивание
             setTimeout(() => { if(!introSkipped && strike) { strike.style.width = '120%'; playSfx('click'); } }, 5000);
-            // Старое имя уезжает
             setTimeout(() => { if(!introSkipped && oldName) { oldName.classList.add('crossed'); setTimeout(()=>oldName.classList.add('falling'), 200); } }, 5400);
-            // Новое имя появляется ПОСЛЕ ухода старого
             setTimeout(() => { 
                 if(!introSkipped) { 
                     if(newNameCont) newNameCont.classList.add('pop');
@@ -914,9 +961,7 @@
                     playSfx('win');
                 }
             }, 6200);
-            // Подзаголовок
             setTimeout(() => { if(!introSkipped && subtitle) subtitle.classList.add('show'); }, 7000);
-            // Авто-пропуск
             setTimeout(() => { if(!introSkipped) skipIntro(); }, 9500);
         }
 
@@ -928,9 +973,11 @@
         }
 
         // ============================================
-        // === РУЛЕТКА — ИСПРАВЛЕННОЕ ЗАМЕДЛЕНИЕ ===
+        // 🔧 РУЛЕТКА — ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ
         // ============================================
+        
         function openCaseDetails(type) {
+            if (rouletteSpinning) return;
             currentCaseType = type;
             casePrice = {backpack:3, chest:10, crypto:50, legendary:100}[type] || 3;
             const grid = document.getElementById('possible-items');
@@ -948,22 +995,41 @@
         }
 
         function startRoulette() {
-            if (balance < casePrice) { showToast(`❌ Нужно $${casePrice.toFixed(2)}`); if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('error');}catch{}; return; }
+            // 🔧 Защита от двойного клика
+            if (rouletteSpinning) return;
+            
+            if (balance < casePrice) { 
+                showToast(`❌ Нужно $${casePrice.toFixed(2)}`); 
+                if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('error');}catch{}; 
+                return; 
+            }
             
             const btn = document.getElementById('open-btn');
             if(btn) btn.disabled = true;
             
             balance -= casePrice; stats.casesOpened++; addXp(30); updateBalance();
             playSfx('click');
+            
+            // 🔧 ВИБРАЦИЯ ПРИ СТАРТЕ
+            if(tg?.HapticFeedback) {
+                try { tg.HapticFeedback.impactOccurred('medium'); } catch{}
+            }
+            
             nav('screen-opening', 'next');
-            if(tg?.HapticFeedback) try{tg.HapticFeedback.impactOccurred('medium');}catch{};
-
+            
             const track = document.getElementById('roulette-track');
+            const message = document.getElementById('roulette-message');
             if(!track) return;
+            
+            // 🔧 СБРОС ПЕРЕД НОВЫМ СПИНОМ
+            track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
-            track.classList.add('spinning');
             track.innerHTML = '';
-
+            rouletteSpinning = true;
+            
+            // 🔧 Текст ЗАМЕНЯЕТСЯ, не добавляется (исправление бага)
+            message.innerText = '🎰 Крутим...';
+            
             const items = caseItems[currentCaseType] || caseItems.backpack;
             const winnerIndex = 48;
             
@@ -985,52 +1051,60 @@
                 track.appendChild(div);
             }
 
-            // 🎯 Расчёт позиции
-            const itemW = 150 + 20;
-            const finalPos = -(winnerIndex * itemW) + (window.innerWidth/2) - 75;
+            // 🎯 Расчёт позиции с учётом адаптивности
+            const itemW = 150 + 20; // Базовый размер + отступ
+            const containerCenter = document.querySelector('.roulette-container').offsetWidth / 2;
+            const finalPos = -(winnerIndex * itemW) + containerCenter - (itemW / 2);
             
-            // === ИСПРАВЛЕННАЯ АНИМАЦИЯ С РЕАЛЬНЫМ ЗАМЕДЛЕНИЕМ ===
-            const duration = 10000; // 10 секунд
-            const slowStart = 7500; // первые 7.5с — быстро
-            let start = null, startPos = 0;
+            // 🔧 ПРИМЕНЯЕМ ПЛАВНЫЙ ПЕРЕХОД С cubic-bezier(0.15, 0.9, 0.2, 1)
+            // Это обеспечивает резкий старт и очень плавное, естественное замедление в конце
+            void track.offsetWidth; // reflow для применения transition
+            track.style.transition = 'transform 10s cubic-bezier(0.15, 0.9, 0.2, 1)';
+            track.style.transform = `translateX(${finalPos}px)`;
             
-            // Правильная функция замедления (easeOutQuint)
-            function easeOutQuint(t) { return 1 - Math.pow(1-t, 5); }
+            // 🔊 Звуки во время вращения
+            let clickCount = 0;
+            const soundInterval = setInterval(() => {
+                if(!rouletteSpinning) { clearInterval(soundInterval); return; }
+                playSfx('click');
+                clickCount++;
+                // Уменьшаем частоту звуков к концу
+                if(clickCount > 30) clearInterval(soundInterval);
+            }, 200);
             
-            function animate(ts) {
-                if(!start) start = ts;
-                const elapsed = ts - start;
-                let progress = Math.min(elapsed / duration, 1);
+            // 🏁 Обработка окончания анимации
+            track.addEventListener('transitionend', function onEnd() {
+                track.removeEventListener('transitionend', onEnd);
+                clearInterval(soundInterval);
                 
-                // Первые 75% — почти линейно, последние 25% — сильное замедление
-                if(progress < 0.75) {
-                    progress = progress / 0.75 * 0.75;
-                } else {
-                    const remaining = (progress - 0.75) / 0.25;
-                    progress = 0.75 + easeOutQuint(remaining) * 0.25;
+                track.classList.remove('spinning');
+                
+                // 🔧 Подсветка победителя
+                const winner = track.children[winnerIndex];
+                if(winner) { 
+                    winner.classList.add('winner'); 
+                    playSfx('win'); 
+                    
+                    // 🔧 ВИБРАЦИЯ ПРИ ВЫИГРЫШЕ
+                    if(tg?.HapticFeedback) {
+                        try { tg.HapticFeedback.notificationOccurred('success'); } catch{}
+                    }
                 }
                 
-                const pos = startPos + (finalPos - startPos) * progress;
-                track.style.transform = `translateX(${pos}px)`;
+                // 🔧 Текст ЗАМЕНЯЕТСЯ полностью
+                message.innerText = '✅ Готово! Нажми для результата...';
                 
-                // 🔊 Звуки: чаще в начале, реже в конце
-                if(elapsed < slowStart && elapsed % 250 < 25) { playSfx('click'); }
-                else if(elapsed >= slowStart && elapsed % 450 < 25) { playSfx('click'); }
-                
-                if(progress < 1) requestAnimationFrame(animate);
-                else {
-                    // 🏁 Финиш
-                    track.classList.remove('spinning');
-                    const winner = track.children[winnerIndex];
-                    if(winner) { winner.classList.add('winner'); playSfx('win'); if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{}; }
-                    setTimeout(() => { if(btn) btn.disabled=false; showResult(); }, 900);
-                }
-            }
-            requestAnimationFrame(animate);
+                setTimeout(() => { 
+                    rouletteSpinning = false;
+                    if(btn) btn.disabled = false; 
+                    showResult(); 
+                }, 900);
+            }, { once: true });
         }
 
         function showResult() {
             if(!currentItem) return;
+            // 🔧 Текст ЗАМЕНЯЕТСЯ, не добавляется
             document.getElementById('result-header').innerText = `${currentItem.name} | ${currentItem.collection}`;
             document.getElementById('result-price-top').innerText = "$"+currentItem.price.toFixed(2);
             const icon = document.getElementById('result-icon');
@@ -1061,7 +1135,7 @@
         function sellFromInventory(id, price) { inventory=inventory.filter(i=>i.invId!=id); balance+=price; stats.totalEarned+=price; updateBalance(); renderInventory(); playSfx('cash'); showToast(`💰 +$${price.toFixed(2)}`); }
 
         // ============================================
-        // === TOMCOIN FLIP ===
+        // TOMCOIN FLIP
         // ============================================
         function selectFlip(choice) {
             selectedFlip = choice;
@@ -1084,7 +1158,6 @@
             result.className = 'flip-result';
             result.innerText = '🪙 Крутится...';
             
-            // Анимация + результат
             setTimeout(() => {
                 const won = Math.random() < 0.5;
                 const actualSide = won ? selectedFlip : (selectedFlip==='tom'?'dog':'tom');
@@ -1113,7 +1186,7 @@
         }
 
         // ============================================
-        // === UPGRADER ===
+        // UPGRADER
         // ============================================
         function renderUpgrader() {
             const list = document.getElementById('upgrade-list');
@@ -1142,7 +1215,7 @@
             }
             upgradeCooldown = true;
             
-            const item = inventory[0]; // Берём первый предмет
+            const item = inventory[0];
             const result = document.getElementById('upgrader-result');
             
             result.className = 'upgrader-result';
@@ -1160,7 +1233,7 @@
                     playSfx('win');
                     if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
                 } else {
-                    inventory.shift(); // Удаляем предмет
+                    inventory.shift();
                     result.className = 'upgrader-result lose show';
                     result.innerText = `💔 Не вышло... ${item.name} исчез`;
                     playSfx('click');
@@ -1174,7 +1247,7 @@
         }
 
         // ============================================
-        // === WHEEL OF FORTUNE ===
+        // WHEEL OF FORTUNE
         // ============================================
         function updateWheelTimer() {
             const timer = document.getElementById('wheel-timer');
@@ -1233,11 +1306,9 @@
         // ИНИЦИАЛИЗАЦИЯ
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🎮 TOM CASE v2.0 — запуск');
+            console.log('🎮 TOM CASE v2.1 — запуск (исправленная рулетка)');
             loadData();
             playIntro();
-            
-            // Инициализация мини-игр
             renderUpgrader();
             updateWheelTimer();
         });
