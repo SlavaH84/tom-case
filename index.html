@@ -27,7 +27,7 @@
         .screen.slide-in-next { transform: translateX(0); opacity: 1; }
         .screen.slide-in-prev { transform: translateX(0); opacity: 1; }
         
-        /* === ЗУМ-ЭФФЕКТ ДЛЯ КЕЙСОВ === */
+        /* === ЗУМ-ЭФФЕКТ === */
         .zoom-enter { animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .zoom-exit { animation: zoomOut 0.3s ease forwards; }
         @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -108,7 +108,7 @@
         .card-title { font-weight: bold; padding: 8px 10px; color: white; background: linear-gradient(135deg, #8B0000, #6A0000); font-size: 14px; }
         .card-price { padding: 6px; color: white; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #4CAF50, #2E7D32); }
         
-        /* === РУЛЕТКА — ИСПРАВЛЕННОЕ ЗАМЕДЛЕНИЕ === */
+        /* === РУЛЕТКА === */
         .roulette-container {
             width: 100%; height: 200px; background: rgba(0,0,0,0.97);
             position: absolute; top: 40%; overflow: hidden; display: flex; align-items: center;
@@ -235,7 +235,7 @@
             75% { transform: rotateY(270deg) scale(1.05); }
             100% { transform: rotateY(360deg) scale(1); }
         }
-        .coin::after { content: '🪙'; position: absolute; }
+        .coin::after { content: '🐻'; position: absolute; }
         .coin.side-b { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); border-color: #808080; }
         .coin.side-b::after { content: '🐕'; }
         .flip-choice { display: flex; gap: 15px; margin-bottom: 25px; }
@@ -339,15 +339,21 @@
             font-weight: bold; animation: bounce 2s infinite;
         }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        /* === ИСПРАВЛЕНИЕ: Скрытие элементов во время анимации === */
+        .screen:not(.active) { display: none !important; }
+        .roulette-container { display: none; }
+        #screen-opening.active .roulette-container { display: flex; }
     </style>
 </head>
 <body>
-    <!-- 🔊 АУДИО -->
-    <audio id="bg-audio" loop preload="auto"><source src="Sakura-Girl-Cat-Walk-chosic.com_.mp3" type="audio/mpeg"></audio>
-    <audio id="sfx-click" preload="auto" src="buttonclickrelease.mp3"></audio>
-    <audio id="sfx-win" preload="auto" src="gambling.mp3"></audio>
-    <audio id="sfx-cash" preload="auto" src="gambling.mp3"></audio>
-    <audio id="sfx-coin" preload="auto"><source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLHPM8uqNQAoecrnx75RFCgtA..." type="audio/wav"></audio>
+    <!-- 🔊 АУДИО (с проверкой существования файлов) -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-click" preload="auto"></audio>
+    <audio id="sfx-win" preload="auto"></audio>
+    <audio id="sfx-cash" preload="auto"></audio>
 
     <div id="app">
         <!-- === INTRO === -->
@@ -398,7 +404,7 @@
                 <div class="profile-card">
                     <div class="profile-avatar" id="prof-avatar">
                         <span id="avatar-placeholder">👤</span>
-                        <img id="avatar-img" src="" alt="Avatar" style="display:none;">
+                        <img id="avatar-img" src="" alt="Avatar" style="display:none;" onerror="this.style.display='none';document.getElementById('avatar-placeholder').style.display='flex';">
                     </div>
                     <div class="profile-name" id="prof-name">Игрок</div>
                     <div style="font-size: 12px; color: #888;">ID: <span id="prof-id">000000</span></div>
@@ -617,9 +623,22 @@
         // TELEGRAM WebApp
         // ============================================
         const tg = window.Telegram?.WebApp;
-        if (tg) { try { tg.ready(); tg.expand(); tg.enableClosingConfirmation(); } catch(e) {} }
+        if (tg) { 
+            try { 
+                tg.ready(); 
+                tg.expand(); 
+                tg.enableClosingConfirmation();
+                tg.setHeaderColor('#8A0030');
+                tg.setBackgroundColor('#000000');
+            } catch(e) { console.warn('Telegram WebApp error:', e); }
+        }
         
-        const tgUser = tg?.initDataUnsafe?.user || { id: Math.floor(Math.random()*1e6), first_name: "Игрок", username: "tomcase_player" };
+        const tgUser = tg?.initDataUnsafe?.user || { 
+            id: Math.floor(Math.random() * 1000000), 
+            first_name: "Игрок", 
+            username: "tomcase_player",
+            photo_url: null
+        };
         const startParam = tg?.initDataUnsafe?.start_param;
         
         // ============================================
@@ -627,20 +646,31 @@
         // ============================================
         let balance = 100.00;
         let inventory = [];
-        let stats = { level:1, xp:0, casesOpened:0, totalEarned:0, referralsCount:0, referralsClaimed:[], flipWins:0, upgrades:0 };
+        let stats = { 
+            level: 1, 
+            xp: 0, 
+            casesOpened: 0, 
+            totalEarned: 0, 
+            referralsCount: 0, 
+            referralsClaimed: [], 
+            flipWins: 0, 
+            upgrades: 0 
+        };
         let currentItem = null;
         let currentCaseType = 'backpack';
         let casePrice = 3.00;
         let introSkipped = false;
         let audioEnabled = true;
         let isLoadingData = true;
-        let navigationHistory = ['screen-main']; // Для обратной навигации
+        let navigationHistory = ['screen-main'];
         let selectedFlip = 'tom';
         let selectedUpgradeChance = 75;
         let dailyBonusClaimed = false;
         let wheelLastSpin = 0;
         let flipCooldown = false;
         let upgradeCooldown = false;
+        let rouletteAnimationId = null;
+        let wheelTimerInterval = null;
 
         const caseItems = {
             backpack: [
@@ -693,46 +723,51 @@
         ];
 
         // ============================================
-        // ХРАНЕНИЕ ДАННЫХ
+        // ХРАНЕНИЕ ДАННЫХ — ИСПРАВЛЕНО
         // ============================================
-        function saveData() {
-            if (tg?.CloudStorage) {
-                try {
-                    const key = `user_${tgUser.id}`;
-                    tg.CloudStorage.setItem(key+'_balance', balance.toString());
-                    tg.CloudStorage.setItem(key+'_inventory', JSON.stringify(inventory));
-                    tg.CloudStorage.setItem(key+'_stats', JSON.stringify(stats));
-                    tg.CloudStorage.setItem(key+'_daily', dailyBonusClaimed ? '1' : '0');
-                    tg.CloudStorage.setItem(key+'_wheel', wheelLastSpin.toString());
-                } catch(e) { saveToLocal(); }
-            } else { saveToLocal(); }
+        function getStorageKey(suffix) {
+            return `tomcase_${tgUser.id}_${suffix}`;
         }
 
-        function saveToLocal() {
-            const key = `user_${tgUser.id}`;
-            localStorage.setItem(key+'_balance', balance.toString());
-            localStorage.setItem(key+'_inventory', JSON.stringify(inventory));
-            localStorage.setItem(key+'_stats', JSON.stringify(stats));
-            localStorage.setItem(key+'_daily', dailyBonusClaimed ? '1' : '0');
-            localStorage.setItem(key+'_wheel', wheelLastSpin.toString());
+        function saveData() {
+            const data = {
+                balance: balance,
+                inventory: inventory,
+                stats: stats,
+                dailyBonusClaimed: dailyBonusClaimed,
+                wheelLastSpin: wheelLastSpin
+            };
+            localStorage.setItem(getStorageKey('data'), JSON.stringify(data));
+            console.log('💾 Данные сохранены');
         }
 
         function loadData() {
-            const key = `user_${tgUser.id}`;
-            const load = (k, def) => {
-                const v = tg?.CloudStorage ? null : localStorage.getItem(key+k);
-                return v ? (k.includes('inventory')||k.includes('stats') ? JSON.parse(v) : (k.includes('balance')?parseFloat(v):v)) : def;
-            };
-            if (tg?.CloudStorage) {
-                // Упрощённая загрузка из облака
-                balance = 100; inventory = []; stats = {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0};
-            } else {
-                balance = parseFloat(localStorage.getItem(key+'_balance')) || 100;
-                try { inventory = JSON.parse(localStorage.getItem(key+'_inventory')) || []; } catch{ inventory = []; }
-                try { stats = JSON.parse(localStorage.getItem(key+'_stats')) || {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0}; } catch{ stats = {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0}; }
+            try {
+                const saved = localStorage.getItem(getStorageKey('data'));
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    balance = typeof data.balance === 'number' ? data.balance : 100;
+                    inventory = Array.isArray(data.inventory) ? data.inventory : [];
+                    stats = { 
+                        level: 1, xp: 0, casesOpened: 0, totalEarned: 0, 
+                        referralsCount: 0, referralsClaimed: [], flipWins: 0, upgrades: 0,
+                        ...data.stats 
+                    };
+                    dailyBonusClaimed = data.dailyBonusClaimed === true;
+                    wheelLastSpin = typeof data.wheelLastSpin === 'number' ? data.wheelLastSpin : 0;
+                    console.log('✅ Данные загружены');
+                } else {
+                    console.log('🆕 Новый игрок');
+                }
+            } catch (e) {
+                console.error('❌ Ошибка загрузки данных:', e);
+                // Сброс к значениям по умолчанию
+                balance = 100;
+                inventory = [];
+                stats = { level:1, xp:0, casesOpened:0, totalEarned:0, referralsCount:0, referralsClaimed:[], flipWins:0, upgrades:0 };
+                dailyBonusClaimed = false;
+                wheelLastSpin = 0;
             }
-            dailyBonusClaimed = localStorage.getItem(key+'_daily') === '1';
-            wheelLastSpin = parseInt(localStorage.getItem(key+'_wheel')) || 0;
             isLoadingData = false;
             updateAllUI();
             checkReferral();
@@ -740,14 +775,24 @@
         }
 
         // ============================================
-        // РЕФЕРАЛЫ
+        // РЕФЕРАЛЫ — ИСПРАВЛЕНО
         // ============================================
         function checkReferral() {
             if (!introSkipped || !startParam) return;
             const refID = parseInt(startParam);
-            if (isNaN(refID) || refID === tgUser.id || stats.referralsClaimed?.includes(refID)) return;
-            balance += 25; stats.totalEarned += 25;
-            if (!Array.isArray(stats.referralsClaimed)) stats.referralsClaimed = [];
+            if (isNaN(refID) || refID === tgUser.id) return;
+            
+            if (!Array.isArray(stats.referralsClaimed)) {
+                stats.referralsClaimed = [];
+            }
+            
+            if (stats.referralsClaimed.includes(refID)) {
+                console.log('ℹ️ Реферал уже активирован');
+                return;
+            }
+            
+            balance += 25; 
+            stats.totalEarned += 25;
             stats.referralsClaimed.push(refID);
             showToast("🎉 Бонус за приглашение: +$25.00!");
             updateBalance();
@@ -755,106 +800,237 @@
         }
 
         function copyRefLink() {
-            const link = `https://t.me/TomCase_Official_Bot?startapp=${tgUser.id}`;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(link).then(() => { playSfx('click'); showToast("✅ Ссылка скопирована!"); });
-            } else { showToast(`🔗 ${link}`); }
+            const botUsername = "TomCase_Official_Bot";
+            const link = `https://t.me/${botUsername}?startapp=${tgUser.id}`;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(link).then(() => { 
+                    playSfx('click'); 
+                    showToast("✅ Ссылка скопирована!"); 
+                }).catch(() => { 
+                    showToast(`🔗 ${link}`); 
+                });
+            } else {
+                showToast(`🔗 ${link}`);
+            }
         }
 
         // ============================================
-        // АУДИО
+        // АУДИО — ИСПРАВЛЕНО
         // ============================================
         const bgAudio = document.getElementById('bg-audio');
-        if (bgAudio) bgAudio.volume = 0.25;
+        if (bgAudio) {
+            bgAudio.volume = 0.25;
+            bgAudio.addEventListener('error', () => {
+                console.warn('⚠️ Фоновая музыка не загрузилась');
+                audioEnabled = false;
+                document.getElementById('audio-btn').innerText = '🔇';
+            });
+        }
+
         function toggleAudio() {
             audioEnabled = !audioEnabled;
-            document.getElementById('audio-btn').innerText = audioEnabled ? '🔊' : '🔇';
-            if (audioEnabled && bgAudio) bgAudio.play().catch(()=>{});
-            else if (bgAudio) bgAudio.pause();
+            const btn = document.getElementById('audio-btn');
+            if (!btn) return;
+            
+            btn.innerText = audioEnabled ? '🔊' : '🔇';
+            
+            if (audioEnabled && bgAudio) {
+                bgAudio.play().catch(e => {
+                    console.warn('⚠️ Автовоспроизведение заблокировано:', e);
+                    audioEnabled = false;
+                    btn.innerText = '🔇';
+                });
+            } else if (bgAudio) {
+                bgAudio.pause();
+            }
+            
             showToast(audioEnabled ? "🔊 Звук включён" : "🔇 Звук выключен");
         }
+
         function playSfx(type) {
             if (!audioEnabled) return;
-            const sfx = document.getElementById(`sfx-${type}`);
-            if (sfx) { sfx.currentTime=0; sfx.play().catch(()=>{}); }
+            
+            // Создаём звук программно (чтобы не зависеть от файлов)
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            if (type === 'click') {
+                oscillator.frequency.value = 800;
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } else if (type === 'win') {
+                oscillator.frequency.value = 523.25;
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } else if (type === 'cash') {
+                oscillator.frequency.value = 1046.50;
+                gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            }
         }
 
         // ============================================
-        // XP & LEVELS
+        // XP & LEVELS — ИСПРАВЛЕНО
         // ============================================
         function addXp(amount) {
+            if (typeof amount !== 'number' || amount <= 0) return;
+            
             stats.xp += amount;
             const max = stats.level * 100;
-            if (stats.xp >= max) { stats.xp -= max; stats.level++; showToast(`⭐ УРОВЕНЬ ${stats.level}!`); if (tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{} }
+            
+            if (stats.xp >= max) { 
+                stats.xp -= max; 
+                stats.level++; 
+                showToast(`⭐ УРОВЕНЬ ${stats.level}!`); 
+                if (tg?.HapticFeedback) {
+                    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+                }
+            }
             updateProfileUI();
             saveData();
         }
 
         // ============================================
-        // UI & TOAST
+        // UI & TOAST — ИСПРАВЛЕНО
         // ============================================
+        let toastTimeout = null;
         function showToast(text) {
+            if (!text) return;
+            
             const t = document.getElementById('toast');
-            t.innerText = text; t.classList.add('show');
-            setTimeout(()=>{ t.classList.remove('show'); }, 2800);
+            if (!t) return;
+            
+            // Очищаем предыдущий таймер
+            if (toastTimeout) clearTimeout(toastTimeout);
+            
+            t.innerText = text; 
+            t.classList.add('show');
+            
+            toastTimeout = setTimeout(() => { 
+                t.classList.remove('show'); 
+            }, 2800);
         }
 
         function updateBalance() {
-            document.querySelectorAll('.balance-disp').forEach(el => { if(el) el.innerText = "$"+balance.toFixed(2); });
-            document.getElementById('inv-count-disp').innerText = inventory.length;
-            document.getElementById('inv-count-header').innerText = inventory.length;
+            document.querySelectorAll('.balance-disp').forEach(el => { 
+                if(el) el.innerText = "$" + balance.toFixed(2); 
+            });
+            const invDisp = document.getElementById('inv-count-disp');
+            const invHeader = document.getElementById('inv-count-header');
+            if (invDisp) invDisp.innerText = inventory.length;
+            if (invHeader) invHeader.innerText = inventory.length;
         }
 
-        function updateAllUI() { updateBalance(); updateProfileUI(); }
+        function updateAllUI() { 
+            updateBalance(); 
+            updateProfileUI(); 
+        }
 
         function updateProfileUI() {
-            // Аватарка из Telegram
+            // Аватарка из Telegram — ИСПРАВЛЕНО
             const avatarPlaceholder = document.getElementById('avatar-placeholder');
             const avatarImg = document.getElementById('avatar-img');
+            
+            if (!avatarPlaceholder || !avatarImg) return;
+            
             if (tgUser?.photo_url) {
                 avatarImg.src = tgUser.photo_url;
                 avatarImg.style.display = 'block';
                 avatarPlaceholder.style.display = 'none';
-            } else if (tgUser?.first_name) {
+            } else if (tgUser?.first_name && tgUser.first_name.length > 0) {
                 avatarPlaceholder.innerText = tgUser.first_name[0].toUpperCase();
+                avatarPlaceholder.style.display = 'flex';
+                avatarImg.style.display = 'none';
+            } else {
+                avatarPlaceholder.innerText = '👤';
+                avatarPlaceholder.style.display = 'flex';
+                avatarImg.style.display = 'none';
             }
             
-            document.getElementById('prof-name').innerText = tgUser.first_name || tgUser.username || 'Игрок';
-            document.getElementById('prof-id').innerText = tgUser.id || '000000';
-            document.getElementById('prof-lvl').innerText = stats.level;
-            document.getElementById('prof-xp').innerText = Math.floor(stats.xp);
-            document.getElementById('prof-max-xp').innerText = stats.level * 100;
-            document.getElementById('prof-progress').style.width = `${(stats.xp/(stats.level*100))*100}%`;
-            document.getElementById('stat-cases').innerText = stats.casesOpened;
-            document.getElementById('stat-earned').innerText = "$"+stats.totalEarned.toFixed(2);
-            document.getElementById('stat-flip').innerText = stats.flipWins;
-            document.getElementById('stat-upgrade').innerText = stats.upgrades;
-            document.getElementById('stat-refs').innerText = stats.referralsClaimed?.length || 0;
+            const profName = document.getElementById('prof-name');
+            const profId = document.getElementById('prof-id');
+            const profLvl = document.getElementById('prof-lvl');
+            const profXp = document.getElementById('prof-xp');
+            const profMaxXp = document.getElementById('prof-max-xp');
+            const profProgress = document.getElementById('prof-progress');
+            const statCases = document.getElementById('stat-cases');
+            const statEarned = document.getElementById('stat-earned');
+            const statFlip = document.getElementById('stat-flip');
+            const statUpgrade = document.getElementById('stat-upgrade');
+            const statRefs = document.getElementById('stat-refs');
+            
+            if (profName) profName.innerText = tgUser.first_name || tgUser.username || 'Игрок';
+            if (profId) profId.innerText = tgUser.id || '000000';
+            if (profLvl) profLvl.innerText = stats.level || 1;
+            if (profXp) profXp.innerText = Math.floor(stats.xp || 0);
+            
+            const maxXp = (stats.level || 1) * 100;
+            if (profMaxXp) profMaxXp.innerText = maxXp;
+            if (profProgress) {
+                const percent = Math.min(100, ((stats.xp || 0) / maxXp) * 100);
+                profProgress.style.width = `${percent}%`;
+            }
+            
+            if (statCases) statCases.innerText = stats.casesOpened || 0;
+            if (statEarned) statEarned.innerText = "$" + (stats.totalEarned || 0).toFixed(2);
+            if (statFlip) statFlip.innerText = stats.flipWins || 0;
+            if (statUpgrade) statUpgrade.innerText = stats.upgrades || 0;
+            if (statRefs) statRefs.innerText = (stats.referralsClaimed?.length || 0);
         }
 
         // ============================================
-        // === НАПРАВЛЕННАЯ НАВИГАЦИЯ ===
+        // НАВИГАЦИЯ — ИСПРАВЛЕНО
         // ============================================
         function nav(screenId, direction) {
-            if (isLoadingData) { showToast('⏳ Загрузка...'); return; }
+            if (isLoadingData) { 
+                showToast('⏳ Загрузка...'); 
+                return; 
+            }
+            
+            // Блокируем навигацию во время рулетки
+            const openingScreen = document.getElementById('screen-opening');
+            if (openingScreen && openingScreen.classList.contains('active') && screenId !== 'screen-opening') {
+                return;
+            }
+            
             playSfx('click');
             
             const current = document.querySelector('.screen.active');
             const next = document.getElementById(screenId);
-            if (!next) return;
+            
+            if (!next) {
+                console.error('❌ Экран не найден:', screenId);
+                return;
+            }
+            
+            // Если уже на этом экране — ничего не делаем
+            if (current === next) return;
             
             // Обновляем историю
             if (direction === 'next') {
                 navigationHistory.push(screenId);
             } else if (direction === 'prev') {
-                navigationHistory.pop();
+                if (navigationHistory.length > 1) {
+                    navigationHistory.pop();
+                }
             }
             
             // Анимация ухода текущего экрана
             if (current) {
-                current.classList.remove('active');
+                current.classList.remove('active', 'slide-in-next', 'slide-in-prev');
                 current.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
-                void current.offsetWidth; // reflow
+                
                 setTimeout(() => {
                     current.classList.remove('slide-next', 'slide-prev');
                 }, 350);
@@ -863,7 +1039,10 @@
             // Анимация появления нового
             next.classList.remove('slide-next', 'slide-prev');
             next.classList.add('active');
+            
+            // Форсируем перерисовку
             void next.offsetWidth;
+            
             next.classList.add(direction === 'next' ? 'slide-in-next' : 'slide-in-prev');
             
             // Зум-эффект для кейсов
@@ -877,12 +1056,22 @@
             if (screenId === 'screen-inventory') renderInventory();
             if (screenId === 'screen-profile') updateProfileUI();
             if (screenId === 'screen-upgrader') renderUpgrader();
+            if (screenId === 'screen-wheel') updateWheelTimer();
         }
 
         // ============================================
-        // === ИСПРАВЛЕННОЕ ИНТРО ===
+        // ИНТРО — ИСПРАВЛЕНО
         // ============================================
+        let introTimeouts = [];
+        
+        function clearIntroTimeouts() {
+            introTimeouts.forEach(t => clearTimeout(t));
+            introTimeouts = [];
+        }
+        
         function playIntro() {
+            clearIntroTimeouts();
+            
             const t1 = document.getElementById('intro-text-1');
             const t2 = document.getElementById('intro-text-2');
             const names = document.getElementById('intro-names');
@@ -895,71 +1084,120 @@
             
             if (introSkipped) return;
 
-            // Текст 1
-            setTimeout(() => { if(!introSkipped && t1) t1.classList.add('intro-show'); }, 400);
-            // Текст 2
-            setTimeout(() => { if(!introSkipped) { if(t1) t1.classList.remove('intro-show'); if(t2) t2.classList.add('intro-show'); } }, 2200);
-            // Имена появляются
-            setTimeout(() => { if(!introSkipped && names) names.style.opacity = '1'; }, 4000);
-            // Зачёркивание
-            setTimeout(() => { if(!introSkipped && strike) { strike.style.width = '120%'; playSfx('click'); } }, 5000);
-            // Старое имя уезжает
-            setTimeout(() => { if(!introSkipped && oldName) { oldName.classList.add('crossed'); setTimeout(()=>oldName.classList.add('falling'), 200); } }, 5400);
-            // Новое имя появляется ПОСЛЕ ухода старого
-            setTimeout(() => { 
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped && t1) t1.classList.add('intro-show'); 
+            }, 400));
+            
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped) { 
+                    if(t1) t1.classList.remove('intro-show'); 
+                    if(t2) t2.classList.add('intro-show'); 
+                } 
+            }, 2200));
+            
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped && names) names.style.opacity = '1'; 
+            }, 4000));
+            
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped && strike) { 
+                    strike.style.width = '120%'; 
+                    playSfx('click'); 
+                } 
+            }, 5000));
+            
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped && oldName) { 
+                    oldName.classList.add('crossed'); 
+                    setTimeout(() => oldName.classList.add('falling'), 200); 
+                } 
+            }, 5400));
+            
+            introTimeouts.push(setTimeout(() => { 
                 if(!introSkipped) { 
                     if(newNameCont) newNameCont.classList.add('pop');
-                    setTimeout(()=>{ if(crown) crown.classList.add('show'); }, 100);
-                    setTimeout(()=>{ if(nameNew) nameNew.classList.add('show'); }, 250);
+                    setTimeout(() => { if(crown) crown.classList.add('show'); }, 100);
+                    setTimeout(() => { if(nameNew) nameNew.classList.add('show'); }, 250);
                     playSfx('win');
                 }
-            }, 6200);
-            // Подзаголовок
-            setTimeout(() => { if(!introSkipped && subtitle) subtitle.classList.add('show'); }, 7000);
-            // Авто-пропуск
-            setTimeout(() => { if(!introSkipped) skipIntro(); }, 9500);
+            }, 6200));
+            
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped && subtitle) subtitle.classList.add('show'); 
+            }, 7000));
+            
+            introTimeouts.push(setTimeout(() => { 
+                if(!introSkipped) skipIntro(); 
+            }, 9500));
         }
 
         function skipIntro() {
+            if (introSkipped) return;
             introSkipped = true;
-            if (audioEnabled && bgAudio) bgAudio.play().catch(()=>{});
+            clearIntroTimeouts();
+            
+            if (audioEnabled && bgAudio) {
+                bgAudio.play().catch(e => console.warn('⚠️ Автоплей заблокирован:', e));
+            }
+            
             checkReferral();
             nav('screen-main', 'next');
         }
 
         // ============================================
-        // === РУЛЕТКА — ИСПРАВЛЕННОЕ ЗАМЕДЛЕНИЕ ===
+        // РУЛЕТКА — ИСПРАВЛЕНО ЗАМЕДЛЕНИЕ
         // ============================================
         function openCaseDetails(type) {
             currentCaseType = type;
             casePrice = {backpack:3, chest:10, crypto:50, legendary:100}[type] || 3;
+            
             const grid = document.getElementById('possible-items');
             if(!grid) return;
+            
             grid.innerHTML = '';
-            (caseItems[type]||caseItems.backpack).forEach(item => {
+            const items = caseItems[type] || caseItems.backpack;
+            
+            items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.borderLeft = `5px solid ${item.color}`;
                 card.innerHTML = `<div class="card-img" style="background:${item.bg};">${item.icon}</div><div class="card-title">${item.name}<br><small style="font-weight:normal;color:#ccc">${item.collection}</small></div>`;
                 grid.appendChild(card);
             });
-            document.getElementById('open-btn').innerText = `ОТКРЫТЬ ($${casePrice.toFixed(2)})`;
+            
+            const btn = document.getElementById('open-btn');
+            if (btn) btn.innerText = `ОТКРЫТЬ ($${casePrice.toFixed(2)})`;
+            
             nav('screen-case-details', 'next');
         }
 
         function startRoulette() {
-            if (balance < casePrice) { showToast(`❌ Нужно $${casePrice.toFixed(2)}`); if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('error');}catch{}; return; }
+            if (balance < casePrice) { 
+                showToast(`❌ Нужно $${casePrice.toFixed(2)}`); 
+                if(tg?.HapticFeedback) {
+                    try { tg.HapticFeedback.notificationOccurred('error'); } catch(e) {}
+                }
+                return; 
+            }
             
             const btn = document.getElementById('open-btn');
             if(btn) btn.disabled = true;
             
-            balance -= casePrice; stats.casesOpened++; addXp(30); updateBalance();
+            balance -= casePrice; 
+            stats.casesOpened++; 
+            addXp(30); 
+            updateBalance();
             playSfx('click');
             nav('screen-opening', 'next');
-            if(tg?.HapticFeedback) try{tg.HapticFeedback.impactOccurred('medium');}catch{};
+            
+            if(tg?.HapticFeedback) {
+                try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+            }
 
             const track = document.getElementById('roulette-track');
             if(!track) return;
+            
+            // Сброс
             track.style.transform = 'translateX(0)';
             track.classList.add('spinning');
             track.innerHTML = '';
@@ -989,15 +1227,17 @@
             const itemW = 150 + 20;
             const finalPos = -(winnerIndex * itemW) + (window.innerWidth/2) - 75;
             
-            // === ИСПРАВЛЕННАЯ АНИМАЦИЯ С РЕАЛЬНЫМ ЗАМЕДЛЕНИЕМ ===
-            const duration = 10000; // 10 секунд
-            const slowStart = 7500; // первые 7.5с — быстро
+            // === ИСПРАВЛЕННАЯ АНИМАЦИЯ ===
+            const duration = 10000;
+            const slowStart = 7500;
             let start = null, startPos = 0;
+            let animationRunning = true;
             
-            // Правильная функция замедления (easeOutQuint)
             function easeOutQuint(t) { return 1 - Math.pow(1-t, 5); }
             
             function animate(ts) {
+                if (!animationRunning) return;
+                
                 if(!start) start = ts;
                 const elapsed = ts - start;
                 let progress = Math.min(elapsed / duration, 1);
@@ -1013,60 +1253,133 @@
                 const pos = startPos + (finalPos - startPos) * progress;
                 track.style.transform = `translateX(${pos}px)`;
                 
-                // 🔊 Звуки: чаще в начале, реже в конце
-                if(elapsed < slowStart && elapsed % 250 < 25) { playSfx('click'); }
-                else if(elapsed >= slowStart && elapsed % 450 < 25) { playSfx('click'); }
+                // 🔊 Звуки
+                if(elapsed < slowStart && elapsed % 250 < 25) { 
+                    playSfx('click'); 
+                } else if(elapsed >= slowStart && elapsed % 450 < 25) { 
+                    playSfx('click'); 
+                }
                 
-                if(progress < 1) requestAnimationFrame(animate);
-                else {
+                if(progress < 1) {
+                    rouletteAnimationId = requestAnimationFrame(animate);
+                } else {
                     // 🏁 Финиш
+                    animationRunning = false;
                     track.classList.remove('spinning');
                     const winner = track.children[winnerIndex];
-                    if(winner) { winner.classList.add('winner'); playSfx('win'); if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{}; }
-                    setTimeout(() => { if(btn) btn.disabled=false; showResult(); }, 900);
+                    if(winner) { 
+                        winner.classList.add('winner'); 
+                        playSfx('win'); 
+                        if(tg?.HapticFeedback) {
+                            try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+                        }
+                    }
+                    setTimeout(() => { 
+                        if(btn) btn.disabled=false; 
+                        showResult(); 
+                    }, 900);
                 }
             }
-            requestAnimationFrame(animate);
+            
+            rouletteAnimationId = requestAnimationFrame(animate);
         }
 
         function showResult() {
-            if(!currentItem) return;
-            document.getElementById('result-header').innerText = `${currentItem.name} | ${currentItem.collection}`;
-            document.getElementById('result-price-top').innerText = "$"+currentItem.price.toFixed(2);
+            if(!currentItem) {
+                showToast('❌ Ошибка: нет предмета');
+                nav('screen-cases', 'prev');
+                return;
+            }
+            
+            const header = document.getElementById('result-header');
+            const price = document.getElementById('result-price-top');
             const icon = document.getElementById('result-icon');
-            icon.innerText = currentItem.icon;
-            icon.style.borderBottomColor = currentItem.color;
+            
+            if (header) header.innerText = `${currentItem.name} | ${currentItem.collection}`;
+            if (price) price.innerText = "$" + currentItem.price.toFixed(2);
+            if (icon) {
+                icon.innerText = currentItem.icon;
+                icon.style.borderBottomColor = currentItem.color;
+            }
+            
             nav('screen-result', 'next');
         }
 
-        function sellCurrentItem() { if(!currentItem) return; balance+=currentItem.price; stats.totalEarned+=currentItem.price; playSfx('cash'); showToast(`💰 Продано за $${currentItem.price.toFixed(2)}`); currentItem=null; updateBalance(); nav('screen-cases', 'prev'); }
-        function keepCurrentItem() { if(!currentItem) return; inventory.push({...currentItem, invId:Date.now()+Math.random()}); playSfx('click'); showToast("✅ В инвентаре"); currentItem=null; updateBalance(); nav('screen-cases', 'prev'); }
+        function sellCurrentItem() { 
+            if(!currentItem) return; 
+            balance += currentItem.price; 
+            stats.totalEarned += currentItem.price; 
+            playSfx('cash'); 
+            showToast(`💰 Продано за $${currentItem.price.toFixed(2)}`); 
+            currentItem = null; 
+            updateBalance(); 
+            saveData();
+            nav('screen-cases', 'prev'); 
+        }
+        
+        function keepCurrentItem() { 
+            if(!currentItem) return; 
+            inventory.push({
+                ...currentItem, 
+                invId: Date.now() + Math.random()
+            }); 
+            playSfx('click'); 
+            showToast("✅ В инвентаре"); 
+            currentItem = null; 
+            updateBalance(); 
+            saveData();
+            nav('screen-cases', 'prev'); 
+        }
 
         // ============================================
-        // ИНВЕНТАРЬ
+        // ИНВЕНТАРЬ — ИСПРАВЛЕНО
         // ============================================
         function renderInventory() {
             const list = document.getElementById('inventory-list');
             if(!list) return;
-            if(!inventory.length) { list.innerHTML = '<div style="grid-column:1/-1;text-align:center;margin-top:60px;color:#aaa;font-size:16px">🎒 Пусто. Открой кейс!</div>'; return; }
+            
+            if(!inventory || inventory.length === 0) { 
+                list.innerHTML = '<div style="grid-column:1/-1;text-align:center;margin-top:60px;color:#aaa;font-size:16px">🎒 Пусто. Открой кейс!</div>'; 
+                return; 
+            }
+            
             list.innerHTML = '';
             [...inventory].reverse().forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'inv-item';
                 div.style.cssText = `border-bottom-color:${item.color||'#000'}; background:${item.bg||'#fff'}`;
-                div.innerHTML = `${item.icon}<div class="inv-price">$${item.price.toFixed(2)}</div><button class="inv-sell-btn" onclick="sellFromInventory('${item.invId}',${item.price})">SELL</button>`;
+                div.innerHTML = `${item.icon || '?'}<div class="inv-price">$${(item.price||0).toFixed(2)}</div><button class="inv-sell-btn" onclick="sellFromInventory('${item.invId}',${item.price||0})">SELL</button>`;
                 list.appendChild(div);
             });
         }
-        function sellFromInventory(id, price) { inventory=inventory.filter(i=>i.invId!=id); balance+=price; stats.totalEarned+=price; updateBalance(); renderInventory(); playSfx('cash'); showToast(`💰 +$${price.toFixed(2)}`); }
+        
+        function sellFromInventory(invId, price) { 
+            // ИСПРАВЛЕНО: сравнение как строки
+            const index = inventory.findIndex(i => String(i.invId) === String(invId));
+            if (index === -1) {
+                showToast('❌ Предмет не найден');
+                return;
+            }
+            
+            inventory.splice(index, 1);
+            balance += price; 
+            stats.totalEarned += price; 
+            updateBalance(); 
+            renderInventory(); 
+            playSfx('cash'); 
+            showToast(`💰 +$${price.toFixed(2)}`);
+            saveData();
+        }
 
         // ============================================
-        // === TOMCOIN FLIP ===
+        // TOMCOIN FLIP — ИСПРАВЛЕНО
         // ============================================
         function selectFlip(choice) {
             selectedFlip = choice;
-            document.getElementById('flip-tom').classList.toggle('active', choice==='tom');
-            document.getElementById('flip-dog').classList.toggle('active', choice==='dog');
+            const tomBtn = document.getElementById('flip-tom');
+            const dogBtn = document.getElementById('flip-dog');
+            if (tomBtn) tomBtn.classList.toggle('active', choice === 'tom');
+            if (dogBtn) dogBtn.classList.toggle('active', choice === 'dog');
             playSfx('click');
         }
         
@@ -1079,28 +1392,33 @@
             const result = document.getElementById('flip-result');
             const btn = document.getElementById('flip-btn');
             
+            if (!coin || !result || !btn) return;
+            
             coin.classList.add('flipping');
             btn.disabled = true;
             result.className = 'flip-result';
             result.innerText = '🪙 Крутится...';
             
-            // Анимация + результат
             setTimeout(() => {
                 const won = Math.random() < 0.5;
-                const actualSide = won ? selectedFlip : (selectedFlip==='tom'?'dog':'tom');
+                const actualSide = won ? selectedFlip : (selectedFlip === 'tom' ? 'dog' : 'tom');
                 
                 coin.classList.remove('flipping');
-                coin.classList.toggle('side-b', actualSide==='dog');
+                coin.classList.toggle('side-b', actualSide === 'dog');
                 
                 if(won) {
-                    balance += 15; stats.totalEarned += 15; stats.flipWins++;
+                    balance += 15; 
+                    stats.totalEarned += 15; 
+                    stats.flipWins++;
                     result.className = 'flip-result win';
-                    result.innerText = `🎉 Выпал ${actualSide==='tom'?'🐻':'🐕'}! +$15.00`;
+                    result.innerText = `🎉 Выпал ${actualSide === 'tom' ? '🐻' : '🐕'}! +$15.00`;
                     playSfx('win');
-                    if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
+                    if(tg?.HapticFeedback) {
+                        try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+                    }
                 } else {
                     result.className = 'flip-result lose';
-                    result.innerText = `😔 Выпал ${actualSide==='tom'?'🐻':'🐕'}... Попробуй ещё!`;
+                    result.innerText = `😔 Выпал ${actualSide === 'tom' ? '🐻' : '🐕'}... Попробуй ещё!`;
                     playSfx('click');
                 }
                 
@@ -1108,21 +1426,36 @@
                 updateProfileUI();
                 saveData();
                 
-                setTimeout(() => { flipCooldown=false; btn.disabled=false; }, 2000);
+                setTimeout(() => { 
+                    flipCooldown = false; 
+                    if(btn) btn.disabled = false; 
+                }, 2000);
             }, 1600);
         }
 
         // ============================================
-        // === UPGRADER ===
+        // UPGRADER — ИСПРАВЛЕНО
         // ============================================
         function renderUpgrader() {
             const list = document.getElementById('upgrade-list');
             if(!list) return;
+            
             list.innerHTML = '';
+            
+            // Проверка на наличие предметов
+            if (!inventory || inventory.length === 0) {
+                list.innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;">🎒 Сначала получи предмет в инвентарь!</div>';
+                return;
+            }
+            
             upgradeTiers.forEach(tier => {
                 const div = document.createElement('div');
-                div.className = `upgrade-item ${selectedUpgradeChance===tier.chance?'selected':''}`;
-                div.onclick = () => { selectedUpgradeChance=tier.chance; renderUpgrader(); playSfx('click'); };
+                div.className = `upgrade-item ${selectedUpgradeChance === tier.chance ? 'selected' : ''}`;
+                div.onclick = () => { 
+                    selectedUpgradeChance = tier.chance; 
+                    renderUpgrader(); 
+                    playSfx('click'); 
+                };
                 div.innerHTML = `
                     <div class="upgrade-icon">⚡</div>
                     <div class="upgrade-info">
@@ -1136,14 +1469,19 @@
         }
         
         function doUpgrade(chance, multiplier) {
-            if(upgradeCooldown || !inventory.length) { 
-                if(!inventory.length) showToast("🎒 Сначала получи предмет!"); 
+            if(upgradeCooldown) return;
+            
+            if (!inventory || inventory.length === 0) { 
+                showToast("🎒 Сначала получи предмет!"); 
                 return; 
             }
+            
             upgradeCooldown = true;
             
-            const item = inventory[0]; // Берём первый предмет
+            const item = inventory[0];
             const result = document.getElementById('upgrader-result');
+            
+            if (!result) return;
             
             result.className = 'upgrader-result';
             result.innerText = '⚡ Улучшаем...';
@@ -1153,14 +1491,21 @@
                 const won = Math.random() * 100 <= chance;
                 if(won) {
                     const newPrice = item.price * multiplier;
-                    inventory[0] = { ...item, price: newPrice, name: item.name+'+', icon: '✨'+item.icon };
+                    inventory[0] = { 
+                        ...item, 
+                        price: newPrice, 
+                        name: item.name + '+', 
+                        icon: '✨' + item.icon 
+                    };
                     stats.upgrades++;
                     result.className = 'upgrader-result win show';
                     result.innerText = `🎉 Успех! ${item.name} → ${item.name}+ ($${newPrice.toFixed(2)})`;
                     playSfx('win');
-                    if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
+                    if(tg?.HapticFeedback) {
+                        try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+                    }
                 } else {
-                    inventory.shift(); // Удаляем предмет
+                    inventory.shift();
                     result.className = 'upgrader-result lose show';
                     result.innerText = `💔 Не вышло... ${item.name} исчез`;
                     playSfx('click');
@@ -1169,81 +1514,142 @@
                 renderInventory();
                 updateProfileUI();
                 saveData();
-                setTimeout(() => { upgradeCooldown=false; result.classList.remove('show'); }, 2500);
+                setTimeout(() => { 
+                    upgradeCooldown = false; 
+                    result.classList.remove('show'); 
+                }, 2500);
             }, 800);
         }
 
         // ============================================
-        // === WHEEL OF FORTUNE ===
+        // WHEEL OF FORTUNE — ИСПРАВЛЕНО
         // ============================================
         function updateWheelTimer() {
             const timer = document.getElementById('wheel-timer');
             if(!timer) return;
-            const now = Date.now();
-            const next = wheelLastSpin + 24*60*60*1000;
-            if(now >= next) { timer.innerText = 'ГОТОВО!'; return; }
-            const diff = next - now;
-            const h = Math.floor(diff/3600000).toString().padStart(2,'0');
-            const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-            const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-            timer.innerText = `${h}:${m}:${s}`;
-            if(diff > 0) setTimeout(updateWheelTimer, 1000);
+            
+            if (wheelTimerInterval) clearInterval(wheelTimerInterval);
+            
+            const update = () => {
+                const now = Date.now();
+                const next = wheelLastSpin + 24 * 60 * 60 * 1000;
+                
+                if(now >= next) { 
+                    timer.innerText = 'ГОТОВО!'; 
+                    return; 
+                }
+                
+                const diff = next - now;
+                const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+                const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                timer.innerText = `${h}:${m}:${s}`;
+            };
+            
+            update();
+            wheelTimerInterval = setInterval(update, 1000);
         }
         
         function spinWheel() {
             const now = Date.now();
-            if(now < wheelLastSpin + 24*60*60*1000) { showToast("⏳ Приходи завтра!"); return; }
+            const next = wheelLastSpin + 24 * 60 * 60 * 1000;
+            
+            if(now < next) { 
+                showToast("⏳ Приходи завтра!"); 
+                return; 
+            }
             
             const wheel = document.getElementById('wheel');
             const btn = document.getElementById('wheel-btn');
+            
+            if (!wheel || !btn) return;
+            
             wheel.classList.add('spinning');
             btn.disabled = true;
             playSfx('click');
             
             setTimeout(() => {
                 wheel.classList.remove('spinning');
-                const prize = wheelPrizes[Math.floor(Math.random()*wheelPrizes.length)];
-                if(prize.xp) { addXp(prize.xp); showToast(`⭐ ${prize.label}!`); }
-                else { balance += prize.amount; stats.totalEarned += prize.amount; showToast(`🎁 ${prize.label}!`); playSfx(prize.amount>=100?'win':'cash'); }
+                const prize = wheelPrizes[Math.floor(Math.random() * wheelPrizes.length)];
+                
+                if(prize.xp) { 
+                    addXp(prize.xp); 
+                    showToast(`⭐ ${prize.label}!`); 
+                } else { 
+                    balance += prize.amount; 
+                    stats.totalEarned += prize.amount; 
+                    showToast(`🎁 ${prize.label}!`); 
+                    playSfx(prize.amount >= 100 ? 'win' : 'cash'); 
+                }
+                
                 wheelLastSpin = now;
                 updateBalance();
                 updateProfileUI();
                 saveData();
                 updateWheelTimer();
-                setTimeout(() => btn.disabled=false, 1500);
+                
+                setTimeout(() => { 
+                    if(btn) btn.disabled = false; 
+                }, 1500);
             }, 4100);
         }
 
         // ============================================
-        // ЕЖЕДНЕВНЫЙ БОНУС
+        // ЕЖЕДНЕВНЫЙ БОНУС — ИСПРАВЛЕНО
         // ============================================
         function claimDailyBonus() {
-            if(dailyBonusClaimed) { showToast("✅ Уже забрал сегодня!"); return; }
-            balance += 10; stats.totalEarned += 10; addXp(15);
+            if(dailyBonusClaimed) { 
+                showToast("✅ Уже забрал сегодня!"); 
+                return; 
+            }
+            
+            balance += 10; 
+            stats.totalEarned += 10; 
+            addXp(15);
             dailyBonusClaimed = true;
             playSfx('cash');
             showToast("🎁 Ежедневный бонус: +$10.00 +15 XP!");
-            document.getElementById('daily-text').innerText = '✅ Забрано';
+            
+            const dailyText = document.getElementById('daily-text');
+            if (dailyText) dailyText.innerText = '✅ Забрано';
+            
             updateBalance();
             updateProfileUI();
             saveData();
         }
 
         // ============================================
-        // ИНИЦИАЛИЗАЦИЯ
+        // ИНИЦИАЛИЗАЦИЯ — ИСПРАВЛЕНО
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🎮 TOM CASE v2.0 — запуск');
+            console.log('🎮 TOM CASE v2.1 — запуск');
             loadData();
             playIntro();
-            
-            // Инициализация мини-игр
             renderUpgrader();
             updateWheelTimer();
         });
 
-        window.addEventListener('beforeunload', saveData);
-        document.addEventListener('visibilitychange', () => { if(document.hidden) saveData(); });
+        // Сохранение при выходе
+        window.addEventListener('beforeunload', () => {
+            saveData();
+        });
+        
+        // Сохранение при скрытии страницы
+        document.addEventListener('visibilitychange', () => { 
+            if(document.hidden) saveData(); 
+        });
+        
+        // Очистка анимаций при уходе со страницы
+        window.addEventListener('pagehide', () => {
+            if (rouletteAnimationId) {
+                cancelAnimationFrame(rouletteAnimationId);
+            }
+            if (wheelTimerInterval) {
+                clearInterval(wheelTimerInterval);
+            }
+            clearIntroTimeouts();
+            saveData();
+        });
     </script>
 </body>
 </html>
