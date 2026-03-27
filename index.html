@@ -19,9 +19,10 @@
             position: relative; overflow-x: hidden; overflow-y: auto; display: flex; flex-direction: column;
         }
 
-        /* Экраны */
-        .screen { display: none; width: 100%; min-height: 100%; flex-direction: column; position: absolute; top:0; left:0; background: inherit; z-index: 10;}
-        .screen.active { display: flex; }
+        /* Экраны и Анимации переходов */
+        @keyframes fadeInScreen { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .screen { display: none; width: 100%; min-height: 100%; flex-direction: column; position: absolute; top:0; left:0; background: inherit; z-index: 10; opacity: 0;}
+        .screen.active { display: flex; animation: fadeInScreen 0.3s ease-out forwards; }
 
         /* === ИНТРО АНИМАЦИИ === */
         #screen-intro {
@@ -30,7 +31,6 @@
         .intro-text { font-size: 20px; opacity: 0; position: absolute; transition: opacity 0.5s ease; line-height: 1.5; color: #fff; }
         .intro-show { opacity: 1; }
         
-        /* Сцена с именами */
         .intro-names { position: relative; font-size: 36px; font-weight: bold; opacity: 0; transition: opacity 0.5s; display: flex; flex-direction: column; align-items: center;}
         .name-old { color: #888; position: relative; display: inline-block; transition: transform 0.8s, opacity 0.8s; }
         .strike { position: absolute; top: 50%; left: -10%; width: 0; height: 4px; background: red; transition: width 0.5s ease-out; transform: translateY(-50%) rotate(-5deg); z-index: 2;}
@@ -41,28 +41,34 @@
         .crown { font-size: 40px; margin-bottom: -10px; }
         .name-new { color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size: 42px;}
         .subtitle { font-size: 14px; color: #aaa; margin-top: 15px; font-weight: normal; opacity: 0; transition: opacity 1s; max-width: 80%;}
-        .skip-hint { position: absolute; bottom: 20px; font-size: 12px; color: #555; }
+        .skip-hint { position: absolute; bottom: 20px; font-size: 12px; color: #555; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
         /* Шапки экранов */
         .header { background-color: #8A0030; padding: 10px 15px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fff; z-index: 5;}
         
         /* Кнопки */
-        .btn { background-color: #2196F3; color: white; border: none; padding: 12px; margin: 5px 0; font-size: 16px; cursor: pointer; width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); text-transform: uppercase; font-weight: bold;}
-        .btn:active { background-color: #1976D2; transform: scale(0.98); }
+        .btn { background-color: #2196F3; color: white; border: none; padding: 12px; margin: 5px 0; font-size: 16px; cursor: pointer; width: 100%; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); text-transform: uppercase; font-weight: bold; transition: all 0.1s ease;}
+        .btn:active { background-color: #1976D2; transform: scale(0.96); box-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .btn-bottom { margin-top: auto; margin-bottom: 10px; width: calc(100% - 20px); align-self: center; position: sticky; bottom: 10px;}
         .btn-danger { background-color: #EF5350; }
+        
+        .music-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: 2px solid #fff; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; color: white; display: flex; justify-content: center; align-items: center; z-index: 50; cursor: pointer; transition: transform 0.2s; }
+        .music-btn:active { transform: scale(0.9); }
 
         /* Главный экран */
-        .main-menu { align-items: center; justify-content: center; flex: 1; padding: 20px; display: flex; flex-direction: column; }
+        .main-menu { align-items: center; justify-content: center; flex: 1; padding: 20px; display: flex; flex-direction: column; position: relative;}
         .logo-container { background: #B26A2D; padding: 20px; text-align: center; border: 4px solid #5C3A21; margin-bottom: 20px; width: 80%; box-shadow: 0 10px 20px rgba(0,0,0,0.5); border-radius: 10px;}
         .logo-title { font-size: 32px; font-weight: bold; color: #fff; text-shadow: 2px 2px 0 #000; }
         .logo-subtitle { font-size: 36px; font-weight: bold; color: #fff; text-shadow: 2px 2px 0 #000; }
-        .logo-img { font-size: 80px; margin-top: -20px; margin-bottom: 20px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));}
+        .logo-img { font-size: 80px; margin-top: -20px; margin-bottom: 20px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); animation: floatLogo 3s ease-in-out infinite; }
+        @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .version-tag { font-size: 12px; color: #FFD700; margin-bottom: 20px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 10px;}
 
         /* Сетки */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; overflow-y: auto; padding-bottom: 70px;}
-        .card { background: white; color: black; text-align: center; font-size: 14px; position: relative; cursor: pointer; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.3);}
+        .card { background: white; color: black; text-align: center; font-size: 14px; position: relative; cursor: pointer; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.15s ease, box-shadow 0.15s ease;}
+        .card:active { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
         .card-img { font-size: 50px; flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; background: #fff; }
         .card-title { font-weight: bold; padding: 5px; color: white; background: #8B0000; font-size: 14px;}
         .card-price { padding: 5px; color: white; font-size: 12px; font-weight: bold;}
@@ -76,17 +82,20 @@
         /* Экран результата */
         #screen-result { background: linear-gradient(to bottom, #4A148C 0%, #311B92 50%, #4527A0 100%); }
         .result-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .result-img { font-size: 130px; background: radial-gradient(circle, #fff 0%, #eee 100%); padding: 40px; margin-bottom: 20px; border-bottom: 15px solid #8A2BE2; width: 80%; text-align: center; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.5);}
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+        .result-img { font-size: 130px; background: radial-gradient(circle, #fff 0%, #eee 100%); padding: 40px; margin-bottom: 20px; border-bottom: 15px solid #8A2BE2; width: 80%; text-align: center; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .result-buttons { display: flex; gap: 10px; width: 100%; padding: 0 10px; margin-bottom: 20px; margin-top: auto; position: sticky; bottom: 10px;}
 
         /* Инвентарь */
         .inventory-list { padding: 10px; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; padding-bottom: 70px;}
-        .inv-item { background: white; text-align: center; padding: 15px 0 25px 0; font-size: 40px; position: relative; border-bottom: 5px solid #000; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);}
+        .inv-item { background: white; text-align: center; padding: 15px 0 25px 0; font-size: 40px; position: relative; border-bottom: 5px solid #000; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); animation: fadeInScreen 0.3s ease-out;}
         .inv-price { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: #4CAF50; font-size: 11px; padding: 4px; font-weight: bold; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;}
-        .inv-sell-btn { position: absolute; top: 2px; right: 2px; background: red; color: white; border: none; border-radius: 3px; font-size: 10px; padding: 2px 5px; cursor: pointer;}
+        .inv-sell-btn { position: absolute; top: 2px; right: 2px; background: red; color: white; border: none; border-radius: 3px; font-size: 10px; padding: 2px 5px; cursor: pointer; transition: transform 0.1s;}
+        .inv-sell-btn:active { transform: scale(0.9); }
 
         /* Бонусы */
-        .bonus-card { background: linear-gradient(135deg, #34495E, #2C3E50); color: white; text-align: center; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.4);}
+        .bonus-card { background: linear-gradient(135deg, #34495E, #2C3E50); color: white; text-align: center; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.4); transition: transform 0.1s ease;}
+        .bonus-card:active { transform: scale(0.95); }
         .bonus-icon { font-size: 45px; padding: 20px 0; background: rgba(0,0,0,0.2); }
         .bonus-text { padding: 15px 5px; font-size: 14px; font-weight: bold; }
         
@@ -95,10 +104,14 @@
         .click-floating-text { position: absolute; color: #4CAF50; font-weight: bold; font-size: 20px; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 100; text-shadow: 1px 1px 2px #000;}
 
         /* Всплывающее уведомление (Toast) */
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 1000; display: none; transition: opacity 0.3s;}
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid #FFD700; color: white; padding: 12px 24px; border-radius: 20px; font-size: 14px; z-index: 1000; display: none; transition: opacity 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-weight: bold;}
     </style>
 </head>
 <body>
+
+<audio id="bg-music" loop preload="auto">
+    <source src="https://archive.org/download/KevinMacLeod-SneakySnitch/Kevin%20MacLeod%20-%20Sneaky%20Snitch.mp3" type="audio/mpeg">
+</audio>
 
 <div id="app">
     <div id="screen-intro" class="screen active" onclick="skipIntro()">
@@ -120,6 +133,7 @@
     </div>
 
     <div id="screen-main" class="screen">
+        <button class="music-btn" id="music-toggle" onclick="toggleMusic()">🔊</button>
         <div class="main-menu">
             <div class="logo-container">
                 <div class="logo-title">TOM</div>
@@ -139,38 +153,8 @@
             <span>Выберите кейс:</span>
             <span class="balance-disp">$100.00</span>
         </div>
-        <div class="grid">
-            <div class="card" onclick="openCaseDetails()">
-                <div class="card-img" style="background:#E6A8A8;">🎒</div>
-                <div class="card-title">Рюкзак тома</div>
-                <div class="card-price" style="background:#689A53;">$3.00</div>
+        <div class="grid" id="cases-grid">
             </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
-                <div class="card-img" style="background:#E6A8A8;">💼</div>
-                <div class="card-title">Ларец тома</div>
-                <div class="card-price" style="background:#689A53;">$300.00</div>
-            </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
-                <div class="card-img" style="background:#F39C12; border-radius: 50%; color: white; width: 60px; height: 60px; margin: auto;">₿</div>
-                <div class="card-title" style="background:#4B6995;">Crypto case</div>
-                <div class="card-price" style="background:#4B6995;">$2000.00</div>
-            </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
-                <div class="card-img" style="background:#000;">💎</div>
-                <div class="card-title" style="background:#4B6995;">Try your luck</div>
-                <div class="card-price" style="background:#4B6995;">$2000.00</div>
-            </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
-                <div class="card-img" style="background:#fff;">🧑‍🤝‍🧑</div>
-                <div class="card-title" style="background:#9D9C52; color: white;">Friends tom</div>
-                <div class="card-price" style="background:#9D9C52;">$50000.00</div>
-            </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
-                <div class="card-img" style="background:#E3F2FD;">🎁</div>
-                <div class="card-title" style="background:#9D9C52; color: white;">Gift box</div>
-                <div class="card-price" style="background:#9D9C52;">$200000.00</div>
-            </div>
-        </div>
         <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
     </div>
 
@@ -182,7 +166,7 @@
         <div class="grid" id="possible-items"></div>
         <div style="display:flex; gap:10px; padding: 0 10px; position: sticky; bottom: 10px; width: 100%;">
             <button class="btn" onclick="nav('screen-cases')" style="margin:0;">НАЗАД</button>
-            <button class="btn" onclick="startRoulette()" style="margin:0; background-color: #4CAF50;">ОТКРЫТЬ ($3.00)</button>
+            <button class="btn" id="btn-open-case" onclick="startRoulette()" style="margin:0; background-color: #4CAF50;">ОТКРЫТЬ ($3.00)</button>
         </div>
     </div>
 
@@ -244,24 +228,94 @@
 <div id="toast">Уведомление</div>
 
 <script>
-    // Инициализация Telegram Web App
     const tg = window.Telegram.WebApp;
-    tg.expand(); // Разворачиваем на весь экран
+    tg.expand(); 
     
     // --- ДАННЫЕ И СОХРАНЕНИЕ ---
     let balance = parseFloat(localStorage.getItem('tomcase_balance')) || 104.00;
     let inventory = JSON.parse(localStorage.getItem('tomcase_inventory')) || [];
     let currentItem = null; 
     let introSkipped = false;
+    let activeCaseId = null;
 
-    // База предметов
-    const items = [
-        { id: 1, name: "Линейка", collection: "School collection", price: 0.50, icon: "📏", color: "#B71C1C", bg: "#fff" },
-        { id: 2, name: "Нож", collection: "School collection", price: 7.00, icon: "🔪", color: "#6A1B9A", bg: "#fff" },
-        { id: 3, name: "Poco x3", collection: "School collection", price: 150.00, icon: "📱", color: "#D500F9", bg: "#fff" },
-        { id: 4, name: "Charon", collection: "School collection", price: 20.00, icon: "🔋", color: "#B71C1C", bg: "#E0F7FA" },
-        { id: 5, name: "Tom", collection: "Impossible collection", price: 500.00, icon: "🐻", color: "#FBC02D", bg: "#FFF9C4" }
-    ];
+    // --- МУЗЫКА ---
+    const bgMusic = document.getElementById('bg-music');
+    let isMusicPlaying = false;
+    bgMusic.volume = 0.4; // Немного убавим громкость
+
+    function initAudio() {
+        if(!isMusicPlaying) {
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                document.getElementById('music-toggle').innerText = '🔊';
+            }).catch(e => console.log("Автоплей музыки заблокирован браузером"));
+        }
+    }
+    document.body.addEventListener('click', initAudio, { once: true });
+
+    function toggleMusic() {
+        if(bgMusic.paused) {
+            bgMusic.play();
+            isMusicPlaying = true;
+            document.getElementById('music-toggle').innerText = '🔊';
+        } else {
+            bgMusic.pause();
+            isMusicPlaying = false;
+            document.getElementById('music-toggle').innerText = '🔇';
+        }
+    }
+
+    // --- БАЗА КЕЙСОВ И ПРЕДМЕТОВ ---
+    const casesDB = {
+        'case1': { id: 'case1', name: "Рюкзак тома", price: 3.00, icon: "🎒", bg: "#E6A8A8", color: "#689A53", items: [
+            { id: 1, name: "Линейка", collection: "School collection", price: 0.50, icon: "📏", color: "#B71C1C", bg: "#fff" },
+            { id: 2, name: "Нож", collection: "School collection", price: 7.00, icon: "🔪", color: "#6A1B9A", bg: "#fff" },
+            { id: 3, name: "Poco x3", collection: "School collection", price: 150.00, icon: "📱", color: "#D500F9", bg: "#fff" },
+            { id: 4, name: "Charon", collection: "School collection", price: 20.00, icon: "🔋", color: "#B71C1C", bg: "#E0F7FA" },
+            { id: 5, name: "Tom", collection: "Impossible collection", price: 500.00, icon: "🐻", color: "#FBC02D", bg: "#FFF9C4" }
+        ]},
+        'case2': { id: 'case2', name: "Ларец тома", price: 300.00, icon: "💼", bg: "#E6A8A8", color: "#689A53", items: [
+            { id: 10, name: "Золотое яблоко", collection: "Rare box", price: 50.00, icon: "🍎", color: "#F39C12", bg: "#fff" },
+            { id: 11, name: "AirPods", collection: "Rare box", price: 250.00, icon: "🎧", color: "#7F8C8D", bg: "#f1f2f6" },
+            { id: 12, name: "Rolex", collection: "Ultra Rare", price: 1500.00, icon: "⌚", color: "#FFD700", bg: "#000" }
+        ]},
+        'case3': { id: 'case3', name: "Crypto case", price: 2000.00, icon: "₿", bg: "#F39C12", color: "#4B6995", items: [
+            { id: 20, name: "Doge Coin", collection: "Crypto", price: 100.00, icon: "🐶", color: "#F1C40F", bg: "#fff" },
+            { id: 21, name: "Ethereum", collection: "Crypto", price: 1800.00, icon: "🔷", color: "#8E44AD", bg: "#ecf0f1" },
+            { id: 22, name: "Bitcoin", collection: "Crypto", price: 12000.00, icon: "🤑", color: "#F39C12", bg: "#2c3e50" }
+        ]},
+        'case4': { id: 'case4', name: "Try your luck", price: 2000.00, icon: "💎", bg: "#000", color: "#4B6995", items: [
+            { id: 30, name: "Мусор", collection: "Luck", price: 0.01, icon: "🗑️", color: "#95A5A6", bg: "#fff" },
+            { id: 31, name: "Алмаз", collection: "Luck", price: 15000.00, icon: "💎", color: "#00A8FF", bg: "#000" }
+        ]},
+        'case5': { id: 'case5', name: "Friends tom", price: 50000.00, icon: "🧑‍🤝‍🧑", bg: "#fff", color: "#9D9C52", items: [
+            { id: 40, name: "Бернард", collection: "Homies", price: 10000.00, icon: "👦", color: "#3498DB", bg: "#fff" },
+            { id: 41, name: "Анджела", collection: "Homies", price: 25000.00, icon: "👧", color: "#E74C3C", bg: "#fff" },
+            { id: 42, name: "Сам ТОМ", collection: "God Tier", price: 150000.00, icon: "🐻", color: "#FFD700", bg: "#000" }
+        ]},
+        'case6': { id: 'case6', name: "Gift box", price: 200000.00, icon: "🎁", bg: "#E3F2FD", color: "#9D9C52", items: [
+            { id: 50, name: "Носки", collection: "Troll", price: 5.00, icon: "🧦", color: "#7F8C8D", bg: "#fff" },
+            { id: 51, name: "Tesla Model S", collection: "Luxury", price: 100000.00, icon: "🚗", color: "#E74C3C", bg: "#2C3E50" },
+            { id: 52, name: "Вилла", collection: "Luxury", price: 1000000.00, icon: "🏰", color: "#F1C40F", bg: "#8E44AD" }
+        ]}
+    };
+
+    function renderCases() {
+        const grid = document.getElementById('cases-grid');
+        grid.innerHTML = '';
+        Object.values(casesDB).forEach(c => {
+            // Если иконка ₿, делаем ей круглый фон как было
+            let iconStyle = c.icon === "₿" ? `background:${c.bg}; border-radius:50%; color:white; width:60px; height:60px; margin:auto;` : `background:${c.bg};`;
+            
+            grid.innerHTML += `
+                <div class="card" onclick="openCaseDetails('${c.id}')">
+                    <div class="card-img"><div style="${iconStyle} display:flex; align-items:center; justify-content:center; width:100%; height:100%;">${c.icon}</div></div>
+                    <div class="card-title" style="background:${c.color}; color: white;">${c.name}</div>
+                    <div class="card-price" style="background:${c.color};">$${c.price.toFixed(2)}</div>
+                </div>
+            `;
+        });
+    }
 
     function saveData() {
         localStorage.setItem('tomcase_balance', balance.toFixed(2));
@@ -273,7 +327,7 @@
         const toast = document.getElementById('toast');
         toast.innerText = text;
         toast.style.display = 'block';
-        toast.style.opacity = '1';
+        setTimeout(() => toast.style.opacity = '1', 10);
         setTimeout(() => {
             toast.style.opacity = '0';
             setTimeout(() => toast.style.display = 'none', 300);
@@ -282,19 +336,22 @@
 
     // --- ИНТЕРФЕЙС ---
     function updateBalance() {
-        document.querySelectorAll('.balance-disp').forEach(d => {
-            d.innerText = "$" + balance.toFixed(2);
-        });
+        document.querySelectorAll('.balance-disp').forEach(d => d.innerText = "$" + balance.toFixed(2));
         document.getElementById('inv-count-disp').innerText = inventory.length;
         document.getElementById('inv-count-header').innerText = inventory.length;
         saveData();
     }
 
     function nav(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active');
+            s.style.opacity = '0';
+        });
+        const target = document.getElementById(screenId);
+        target.classList.add('active');
         updateBalance();
         if(screenId === 'screen-inventory') renderInventory();
+        if(screenId === 'screen-cases') renderCases();
     }
 
     // --- ЛОГИКА ИНТРО ---
@@ -309,38 +366,32 @@
 
         if(introSkipped) return;
 
-        // 1. Показываем первый текст
         setTimeout(() => { if(!introSkipped) t1.classList.add('intro-show'); }, 500);
-        // 2. Скрываем первый, показываем второй
-        setTimeout(() => { 
-            if(!introSkipped) { t1.classList.remove('intro-show'); t2.classList.add('intro-show'); }
-        }, 2500);
-        // 3. Скрываем второй, показываем сцену с именами (ATT12AFTS)
-        setTimeout(() => { 
-            if(!introSkipped) { t2.classList.remove('intro-show'); names.style.opacity = '1'; }
-        }, 4500);
-        // 4. Зачеркиваем ATT12AFTS
+        setTimeout(() => { if(!introSkipped) { t1.classList.remove('intro-show'); t2.classList.add('intro-show'); } }, 2500);
+        setTimeout(() => { if(!introSkipped) { t2.classList.remove('intro-show'); names.style.opacity = '1'; } }, 4500);
         setTimeout(() => { if(!introSkipped) strike.style.width = '120%'; }, 5500);
-        // 5. ATT12AFTS падает вниз
         setTimeout(() => { if(!introSkipped) oldName.classList.add('falling'); }, 6500);
-        // 6. Появляется byblek с короной
         setTimeout(() => { if(!introSkipped) newNameCont.classList.add('pop'); }, 6800);
-        // 7. Появляется субтитр
         setTimeout(() => { if(!introSkipped) subtitle.style.opacity = '1'; }, 7500);
-        // 8. Переход в главное меню
         setTimeout(() => { if(!introSkipped) skipIntro(); }, 10500);
     }
 
     function skipIntro() {
         introSkipped = true;
+        initAudio(); // Пытаемся запустить музыку при пропуске
         nav('screen-main');
     }
 
     // --- КЕЙСЫ И РУЛЕТКА ---
-    function openCaseDetails() {
+    function openCaseDetails(caseId) {
+        activeCaseId = caseId;
+        const caseData = casesDB[caseId];
         const grid = document.getElementById('possible-items');
         grid.innerHTML = '';
-        items.forEach(item => {
+        
+        document.getElementById('btn-open-case').innerText = `ОТКРЫТЬ ($${caseData.price.toFixed(2)})`;
+
+        caseData.items.forEach(item => {
             grid.innerHTML += `
                 <div class="card" style="border-left: 6px solid ${item.color};">
                     <div class="card-img" style="background: ${item.bg}; font-size: 50px;">${item.icon}</div>
@@ -354,13 +405,14 @@
     }
 
     function startRoulette() {
-        if (balance < 3.00) {
-            showToast("Недостаточно средств! (Нужно $3.00)");
+        const caseData = casesDB[activeCaseId];
+        if (balance < caseData.price) {
+            showToast(`Недостаточно средств! (Нужно $${caseData.price.toFixed(2)})`);
             tg.HapticFeedback.notificationOccurred('error');
             return;
         }
         
-        balance -= 3.00;
+        balance -= caseData.price;
         updateBalance();
         nav('screen-opening');
         tg.HapticFeedback.impactOccurred('medium');
@@ -371,16 +423,23 @@
         track.innerHTML = '';
 
         const winnerIndex = 40; 
+        // Простая система шансов (чем предмет дороже, тем меньше шанс)
+        // Для этой версии берем случайный, но добавим легкий "вес" дешёвым вещам
+        const itemsList = caseData.items;
+        // Сортируем от дешевых к дорогим
+        const sortedItems = [...itemsList].sort((a,b) => a.price - b.price);
+        
         const rand = Math.random();
-        if (rand < 0.5) currentItem = items[0]; 
-        else if (rand < 0.8) currentItem = items[1]; 
-        else if (rand < 0.95) currentItem = items[3]; 
-        else if (rand < 0.99) currentItem = items[2]; 
-        else currentItem = items[4]; 
+        // Захардкодим базовые шансы для плавности (самый дорогой выпадает редко)
+        if (rand < 0.6) currentItem = sortedItems[0]; // 60% шанс на самый дешёвый
+        else if (rand < 0.85 && sortedItems.length > 1) currentItem = sortedItems[1]; // 25% 
+        else if (rand < 0.95 && sortedItems.length > 2) currentItem = sortedItems[2]; // 10%
+        else if (rand < 0.99 && sortedItems.length > 3) currentItem = sortedItems[3]; // 4%
+        else currentItem = sortedItems[sortedItems.length - 1]; // 1% на самый дорогой/последний
 
         let html = '';
         for (let i = 0; i < 50; i++) {
-            let itemObj = items[Math.floor(Math.random() * items.length)];
+            let itemObj = itemsList[Math.floor(Math.random() * itemsList.length)];
             if (i === winnerIndex) itemObj = currentItem; 
             html += `<div class="roulette-item" style="border-bottom-color: ${itemObj.color}; background: ${itemObj.bg};">${itemObj.icon}</div>`;
         }
@@ -392,7 +451,6 @@
             track.style.transform = `translateX(${offset}px)`;
         }, 50);
 
-        // Звуки/Вибрация во время прокрутки (имитация тиков)
         let ticks = 0;
         let tickInterval = setInterval(() => {
             ticks++;
@@ -413,6 +471,12 @@
         const iconElem = document.getElementById('result-icon');
         iconElem.innerText = currentItem.icon;
         iconElem.style.borderBottomColor = currentItem.color;
+        
+        // Сбрасываем анимацию для повторного воспроизведения
+        iconElem.style.animation = 'none';
+        iconElem.offsetHeight; 
+        iconElem.style.animation = null;
+
         nav('screen-result');
     }
 
@@ -428,7 +492,7 @@
 
     function keepCurrentItem() {
         if (currentItem) {
-            inventory.push({...currentItem, invId: Date.now()}); // добавляем уникальный ID для продажи из инвентаря
+            inventory.push({...currentItem, invId: Date.now()});
             showToast("Добавлено в инвентарь");
             currentItem = null;
             updateBalance();
@@ -454,7 +518,7 @@
                 </div>
             `;
         });
-        inventory.reverse(); // возвращаем оригинальный порядок массива
+        inventory.reverse(); 
     }
 
     function sellFromInventory(invId, price) {
@@ -466,19 +530,17 @@
         showToast(`Продано за $${price.toFixed(2)}`);
     }
 
-    // --- БОНУСЫ (КЛИКЕР И СБРОС) ---
+    // --- БОНУСЫ ---
     function clickerTap(event) {
         balance += 0.60;
         updateBalance();
         tg.HapticFeedback.impactOccurred('light');
 
-        // Визуальный эффект тапа
         const clickerBtn = document.getElementById('clicker-btn');
         const rect = clickerBtn.getBoundingClientRect();
         
         let x = event.clientX - rect.left;
         let y = event.clientY - rect.top;
-        // Если тапнули мимо (или программный вызов), ставим по центру
         if(!event.clientX) { x = rect.width / 2; y = rect.height / 2; }
 
         const floatTxt = document.createElement('div');
