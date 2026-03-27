@@ -77,6 +77,7 @@
         .btn-danger { background: linear-gradient(135deg, #EF5350, #C62828); box-shadow: 0 4px 12px rgba(239, 83, 80, 0.4); }
         .btn-success { background: linear-gradient(135deg, #4CAF50, #2E7D32); box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4); }
         .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); color: #333; box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4); }
+        .btn-small { padding: 10px 16px; font-size: 14px; width: auto; }
         
         /* Main Menu */
         .main-menu { align-items: center; justify-content: center; flex: 1; padding: 20px; display: flex; flex-direction: column; }
@@ -108,10 +109,9 @@
         .card-title { font-weight: bold; padding: 8px 10px; color: white; background: linear-gradient(135deg, #8B0000, #6A0000); font-size: 14px; }
         .card-price { padding: 6px; color: white; font-size: 13px; font-weight: bold; background: linear-gradient(135deg, #4CAF50, #2E7D32); }
         
-        /* === 🔧 РУЛЕТКА — ИСПРАВЛЕННАЯ ВЕРСИЯ === */
+        /* === РУЛЕТКА === */
         .roulette-container {
             width: 100%; 
-            /* 🔧 АДАПТИВНОСТЬ: высота подстраивается под экран */
             height: clamp(180px, 35vw, 220px); 
             background: rgba(0,0,0,0.97);
             position: absolute; 
@@ -123,27 +123,21 @@
             border-bottom: 5px solid #FFD700;
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.5);
             border-radius: 10px;
-            /* 🔧 Маскировка краёв для плавного исчезновения */
             mask: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
             -webkit-mask: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
         }
-        
         .roulette-track { 
             display: flex; 
             height: 100%; 
             align-items: center; 
             will-change: transform;
-            /* 🔧 ПЛАВНОЕ ЗАМЕДЛЕНИЕ: cubic-bezier(0.15, 0.9, 0.2, 1) */
             transition: transform 10s cubic-bezier(0.15, 0.9, 0.2, 1);
         }
-        
-        /* 🔧 АДАПТИВНЫЕ РАЗМЕРЫ ЭЛЕМЕНТОВ */
         :root {
             --item-width: clamp(120px, 28vw, 150px);
             --item-gap: clamp(8px, 2vw, 10px);
             --item-height: clamp(120px, 28vw, 150px);
         }
-        
         .roulette-item {
             min-width: var(--item-width); 
             height: var(--item-height); 
@@ -159,16 +153,9 @@
             transition: transform 0.2s, filter 0.2s;
             flex-shrink: 0;
         }
+        .roulette-track.spinning .roulette-item { animation: motionBlur 0.06s infinite alternate; }
+        @keyframes motionBlur { 0% { filter: blur(0) brightness(1); } 100% { filter: blur(1px) brightness(0.95); } }
         
-        .roulette-track.spinning .roulette-item { 
-            animation: motionBlur 0.06s infinite alternate; 
-        }
-        @keyframes motionBlur { 
-            0% { filter: blur(0) brightness(1); } 
-            100% { filter: blur(1px) brightness(0.95); } 
-        }
-        
-        /* 🔧 УКАЗАТЕЛЬ — ЦЕНТРАЛЬНАЯ СТРЕЛКА */
         .pointer {
             position: absolute; 
             top: 25%; 
@@ -181,7 +168,7 @@
             border-radius: 4px;
             box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700, 0 0 80px rgba(255, 215, 0, 0.6);
             animation: pointerPulse 1.5s infinite ease-in-out;
-            pointer-events: none; /* 🔧 Чтобы не мешал кликам */
+            pointer-events: none;
         }
         .pointer::before { 
             content: '▼'; 
@@ -193,10 +180,7 @@
             color: #FFD700; 
             text-shadow: 0 0 10px #FFD700; 
         }
-        @keyframes pointerPulse { 
-            0%, 100% { box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; } 
-            50% { box-shadow: 0 0 35px #FFD700, 0 0 70px #FFD700, 0 0 100px rgba(255, 215, 0, 0.8); } 
-        }
+        @keyframes pointerPulse { 0%, 100% { box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; } 50% { box-shadow: 0 0 35px #FFD700, 0 0 70px #FFD700, 0 0 100px rgba(255, 215, 0, 0.8); } }
         
         .roulette-item.winner {
             animation: winnerPop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -221,12 +205,7 @@
             animation: dropInBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
-        @keyframes dropInBounce { 
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; } 
-            50% { transform: scale(1.15) rotate(8deg); opacity: 1; } 
-            75% { transform: scale(0.95) rotate(-3deg); } 
-            100% { transform: scale(1) rotate(0); } 
-        }
+        @keyframes dropInBounce { 0% { transform: scale(0) rotate(-20deg); opacity: 0; } 50% { transform: scale(1.15) rotate(8deg); opacity: 1; } 75% { transform: scale(0.95) rotate(-3deg); } 100% { transform: scale(1) rotate(0); } }
         .result-buttons { display: flex; gap: 12px; width: 100%; padding: 0 15px; margin-bottom: 25px; margin-top: auto; position: sticky; bottom: 15px; }
         
         /* Inventory */
@@ -291,22 +270,12 @@
             border: 4px solid #B8860B; position: relative; transition: transform 0.3s;
         }
         .coin.flipping { animation: coinFlip 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; pointer-events: none; }
-        @keyframes coinFlip {
-            0% { transform: rotateY(0) scale(1); }
-            25% { transform: rotateY(90deg) scale(1.05); }
-            50% { transform: rotateY(180deg) scale(1); }
-            75% { transform: rotateY(270deg) scale(1.05); }
-            100% { transform: rotateY(360deg) scale(1); }
-        }
+        @keyframes coinFlip { 0% { transform: rotateY(0) scale(1); } 25% { transform: rotateY(90deg) scale(1.05); } 50% { transform: rotateY(180deg) scale(1); } 75% { transform: rotateY(270deg) scale(1.05); } 100% { transform: rotateY(360deg) scale(1); } }
         .coin::after { content: '🪙'; position: absolute; }
         .coin.side-b { background: linear-gradient(135deg, #C0C0C0, #A0A0A0); border-color: #808080; }
         .coin.side-b::after { content: '🐕'; }
         .flip-choice { display: flex; gap: 15px; margin-bottom: 25px; }
-        .flip-btn { 
-            padding: 15px 30px; border-radius: 12px; border: 3px solid; 
-            background: rgba(255,255,255,0.1); color: white; font-weight: bold; 
-            cursor: pointer; transition: all 0.2s; font-size: 16px;
-        }
+        .flip-btn { padding: 15px 30px; border-radius: 12px; border: 3px solid; background: rgba(255,255,255,0.1); color: white; font-weight: bold; cursor: pointer; transition: all 0.2s; font-size: 16px; }
         .flip-btn.active { background: rgba(255,215,0,0.3); border-color: #FFD700; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
         .flip-btn:hover { transform: scale(1.05); }
         .flip-result { font-size: 20px; margin-top: 20px; min-height: 30px; font-weight: bold; }
@@ -315,60 +284,75 @@
         
         /* === UPGRADER === */
         .upgrader-container { padding: 20px; }
-        .upgrade-item { 
-            background: rgba(255,255,255,0.1); border-radius: 14px; padding: 15px; 
-            margin-bottom: 12px; display: flex; align-items: center; gap: 15px;
-            border-left: 4px solid #4CAF50; transition: all 0.2s;
-        }
+        .upgrade-item { background: rgba(255,255,255,0.1); border-radius: 14px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border-left: 4px solid #4CAF50; transition: all 0.2s; }
         .upgrade-item:hover { background: rgba(255,255,255,0.15); transform: translateX(5px); }
         .upgrade-item.selected { border-left-color: #FFD700; background: rgba(255,215,0,0.15); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
         .upgrade-icon { font-size: 35px; min-width: 50px; text-align: center; }
         .upgrade-info { flex: 1; }
         .upgrade-name { font-weight: bold; font-size: 15px; }
         .upgrade-chance { font-size: 13px; color: #aaa; }
-        .upgrade-chance.high { color: #4CAF50; }
-        .upgrade-chance.mid { color: #FFA500; }
-        .upgrade-chance.low { color: #EF5350; }
-        .upgrade-btn { 
-            padding: 10px 20px; background: linear-gradient(135deg, #4CAF50, #2E7D32); 
-            border: none; border-radius: 10px; color: white; font-weight: bold; 
-            cursor: pointer; transition: all 0.2s;
-        }
+        .upgrade-chance.high { color: #4CAF50; } .upgrade-chance.mid { color: #FFA500; } .upgrade-chance.low { color: #EF5350; }
+        .upgrade-btn { padding: 10px 20px; background: linear-gradient(135deg, #4CAF50, #2E7D32); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .upgrade-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .upgrade-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 5px 15px rgba(76,175,80,0.4); }
-        .upgrader-result { 
-            margin-top: 20px; padding: 15px; border-radius: 12px; text-align: center; 
-            font-weight: bold; display: none; animation: slideUp 0.4s ease;
-        }
+        .upgrader-result { margin-top: 20px; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; display: none; animation: slideUp 0.4s ease; }
         .upgrader-result.show { display: block; }
         .upgrader-result.win { background: rgba(76,175,80,0.3); border: 2px solid #4CAF50; color: #4CAF50; }
         .upgrader-result.lose { background: rgba(239,83,80,0.3); border: 2px solid #EF5350; color: #EF5350; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* === WHEEL OF FORTUNE === */
+        /* === 🔧 WHEEL OF FORTUNE — ИСПРАВЛЕННЫЙ === */
         .wheel-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .wheel-wrapper { position: relative; width: 240px; height: 240px; margin: 15px 0; }
         .wheel { 
-            width: 220px; height: 220px; border-radius: 50%; 
-            background: conic-gradient(#EF5350 0deg 60deg, #FFA500 60deg 120deg, #FFD700 120deg 180deg, #4CAF50 180deg 240deg, #2196F3 240deg 300deg, #9C27B0 300deg 360deg);
-            border: 8px solid #FFD700; margin: 20px 0; position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4); transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            width: 100%; height: 100%; border-radius: 50%; 
+            background: conic-gradient(
+                #EF5350 0deg 60deg, 
+                #FFA500 60deg 120deg, 
+                #FFD700 120deg 180deg, 
+                #4CAF50 180deg 240deg, 
+                #2196F3 240deg 300deg, 
+                #9C27B0 300deg 360deg
+            );
+            border: 8px solid #FFD700; 
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            transition: transform 5s cubic-bezier(0.15, 0.9, 0.2, 1);
         }
-        .wheel.spinning { animation: wheelSpin 4s cubic-bezier(0.17, 0.67, 0.12, 0.99) forwards; }
-        @keyframes wheelSpin { from { transform: rotate(0deg); } to { transform: rotate(1800deg); } }
         .wheel::after { 
             content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 60px; height: 60px; background: linear-gradient(135deg, #333, #555); 
-            border-radius: 50%; border: 4px solid #FFD700;
+            border-radius: 50%; border: 4px solid #FFD700; z-index: 2;
         }
         .wheel-pointer { 
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            font-size: 40px; color: #FFD700; text-shadow: 0 0 10px #FFD700; z-index: 5;
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            font-size: 45px; color: #FFD700; text-shadow: 0 0 15px #FFD700; z-index: 5;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce { from { transform: translateX(-50%) translateY(0); } to { transform: translateX(-50%) translateY(-5px); } }
+        
+        /* 🔧 Сегменты для визуализации */
+        .wheel-segment {
+            position: absolute;
+            width: 50%; height: 50%;
+            transform-origin: bottom right;
+            left: 50%; top: 50%;
+            display: flex; align-items: center; justify-content: center;
+            padding-left: 35px;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .wheel-segment span {
+            transform: rotate(60deg); 
+            font-size: 11px; 
+            font-weight: bold; 
+            color: white; 
+            text-shadow: 1px 1px 2px black;
+            white-space: nowrap;
         }
         .wheel-prizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 20px; }
-        .wheel-prize { 
-            background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; 
-            font-size: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.2);
-        }
+        .wheel-prize { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+        .wheel-result { margin-top: 15px; font-size: 16px; font-weight: bold; min-height: 24px; color: #FFD700; }
         
         /* Audio Toggle */
         .audio-toggle { background: transparent; border: none; font-size: 26px; cursor: pointer; color: white; transition: transform 0.2s; }
@@ -387,21 +371,26 @@
         .loader { border: 4px solid rgba(255,255,255,0.2); border-top: 4px solid #FFD700; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; margin: auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Back button in header */
-        .back-btn { 
-            background: none; border: none; color: white; font-size: 24px; 
-            cursor: pointer; padding: 5px 10px; margin-right: 5px; 
-            transition: transform 0.2s; display: flex; align-items: center;
-        }
+        /* Back button */
+        .back-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 5px 10px; margin-right: 5px; transition: transform 0.2s; display: flex; align-items: center; }
         .back-btn:active { transform: scale(0.9); }
         
         /* Daily bonus badge */
-        .daily-badge { 
-            position: absolute; top: -5px; right: -5px; background: #EF5350; 
-            color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; 
-            font-weight: bold; animation: bounce 2s infinite;
-        }
+        .daily-badge { position: absolute; top: -5px; right: -5px; background: #EF5350; color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        
+        /* 🔧 НОВЫЕ ЭЛЕМЕНТЫ ЗАРАБОТКА */
+        .earn-card { 
+            background: linear-gradient(135deg, #1B5E20, #2E7D32); 
+            color: white; text-align: center; border-radius: 16px; 
+            padding: 15px; margin: 10px; cursor: pointer;
+            border: 2px solid #4CAF50; transition: transform 0.2s;
+        }
+        .earn-card:active { transform: scale(0.98); }
+        .earn-icon { font-size: 40px; margin-bottom: 8px; }
+        .earn-amount { font-size: 20px; font-weight: bold; color: #FFD700; }
+        .earn-cooldown { font-size: 11px; color: #aaa; margin-top: 5px; }
+        .earn-card.disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -485,7 +474,7 @@
 
                 <div class="profile-card" style="background: linear-gradient(135deg, #1B5E20, #0D47A1); border-color: #4CAF50;">
                     <h3 style="color:#fff; margin-bottom:12px;">🤝 Рефералы</h3>
-                    <p style="font-size:13px; color:#ddd; margin-bottom:12px;">Пригласи друга — получи <strong style="color:#FFD700;">$50</strong> + он <strong style="color:#4CAF50;">$25</strong>!</p>
+                    <p style="font-size:13px; color:#ddd; margin-bottom:12px;">Пригласи друга — получи <strong style="color:#FFD700;">$150</strong> + он <strong style="color:#4CAF50;">$75</strong>!</p>
                     <div style="font-size:14px; margin-bottom:12px;">Приглашено: <strong id="stat-refs" style="color:#FFD700; font-size:18px;">0</strong> друзей</div>
                     <button class="btn btn-success" onclick="copyRefLink()">🔗 СКОПИРОВАТЬ ССЫЛКУ</button>
                 </div>
@@ -541,12 +530,10 @@
 
         <!-- === OPENING (ROULETTE) === -->
         <div id="screen-opening" class="screen">
-            <!-- 🔧 УКАЗАТЕЛЬ — всегда по центру -->
             <div class="pointer"></div>
             <div class="roulette-container">
                 <div class="roulette-track" id="roulette-track"></div>
             </div>
-            <!-- 🔧 Блок сообщений — текст ЗАМЕНЯЕТСЯ, не добавляется -->
             <div id="roulette-message" style="position:absolute; bottom:20px; left:0; right:0; text-align:center; font-size:14px; color:#aaa; min-height:20px;"></div>
         </div>
 
@@ -599,9 +586,33 @@
                 </div>
                 <div class="bonus-card" onclick="claimDailyBonus()">
                     <div class="bonus-icon">🎁</div>
-                    <div class="bonus-text">Ежедневный бонус<br><span id="daily-text">+$10.00</span></div>
+                    <div class="bonus-text">Ежедневный бонус<br><span id="daily-text">+$50.00</span></div>
                 </div>
             </div>
+            
+            <!-- 🔧 НОВЫЕ СПОСОБЫ ЗАРАБОТКА -->
+            <div style="padding: 0 15px; margin-top: 10px;">
+                <div style="font-size: 13px; color: #aaa; margin-bottom: 10px;">💰 Быстрый заработок:</div>
+                <div class="earn-card" id="earn-work" onclick="earnWork()">
+                    <div class="earn-icon">💼</div>
+                    <div>Работа у Тома</div>
+                    <div class="earn-amount">+$5.00</div>
+                    <div class="earn-cooldown" id="work-cooldown">Доступно</div>
+                </div>
+                <div class="earn-card" id="earn-ad" onclick="earnAd()">
+                    <div class="earn-icon">📺</div>
+                    <div>Посмотреть рекламу</div>
+                    <div class="earn-amount">+$3.00</div>
+                    <div class="earn-cooldown" id="ad-cooldown">Доступно</div>
+                </div>
+                <div class="earn-card" id="earn-bonus" onclick="earnHourlyBonus()">
+                    <div class="earn-icon">⏰</div>
+                    <div>Часовой бонус</div>
+                    <div class="earn-amount">+$2.00</div>
+                    <div class="earn-cooldown" id="bonus-cooldown">Доступно</div>
+                </div>
+            </div>
+            
             <button class="btn btn-bottom" onclick="nav('screen-main', 'prev')">НАЗАД</button>
         </div>
 
@@ -635,19 +646,14 @@
             </div>
             <div class="upgrader-container">
                 <p style="text-align:center; margin-bottom:15px; color:#ccc;">Выбери шанс и рискни своим предметом!</p>
-                <div id="upgrade-list">
-                    <!-- Генерируется через JS -->
-                </div>
+                <div id="upgrade-list"></div>
                 <div class="upgrader-result" id="upgrader-result"></div>
-                <p style="font-size:11px; color:#888; text-align:center; margin-top:15px;">
-                    ⚠️ При проигрыше предмет исчезает навсегда!<br>
-                    💡 Чем меньше шанс — тем ценнее награда
-                </p>
+                <p style="font-size:11px; color:#888; text-align:center; margin-top:15px;">⚠️ При проигрыше предмет исчезает навсегда!<br>💡 Чем меньше шанс — тем ценнее награда</p>
             </div>
             <button class="btn btn-bottom" onclick="nav('screen-minigames', 'prev')">НАЗАД</button>
         </div>
 
-        <!-- === WHEEL OF FORTUNE === -->
+        <!-- === 🔧 WHEEL OF FORTUNE — ИСПРАВЛЕННЫЙ === -->
         <div id="screen-wheel" class="screen">
             <div class="header">
                 <button class="back-btn" onclick="nav('screen-minigames', 'prev')">←</button>
@@ -656,16 +662,32 @@
             </div>
             <div class="wheel-container">
                 <p style="text-align:center; margin-bottom:10px; color:#ccc;">Крути колесо и выигрывай призы!</p>
+                
+                <!-- 🔧 Указатель сверху -->
                 <div class="wheel-pointer">▼</div>
-                <div class="wheel" id="wheel"></div>
+                
+                <!-- 🔧 Обёртка для колеса с сегментами -->
+                <div class="wheel-wrapper">
+                    <div class="wheel" id="wheel"></div>
+                    <!-- 🔧 Визуальные сегменты (не влияют на вращение) -->
+                    <div class="wheel-segment" style="transform: rotate(0deg);"><span style="color:#fff">$10</span></div>
+                    <div class="wheel-segment" style="transform: rotate(60deg);"><span style="color:#fff">$25</span></div>
+                    <div class="wheel-segment" style="transform: rotate(120deg);"><span style="color:#333">$50</span></div>
+                    <div class="wheel-segment" style="transform: rotate(180deg);"><span style="color:#fff">XP+50</span></div>
+                    <div class="wheel-segment" style="transform: rotate(240deg);"><span style="color:#fff">$100</span></div>
+                    <div class="wheel-segment" style="transform: rotate(300deg);"><span style="color:#fff">JACKPOT</span></div>
+                </div>
+                
                 <button class="btn btn-gold" style="width:200px; margin:15px 0;" onclick="spinWheel()" id="wheel-btn">🎡 КРУТИТЬ</button>
+                <div class="wheel-result" id="wheel-result"></div>
+                
                 <div class="wheel-prizes">
-                    <div class="wheel-prize">💰 $10</div>
-                    <div class="wheel-prize">🪙 $25</div>
-                    <div class="wheel-prize">🎁 $50</div>
-                    <div class="wheel-prize">⭐ XP +50</div>
-                    <div class="wheel-prize">🔥 $100</div>
-                    <div class="wheel-prize">💎 JACKPOT!</div>
+                    <div class="wheel-prize" style="border-color:#EF5350">💰 $10</div>
+                    <div class="wheel-prize" style="border-color:#FFA500">🪙 $25</div>
+                    <div class="wheel-prize" style="border-color:#FFD700">🎁 $50</div>
+                    <div class="wheel-prize" style="border-color:#4CAF50">⭐ XP +50</div>
+                    <div class="wheel-prize" style="border-color:#2196F3">🔥 $100</div>
+                    <div class="wheel-prize" style="border-color:#9C27B0">💎 JACKPOT $500!</div>
                 </div>
                 <p style="font-size:11px; color:#888; margin-top:15px;">Бесплатно раз в 24 часа • Следующий через: <span id="wheel-timer">00:00:00</span></p>
             </div>
@@ -704,7 +726,15 @@
         let wheelLastSpin = 0;
         let flipCooldown = false;
         let upgradeCooldown = false;
-        let rouletteSpinning = false; // 🔧 Блокировка повторного спина
+        let rouletteSpinning = false;
+        
+        // 🔧 ВРЕМЕННЫЕ МЕТКИ ДЛЯ ЗАРАБОТКА
+        let lastWorkTime = 0;
+        let lastAdTime = 0;
+        let lastHourlyBonus = 0;
+        const WORK_COOLDOWN = 5 * 60 * 1000; // 5 минут
+        const AD_COOLDOWN = 3 * 60 * 1000; // 3 минуты
+        const HOURLY_COOLDOWN = 60 * 60 * 1000; // 1 час
 
         const caseItems = {
             backpack: [
@@ -747,68 +777,86 @@
             { chance:2, multiplier:30.0, label:"2% — x30.0!", class:"low" }
         ];
 
+        // 🔧 КОЛЕСО: призы с индексами сегментов
         const wheelPrizes = [
-            { amount:10, label:"$10", color:"#EF5350" },
-            { amount:25, label:"$25", color:"#FFA500" },
-            { amount:50, label:"$50", color:"#FFD700" },
-            { amount:0, label:"XP+50", color:"#4CAF50", xp:50 },
-            { amount:100, label:"$100", color:"#2196F3" },
-            { amount:500, label:"JACKPOT!", color:"#9C27B0" }
+            { amount:10, label:"$10", color:"#EF5350", segment:0 },
+            { amount:25, label:"$25", color:"#FFA500", segment:1 },
+            { amount:50, label:"$50", color:"#FFD700", segment:2 },
+            { amount:0, label:"XP+50", color:"#4CAF50", xp:50, segment:3 },
+            { amount:100, label:"$100", color:"#2196F3", segment:4 },
+            { amount:500, label:"JACKPOT!", color:"#9C27B0", segment:5 }
         ];
 
         // ============================================
-        // ХРАНЕНИЕ ДАННЫХ
+        // 🔧 ХРАНЕНИЕ ДАННЫХ — ИСПРАВЛЕНО
         // ============================================
+        function getStorageKey(key) { return `tomcase_${tgUser.id}_${key}`; }
+        
         function saveData() {
-            if (tg?.CloudStorage) {
-                try {
-                    const key = `user_${tgUser.id}`;
-                    tg.CloudStorage.setItem(key+'_balance', balance.toString());
-                    tg.CloudStorage.setItem(key+'_inventory', JSON.stringify(inventory));
-                    tg.CloudStorage.setItem(key+'_stats', JSON.stringify(stats));
-                    tg.CloudStorage.setItem(key+'_daily', dailyBonusClaimed ? '1' : '0');
-                    tg.CloudStorage.setItem(key+'_wheel', wheelLastSpin.toString());
-                } catch(e) { saveToLocal(); }
-            } else { saveToLocal(); }
-        }
-
-        function saveToLocal() {
-            const key = `user_${tgUser.id}`;
-            localStorage.setItem(key+'_balance', balance.toString());
-            localStorage.setItem(key+'_inventory', JSON.stringify(inventory));
-            localStorage.setItem(key+'_stats', JSON.stringify(stats));
-            localStorage.setItem(key+'_daily', dailyBonusClaimed ? '1' : '0');
-            localStorage.setItem(key+'_wheel', wheelLastSpin.toString());
+            const data = {
+                balance, inventory, stats,
+                dailyBonusClaimed, wheelLastSpin,
+                lastWorkTime, lastAdTime, lastHourlyBonus
+            };
+            try {
+                if (tg?.CloudStorage) {
+                    tg.CloudStorage.setItem(getStorageKey('data'), JSON.stringify(data));
+                } else {
+                    localStorage.setItem(getStorageKey('data'), JSON.stringify(data));
+                }
+            } catch(e) { console.error('Save error:', e); }
         }
 
         function loadData() {
-            const key = `user_${tgUser.id}`;
-            if (tg?.CloudStorage) {
-                balance = 100; inventory = []; stats = {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0};
-            } else {
-                balance = parseFloat(localStorage.getItem(key+'_balance')) || 100;
-                try { inventory = JSON.parse(localStorage.getItem(key+'_inventory')) || []; } catch{ inventory = []; }
-                try { stats = JSON.parse(localStorage.getItem(key+'_stats')) || {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0}; } catch{ stats = {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0}; }
+            try {
+                let raw = null;
+                if (tg?.CloudStorage) {
+                    // CloudStorage асинхронный, но для простоты используем синхронный подход
+                    raw = localStorage.getItem(getStorageKey('data'));
+                } else {
+                    raw = localStorage.getItem(getStorageKey('data'));
+                }
+                
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    balance = data.balance ?? 100;
+                    inventory = data.inventory ?? [];
+                    stats = data.stats ?? {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0};
+                    dailyBonusClaimed = data.dailyBonusClaimed ?? false;
+                    wheelLastSpin = data.wheelLastSpin ?? 0;
+                    lastWorkTime = data.lastWorkTime ?? 0;
+                    lastAdTime = data.lastAdTime ?? 0;
+                    lastHourlyBonus = data.lastHourlyBonus ?? 0;
+                }
+            } catch(e) { 
+                console.error('Load error:', e); 
+                // Инициализация по умолчанию при ошибке
+                balance = 100; inventory = []; 
+                stats = {level:1,xp:0,casesOpened:0,totalEarned:0,referralsCount:0,referralsClaimed:[],flipWins:0,upgrades:0};
             }
-            dailyBonusClaimed = localStorage.getItem(key+'_daily') === '1';
-            wheelLastSpin = parseInt(localStorage.getItem(key+'_wheel')) || 0;
             isLoadingData = false;
             updateAllUI();
+            updateEarnButtons();
             checkReferral();
             updateWheelTimer();
         }
 
         // ============================================
-        // РЕФЕРАЛЫ
+        // РЕФЕРАЛЫ — 🔧 УВЕЛИЧЕН БОНУС
         // ============================================
         function checkReferral() {
             if (!introSkipped || !startParam) return;
             const refID = parseInt(startParam);
             if (isNaN(refID) || refID === tgUser.id || stats.referralsClaimed?.includes(refID)) return;
-            balance += 25; stats.totalEarned += 25;
+            
+            // 🔧 УВЕЛИЧЕННЫЙ БОНУС: $150 вместо $25
+            balance += 150; 
+            stats.totalEarned += 150;
             if (!Array.isArray(stats.referralsClaimed)) stats.referralsClaimed = [];
             stats.referralsClaimed.push(refID);
-            showToast("🎉 Бонус за приглашение: +$25.00!");
+            
+            showToast("🎉 Бонус за приглашение: +$150.00!");
+            if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
             updateBalance();
             saveData();
         }
@@ -844,7 +892,16 @@
         function addXp(amount) {
             stats.xp += amount;
             const max = stats.level * 100;
-            if (stats.xp >= max) { stats.xp -= max; stats.level++; showToast(`⭐ УРОВЕНЬ ${stats.level}!`); if (tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{} }
+            if (stats.xp >= max) { 
+                stats.xp -= max; 
+                stats.level++; 
+                showToast(`⭐ УРОВЕНЬ ${stats.level}!`); 
+                if (tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
+                // 🔧 БОНУС ЗА УРОВЕНЬ
+                const levelBonus = stats.level * 10;
+                balance += levelBonus;
+                showToast(`🎁 Бонус уровня: +$${levelBonus}!`);
+            }
             updateProfileUI();
             saveData();
         }
@@ -901,19 +958,14 @@
             const next = document.getElementById(screenId);
             if (!next) return;
             
-            if (direction === 'next') {
-                navigationHistory.push(screenId);
-            } else if (direction === 'prev') {
-                navigationHistory.pop();
-            }
+            if (direction === 'next') navigationHistory.push(screenId);
+            else if (direction === 'prev') navigationHistory.pop();
             
             if (current) {
                 current.classList.remove('active');
                 current.classList.add(direction === 'next' ? 'slide-next' : 'slide-prev');
                 void current.offsetWidth;
-                setTimeout(() => {
-                    current.classList.remove('slide-next', 'slide-prev');
-                }, 350);
+                setTimeout(() => current.classList.remove('slide-next', 'slide-prev'), 350);
             }
             
             next.classList.remove('slide-next', 'slide-prev');
@@ -930,6 +982,7 @@
             if (screenId === 'screen-inventory') renderInventory();
             if (screenId === 'screen-profile') updateProfileUI();
             if (screenId === 'screen-upgrader') renderUpgrader();
+            if (screenId === 'screen-minigames') updateEarnButtons();
         }
 
         // ============================================
@@ -973,9 +1026,8 @@
         }
 
         // ============================================
-        // 🔧 РУЛЕТКА — ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ
+        // РУЛЕТКА
         // ============================================
-        
         function openCaseDetails(type) {
             if (rouletteSpinning) return;
             currentCaseType = type;
@@ -995,9 +1047,7 @@
         }
 
         function startRoulette() {
-            // 🔧 Защита от двойного клика
             if (rouletteSpinning) return;
-            
             if (balance < casePrice) { 
                 showToast(`❌ Нужно $${casePrice.toFixed(2)}`); 
                 if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('error');}catch{}; 
@@ -1009,31 +1059,22 @@
             
             balance -= casePrice; stats.casesOpened++; addXp(30); updateBalance();
             playSfx('click');
-            
-            // 🔧 ВИБРАЦИЯ ПРИ СТАРТЕ
-            if(tg?.HapticFeedback) {
-                try { tg.HapticFeedback.impactOccurred('medium'); } catch{}
-            }
-            
+            if(tg?.HapticFeedback) try{tg.HapticFeedback.impactOccurred('medium');}catch{};
             nav('screen-opening', 'next');
             
             const track = document.getElementById('roulette-track');
             const message = document.getElementById('roulette-message');
             if(!track) return;
             
-            // 🔧 СБРОС ПЕРЕД НОВЫМ СПИНОМ
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
             track.innerHTML = '';
             rouletteSpinning = true;
-            
-            // 🔧 Текст ЗАМЕНЯЕТСЯ, не добавляется (исправление бага)
             message.innerText = '🎰 Крутим...';
             
             const items = caseItems[currentCaseType] || caseItems.backpack;
             const winnerIndex = 48;
             
-            // 🎲 Веса для предметов
             const rand = Math.random();
             if(rand < 0.55) currentItem = items[0];
             else if(rand < 0.85) currentItem = items[1];
@@ -1041,7 +1082,6 @@
             else if(rand < 0.995) currentItem = items[2];
             else currentItem = items[4];
 
-            // Генерация ленты
             for(let i=0; i<70; i++) {
                 const item = (i===winnerIndex) ? currentItem : items[Math.floor(Math.random()*items.length)];
                 const div = document.createElement('div');
@@ -1051,47 +1091,34 @@
                 track.appendChild(div);
             }
 
-            // 🎯 Расчёт позиции с учётом адаптивности
-            const itemW = 150 + 20; // Базовый размер + отступ
+            const itemW = 150 + 20;
             const containerCenter = document.querySelector('.roulette-container').offsetWidth / 2;
             const finalPos = -(winnerIndex * itemW) + containerCenter - (itemW / 2);
             
-            // 🔧 ПРИМЕНЯЕМ ПЛАВНЫЙ ПЕРЕХОД С cubic-bezier(0.15, 0.9, 0.2, 1)
-            // Это обеспечивает резкий старт и очень плавное, естественное замедление в конце
-            void track.offsetWidth; // reflow для применения transition
+            void track.offsetWidth;
             track.style.transition = 'transform 10s cubic-bezier(0.15, 0.9, 0.2, 1)';
             track.style.transform = `translateX(${finalPos}px)`;
             
-            // 🔊 Звуки во время вращения
             let clickCount = 0;
             const soundInterval = setInterval(() => {
                 if(!rouletteSpinning) { clearInterval(soundInterval); return; }
                 playSfx('click');
                 clickCount++;
-                // Уменьшаем частоту звуков к концу
                 if(clickCount > 30) clearInterval(soundInterval);
             }, 200);
             
-            // 🏁 Обработка окончания анимации
             track.addEventListener('transitionend', function onEnd() {
                 track.removeEventListener('transitionend', onEnd);
                 clearInterval(soundInterval);
-                
                 track.classList.remove('spinning');
                 
-                // 🔧 Подсветка победителя
                 const winner = track.children[winnerIndex];
                 if(winner) { 
                     winner.classList.add('winner'); 
                     playSfx('win'); 
-                    
-                    // 🔧 ВИБРАЦИЯ ПРИ ВЫИГРЫШЕ
-                    if(tg?.HapticFeedback) {
-                        try { tg.HapticFeedback.notificationOccurred('success'); } catch{}
-                    }
+                    if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
                 }
                 
-                // 🔧 Текст ЗАМЕНЯЕТСЯ полностью
                 message.innerText = '✅ Готово! Нажми для результата...';
                 
                 setTimeout(() => { 
@@ -1104,7 +1131,6 @@
 
         function showResult() {
             if(!currentItem) return;
-            // 🔧 Текст ЗАМЕНЯЕТСЯ, не добавляется
             document.getElementById('result-header').innerText = `${currentItem.name} | ${currentItem.collection}`;
             document.getElementById('result-price-top').innerText = "$"+currentItem.price.toFixed(2);
             const icon = document.getElementById('result-icon');
@@ -1137,50 +1163,23 @@
         // ============================================
         // TOMCOIN FLIP
         // ============================================
-        function selectFlip(choice) {
-            selectedFlip = choice;
-            document.getElementById('flip-tom').classList.toggle('active', choice==='tom');
-            document.getElementById('flip-dog').classList.toggle('active', choice==='dog');
-            playSfx('click');
-        }
-        
+        function selectFlip(choice) { selectedFlip = choice; document.getElementById('flip-tom').classList.toggle('active', choice==='tom'); document.getElementById('flip-dog').classList.toggle('active', choice==='dog'); playSfx('click'); }
         function doFlip() {
             if(flipCooldown) return;
             flipCooldown = true;
             playSfx('coin');
-            
-            const coin = document.getElementById('flip-coin');
-            const result = document.getElementById('flip-result');
-            const btn = document.getElementById('flip-btn');
-            
-            coin.classList.add('flipping');
-            btn.disabled = true;
-            result.className = 'flip-result';
-            result.innerText = '🪙 Крутится...';
-            
+            const coin = document.getElementById('flip-coin'), result = document.getElementById('flip-result'), btn = document.getElementById('flip-btn');
+            coin.classList.add('flipping'); btn.disabled = true; result.className = 'flip-result'; result.innerText = '🪙 Крутится...';
             setTimeout(() => {
                 const won = Math.random() < 0.5;
                 const actualSide = won ? selectedFlip : (selectedFlip==='tom'?'dog':'tom');
-                
-                coin.classList.remove('flipping');
-                coin.classList.toggle('side-b', actualSide==='dog');
-                
+                coin.classList.remove('flipping'); coin.classList.toggle('side-b', actualSide==='dog');
                 if(won) {
                     balance += 15; stats.totalEarned += 15; stats.flipWins++;
-                    result.className = 'flip-result win';
-                    result.innerText = `🎉 Выпал ${actualSide==='tom'?'🐻':'🐕'}! +$15.00`;
-                    playSfx('win');
-                    if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
-                } else {
-                    result.className = 'flip-result lose';
-                    result.innerText = `😔 Выпал ${actualSide==='tom'?'🐻':'🐕'}... Попробуй ещё!`;
-                    playSfx('click');
-                }
-                
-                updateBalance();
-                updateProfileUI();
-                saveData();
-                
+                    result.className = 'flip-result win'; result.innerText = `🎉 Выпал ${actualSide==='tom'?'🐻':'🐕'}! +$15.00`;
+                    playSfx('win'); if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
+                } else { result.className = 'flip-result lose'; result.innerText = `😔 Выпал ${actualSide==='tom'?'🐻':'🐕'}... Попробуй ещё!`; playSfx('click'); }
+                updateBalance(); updateProfileUI(); saveData();
                 setTimeout(() => { flipCooldown=false; btn.disabled=false; }, 2000);
             }, 1600);
         }
@@ -1189,71 +1188,40 @@
         // UPGRADER
         // ============================================
         function renderUpgrader() {
-            const list = document.getElementById('upgrade-list');
-            if(!list) return;
-            list.innerHTML = '';
+            const list = document.getElementById('upgrade-list'); if(!list) return; list.innerHTML = '';
             upgradeTiers.forEach(tier => {
                 const div = document.createElement('div');
                 div.className = `upgrade-item ${selectedUpgradeChance===tier.chance?'selected':''}`;
                 div.onclick = () => { selectedUpgradeChance=tier.chance; renderUpgrader(); playSfx('click'); };
-                div.innerHTML = `
-                    <div class="upgrade-icon">⚡</div>
-                    <div class="upgrade-info">
-                        <div class="upgrade-name">${tier.label}</div>
-                        <div class="upgrade-chance ${tier.class}">Награда: предмет ×${tier.multiplier}</div>
-                    </div>
-                    <button class="upgrade-btn" onclick="event.stopPropagation(); doUpgrade(${tier.chance},${tier.multiplier})">UPGRADE</button>
-                `;
+                div.innerHTML = `<div class="upgrade-icon">⚡</div><div class="upgrade-info"><div class="upgrade-name">${tier.label}</div><div class="upgrade-chance ${tier.class}">Награда: предмет ×${tier.multiplier}</div></div><button class="upgrade-btn" onclick="event.stopPropagation(); doUpgrade(${tier.chance},${tier.multiplier})">UPGRADE</button>`;
                 list.appendChild(div);
             });
         }
-        
         function doUpgrade(chance, multiplier) {
-            if(upgradeCooldown || !inventory.length) { 
-                if(!inventory.length) showToast("🎒 Сначала получи предмет!"); 
-                return; 
-            }
+            if(upgradeCooldown || !inventory.length) { if(!inventory.length) showToast("🎒 Сначала получи предмет!"); return; }
             upgradeCooldown = true;
-            
-            const item = inventory[0];
-            const result = document.getElementById('upgrader-result');
-            
-            result.className = 'upgrader-result';
-            result.innerText = '⚡ Улучшаем...';
-            result.classList.add('show');
-            
+            const item = inventory[0], result = document.getElementById('upgrader-result');
+            result.className = 'upgrader-result'; result.innerText = '⚡ Улучшаем...'; result.classList.add('show');
             setTimeout(() => {
                 const won = Math.random() * 100 <= chance;
                 if(won) {
                     const newPrice = item.price * multiplier;
                     inventory[0] = { ...item, price: newPrice, name: item.name+'+', icon: '✨'+item.icon };
                     stats.upgrades++;
-                    result.className = 'upgrader-result win show';
-                    result.innerText = `🎉 Успех! ${item.name} → ${item.name}+ ($${newPrice.toFixed(2)})`;
-                    playSfx('win');
-                    if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
-                } else {
-                    inventory.shift();
-                    result.className = 'upgrader-result lose show';
-                    result.innerText = `💔 Не вышло... ${item.name} исчез`;
-                    playSfx('click');
-                }
-                updateBalance();
-                renderInventory();
-                updateProfileUI();
-                saveData();
+                    result.className = 'upgrader-result win show'; result.innerText = `🎉 Успех! ${item.name} → ${item.name}+ ($${newPrice.toFixed(2)})`;
+                    playSfx('win'); if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
+                } else { inventory.shift(); result.className = 'upgrader-result lose show'; result.innerText = `💔 Не вышло... ${item.name} исчез`; playSfx('click'); }
+                updateBalance(); renderInventory(); updateProfileUI(); saveData();
                 setTimeout(() => { upgradeCooldown=false; result.classList.remove('show'); }, 2500);
             }, 800);
         }
 
         // ============================================
-        // WHEEL OF FORTUNE
+        // 🔧 WHEEL OF FORTUNE — ПОЛНОСТЬЮ ИСПРАВЛЕН
         // ============================================
         function updateWheelTimer() {
-            const timer = document.getElementById('wheel-timer');
-            if(!timer) return;
-            const now = Date.now();
-            const next = wheelLastSpin + 24*60*60*1000;
+            const timer = document.getElementById('wheel-timer'); if(!timer) return;
+            const now = Date.now(), next = wheelLastSpin + 24*60*60*1000;
             if(now >= next) { timer.innerText = 'ГОТОВО!'; return; }
             const diff = next - now;
             const h = Math.floor(diff/3600000).toString().padStart(2,'0');
@@ -1269,44 +1237,155 @@
             
             const wheel = document.getElementById('wheel');
             const btn = document.getElementById('wheel-btn');
-            wheel.classList.add('spinning');
+            const result = document.getElementById('wheel-result');
+            
+            // 🔧 Выбираем приз СЛУЧАЙНО
+            const prizeIndex = Math.floor(Math.random() * wheelPrizes.length);
+            const prize = wheelPrizes[prizeIndex];
+            
+            // 🔧 Расчёт угла: каждый сегмент = 60°, указатель сверху (0°)
+            // Чтобы сегмент остановился под указателем, нужно повернуть колесо так,
+            // чтобы центр сегмента оказался в позиции 0° (верх)
+            // Формула: -(сегмент * 60 + 30) + много оборотов
+            const segmentAngle = prize.segment * 60;
+            const extraSpins = 5 + Math.floor(Math.random() * 3); // 5-7 полных оборотов для эффекта
+            const targetRotation = -(extraSpins * 360 + segmentAngle + 30);
+            
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'rotate(0deg)';
+            void wheel.offsetWidth; // reflow
+            
+            wheel.style.transition = 'transform 5s cubic-bezier(0.15, 0.9, 0.2, 1)';
+            wheel.style.transform = `rotate(${targetRotation}deg)`;
+            
             btn.disabled = true;
+            result.innerText = '🎡 Крутим...';
             playSfx('click');
             
             setTimeout(() => {
+                // 🔧 Показываем РЕАЛЬНЫЙ результат
                 wheel.classList.remove('spinning');
-                const prize = wheelPrizes[Math.floor(Math.random()*wheelPrizes.length)];
-                if(prize.xp) { addXp(prize.xp); showToast(`⭐ ${prize.label}!`); }
-                else { balance += prize.amount; stats.totalEarned += prize.amount; showToast(`🎁 ${prize.label}!`); playSfx(prize.amount>=100?'win':'cash'); }
+                
+                if(prize.xp) { 
+                    addXp(prize.xp); 
+                    result.innerHTML = `⭐ ${prize.label}!`; 
+                    result.style.color = '#4CAF50';
+                } else { 
+                    balance += prize.amount; 
+                    stats.totalEarned += prize.amount; 
+                    result.innerHTML = `🎁 ${prize.label}!`; 
+                    result.style.color = prize.amount >= 100 ? '#FFD700' : '#4CAF50';
+                    playSfx(prize.amount>=100?'win':'cash'); 
+                }
+                
                 wheelLastSpin = now;
-                updateBalance();
-                updateProfileUI();
-                saveData();
-                updateWheelTimer();
-                setTimeout(() => btn.disabled=false, 1500);
-            }, 4100);
+                updateBalance(); updateProfileUI(); saveData(); updateWheelTimer();
+                
+                if(tg?.HapticFeedback) try{tg.HapticFeedback.notificationOccurred('success');}catch{};
+                
+                setTimeout(() => btn.disabled = false, 2000);
+            }, 5100);
         }
 
         // ============================================
-        // ЕЖЕДНЕВНЫЙ БОНУС
+        // 🔧 НОВЫЕ СПОСОБЫ ЗАРАБОТКА
+        // ============================================
+        function updateEarnButtons() {
+            const now = Date.now();
+            
+            // Работа
+            const workBtn = document.getElementById('earn-work');
+            const workCd = document.getElementById('work-cooldown');
+            if(now - lastWorkTime >= WORK_COOLDOWN) {
+                workBtn.classList.remove('disabled');
+                workCd.innerText = 'Доступно';
+            } else {
+                workBtn.classList.add('disabled');
+                const sec = Math.ceil((WORK_COOLDOWN - (now - lastWorkTime)) / 1000);
+                workCd.innerText = `⏳ ${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
+            }
+            
+            // Реклама
+            const adBtn = document.getElementById('earn-ad');
+            const adCd = document.getElementById('ad-cooldown');
+            if(now - lastAdTime >= AD_COOLDOWN) {
+                adBtn.classList.remove('disabled');
+                adCd.innerText = 'Доступно';
+            } else {
+                adBtn.classList.add('disabled');
+                const sec = Math.ceil((AD_COOLDOWN - (now - lastAdTime)) / 1000);
+                adCd.innerText = `⏳ ${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
+            }
+            
+            // Часовой бонус
+            const bonusBtn = document.getElementById('earn-bonus');
+            const bonusCd = document.getElementById('bonus-cooldown');
+            if(now - lastHourlyBonus >= HOURLY_COOLDOWN) {
+                bonusBtn.classList.remove('disabled');
+                bonusCd.innerText = 'Доступно';
+            } else {
+                bonusBtn.classList.add('disabled');
+                const min = Math.ceil((HOURLY_COOLDOWN - (now - lastHourlyBonus)) / 60000);
+                bonusCd.innerText = `⏳ ${min} мин`;
+            }
+            
+            // Обновляем таймеры каждую секунду
+            setTimeout(updateEarnButtons, 1000);
+        }
+        
+        function earnWork() {
+            const now = Date.now();
+            if(now - lastWorkTime < WORK_COOLDOWN) { showToast("⏳ Ещё рано!"); return; }
+            lastWorkTime = now;
+            balance += 5; stats.totalEarned += 5; addXp(5);
+            playSfx('cash'); showToast("💼 Работа выполнена: +$5.00 +5 XP!");
+            if(tg?.HapticFeedback) try{tg.HapticFeedback.impactOccurred('light');}catch{};
+            updateBalance(); updateProfileUI(); updateEarnButtons(); saveData();
+        }
+        
+        function earnAd() {
+            const now = Date.now();
+            if(now - lastAdTime < AD_COOLDOWN) { showToast("⏳ Ещё рано!"); return; }
+            lastAdTime = now;
+            // Симуляция просмотра рекламы
+            showToast("📺 Просмотр рекламы...");
+            setTimeout(() => {
+                balance += 3; stats.totalEarned += 3; addXp(3);
+                playSfx('cash'); showToast("✅ Реклама просмотрена: +$3.00 +3 XP!");
+                if(tg?.HapticFeedback) try{tg.HapticFeedback.impactOccurred('light');}catch{};
+                updateBalance(); updateProfileUI(); updateEarnButtons(); saveData();
+            }, 1500);
+        }
+        
+        function earnHourlyBonus() {
+            const now = Date.now();
+            if(now - lastHourlyBonus < HOURLY_COOLDOWN) { showToast("⏳ Приходи через час!"); return; }
+            lastHourlyBonus = now;
+            balance += 2; stats.totalEarned += 2; addXp(2);
+            playSfx('cash'); showToast("⏰ Часовой бонус: +$2.00 +2 XP!");
+            if(tg?.HapticFeedback) try{tg.HapticFeedback.impactOccurred('light');}catch{};
+            updateBalance(); updateProfileUI(); updateEarnButtons(); saveData();
+        }
+
+        // ============================================
+        // ЕЖЕДНЕВНЫЙ БОНУС — 🔧 УВЕЛИЧЕН
         // ============================================
         function claimDailyBonus() {
             if(dailyBonusClaimed) { showToast("✅ Уже забрал сегодня!"); return; }
-            balance += 10; stats.totalEarned += 10; addXp(15);
+            // 🔧 УВЕЛИЧЕННЫЙ БОНУС: $50 вместо $10
+            balance += 50; stats.totalEarned += 50; addXp(25);
             dailyBonusClaimed = true;
             playSfx('cash');
-            showToast("🎁 Ежедневный бонус: +$10.00 +15 XP!");
+            showToast("🎁 Ежедневный бонус: +$50.00 +25 XP!");
             document.getElementById('daily-text').innerText = '✅ Забрано';
-            updateBalance();
-            updateProfileUI();
-            saveData();
+            updateBalance(); updateProfileUI(); saveData();
         }
 
         // ============================================
         // ИНИЦИАЛИЗАЦИЯ
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🎮 TOM CASE v2.1 — запуск (исправленная рулетка)');
+            console.log('🎮 TOM CASE v2.2 — запуск (исправлено всё!)');
             loadData();
             playIntro();
             renderUpgrader();
