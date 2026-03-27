@@ -53,7 +53,7 @@
         
         /* Grids & Cards */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; overflow-y: auto; padding-bottom: 70px;}
-        .card { background: white; color: black; text-align: center; font-size: 14px; position: relative; cursor: pointer; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        .card { background: white; color: black; text-align: center; font-size: 14px; position: relative; cursor: pointer; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s; }
         .card:active { transform: scale(0.95); }
         .card-img { font-size: 50px; flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; background: #fff; }
         .card-title { font-weight: bold; padding: 5px; color: white; background: #8B0000; font-size: 14px;}
@@ -62,7 +62,7 @@
         /* Roulette */
         .roulette-container { width: 100%; height: 150px; background: rgba(0,0,0,0.9); position: absolute; top: 40%; overflow: hidden; display: flex; align-items: center; border-top: 4px solid #FFD700; border-bottom: 4px solid #FFD700; }
         .roulette-track { display: flex; height: 100%; align-items: center; transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1);}
-        .roulette-item { min-width: 120px; height: 120px; background: white; margin: 0 5px; display: flex; align-items: center; justify-content: center; font-size: 50px; border-bottom: 6px solid; border-radius: 3px; }
+        .roulette-item { min-width: 120px; height: 120px; background: white; margin: 0 5px; display: flex; align-items: center; justify-content: center; font-size: 50px; border-bottom: 6px solid; border-radius: 5px; }
         .pointer { position: absolute; top: 25%; left: 50%; transform: translateX(-50%); width: 4px; height: 230px; background: #FFD700; z-index: 10; box-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700; border-radius: 2px; }
         
         /* Result Screen */
@@ -74,21 +74,21 @@
         
         /* Inventory */
         .inventory-list { padding: 10px; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; padding-bottom: 70px;}
-        .inv-item { background: white; text-align: center; padding: 15px 0 25px 0; font-size: 40px; position: relative; border-bottom: 5px solid #000; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        .inv-item { background: white; text-align: center; padding: 15px 0 25px 0; font-size: 40px; position: relative; border-bottom: 5px solid #000; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .inv-item:active { transform: scale(0.95); }
         .inv-price { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: #4CAF50; font-size: 11px; padding: 4px; font-weight: bold; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
         .inv-sell-btn { position: absolute; top: 2px; right: 2px; background: red; color: white; border: none; border-radius: 3px; font-size: 10px; padding: 2px 5px; cursor: pointer; transition: background 0.2s; }
         .inv-sell-btn:active { background: darkred; }
         
         /* Bonuses */
-        .bonus-card { background: linear-gradient(135deg, #34495E, #2C3E50); color: white; text-align: center; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s; }
+        .bonus-card { background: linear-gradient(135deg, #34495E, #2C3E50); color: white; text-align: center; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
         .bonus-card:active { transform: scale(0.95); }
         .bonus-icon { font-size: 45px; padding: 20px 0; background: rgba(0,0,0,0.2);}
         .bonus-text { padding: 15px 5px; font-size: 14px; font-weight: bold;}
         
         /* Floating Text */
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0);} 100% { opacity: 0; transform: translateY(-50px);}}
-        .click-floating-text { position: absolute; color: #4CAF50; font-weight: bold; font-size: 20px; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 100; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+        .click-floating-text { position: absolute; color: #4CAF50; font-weight: bold; font-size: 20px; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 100; text-shadow: 1px 1px 2px #000; }
         
         /* Profile & Levels */
         .profile-card { background: rgba(0,0,0,0.5); border: 2px solid #FFD700; border-radius: 10px; padding: 15px; margin: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
@@ -106,7 +106,7 @@
         .audio-toggle { background: transparent; border: none; font-size: 24px; cursor: pointer; color: white; transition: transform 0.2s; }
         .audio-toggle:active { transform: scale(0.9); }
 
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid #FFD700; color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; display: none; opacity: 0; transition: opacity 0.3s; z-index: 1000; max-width: 80%; text-align: center; }
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid #FFD700; color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 200; opacity: 0; transition: opacity 0.3s; }
         
         /* Loading indicator */
         .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #FFD700; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: auto; }
@@ -115,12 +115,12 @@
 </head>
 <body>
 
-<audio id="bg-audio" loop preload="none">
-    <source src="https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg" type="audio/ogg">
+<audio id="bg-audio" loop preload="auto" volume="0.3">
+    <source src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" type="audio/wav">
 </audio>
-<audio id="sfx-click" preload="none" src="https://actions.google.com/sounds/v1/ui/button_click.ogg"></audio>
-<audio id="sfx-win" preload="none" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-<audio id="sfx-cash" preload="none" src="https://actions.google.com/sounds/v1/office/coins_in_hand.ogg"></audio>
+<audio id="sfx-click" preload="auto" src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="></audio>
+<audio id="sfx-win" preload="auto" src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="></audio>
+<audio id="sfx-cash" preload="auto" src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="></audio>
 
 <div id="app">
     <div id="screen-intro" class="screen active" onclick="skipIntro()">
@@ -163,34 +163,36 @@
             <span>Твой Профиль</span>
             <span class="balance-disp">$100.00</span>
         </div>
-        <div class="profile-card">
-            <div class="profile-avatar" id="prof-avatar">👤</div>
-            <div class="profile-name" id="prof-name">Игрок</div>
-            <div style="font-size: 12px; color: #888;">ID: <span id="prof-id">000000</span></div>
-            
-            <div class="level-container">
-                <div class="level-text">
-                    <span style="color:#FFD700; font-weight:bold;">УРОВЕНЬ <span id="prof-lvl">1</span></span>
-                    <span><span id="prof-xp">0</span> / <span id="prof-max-xp">100</span> XP</span>
+        <div style="overflow-y: auto; flex: 1; padding-bottom: 70px;">
+            <div class="profile-card">
+                <div class="profile-avatar" id="prof-avatar">👤</div>
+                <div class="profile-name" id="prof-name">Игрок</div>
+                <div style="font-size: 12px; color: #888;">ID: <span id="prof-id">000000</span></div>
+                
+                <div class="level-container">
+                    <div class="level-text">
+                        <span style="color:#FFD700; font-weight:bold;">УРОВЕНЬ <span id="prof-lvl">1</span></span>
+                        <span><span id="prof-xp">0</span> / <span id="prof-max-xp">100</span> XP</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="prof-progress"></div>
+                    </div>
+                    <div style="font-size:10px; margin-top:5px; color:#888;">Получай XP за открытие кейсов и клики!</div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="prof-progress"></div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">Открыто кейсов<span id="stat-cases">0</span></div>
+                    <div class="stat-box">Всего заработано<span id="stat-earned">$0.00</span></div>
                 </div>
-                <div style="font-size:10px; margin-top:5px; color:#888;">Получай XP за открытие кейсов и клики!</div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">Открыто кейсов<span id="stat-cases">0</span></div>
-                <div class="stat-box">Всего заработано<span id="stat-earned">$0.00</span></div>
+            <div class="profile-card" style="margin-top: 0; background: #1B5E20; border-color: #4CAF50;">
+                <h3 style="color:#fff; margin-bottom:10px;">Реферальная система</h3>
+                <p style="font-size:12px; color:#ccc; margin-bottom:10px;">Приглашай друзей и получай <strong style="color:#FFD700;">$50.00</strong> за каждого!</p>
+                <div style="font-size:14px; margin-bottom:10px;">Приглашено: <strong id="stat-refs" style="color:#FFD700;">0</strong> друзей</div>
+                <button class="btn" style="background:#4CAF50;" onclick="copyRefLink()">СКОПИРОВАТЬ ССЫЛКУ</button>
+                <div style="font-size:10px; color:#aaa; margin-top:8px;">Ваша реф. ссылка скопируется в буфер обмена</div>
             </div>
-        </div>
-
-        <div class="profile-card" style="margin-top: 0; background: #1B5E20; border-color: #4CAF50;">
-            <h3 style="color:#fff; margin-bottom:10px;">Реферальная система</h3>
-            <p style="font-size:12px; color:#ccc; margin-bottom:10px;">Приглашай друзей и получай <strong style="color:#FFD700;">$50.00</strong> за каждого!</p>
-            <div style="font-size:14px; margin-bottom:10px;">Приглашено: <strong id="stat-refs" style="color:#FFD700;">0</strong> друзей</div>
-            <button class="btn" style="background:#4CAF50;" onclick="copyRefLink()">СКОПИРОВАТЬ ССЫЛКУ</button>
-            <div style="font-size:10px; color:#aaa; margin-top:8px;">Ваша реф. ссылка скопируется в буфер обмена</div>
         </div>
 
         <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
@@ -207,20 +209,20 @@
                 <div class="card-title">Рюкзак тома</div>
                 <div class="card-price" style="background:#689A53;">$3.00</div>
             </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
+            <div class="card" onclick="openCaseDetails('chest')">
                 <div class="card-img" style="background:#E6A8A8;">💼</div>
                 <div class="card-title">Ларец тома</div>
-                <div class="card-price" style="background:#689A53;">$300.00</div>
+                <div class="card-price" style="background:#689A53;">$10.00</div>
             </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
+            <div class="card" onclick="openCaseDetails('crypto')">
                 <div class="card-img" style="background:#F39C12; border-radius: 50%; color: white; width: 60px; height: 60px; margin: auto;">₿</div>
                 <div class="card-title" style="background:#4B6995;">Crypto case</div>
-                <div class="card-price" style="background:#4B6995;">$2000.00</div>
+                <div class="card-price" style="background:#4B6995;">$50.00</div>
             </div>
-            <div class="card" onclick="showToast('Кейс временно закрыт!')">
+            <div class="card" onclick="openCaseDetails('legendary')">
                 <div class="card-img" style="background:#000;">💎</div>
-                <div class="card-title" style="background:#4B6995;">Try your luck</div>
-                <div class="card-price" style="background:#4B6995;">$2000.00</div>
+                <div class="card-title" style="background:#4B6995;">Легендарный</div>
+                <div class="card-price" style="background:#4B6995;">$100.00</div>
             </div>
         </div>
         <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
@@ -228,13 +230,13 @@
 
     <div id="screen-case-details" class="screen">
         <div class="header">
-            <span>Возможны�� предметы:</span>
+            <span>Возможные предметы:</span>
             <span class="balance-disp">$100.00</span>
         </div>
         <div class="grid" id="possible-items"></div>
         <div style="display:flex; gap:10px; padding: 0 10px; position: sticky; bottom: 10px; width: 100%;">
             <button class="btn" onclick="nav('screen-cases')" style="margin:0;">НАЗАД</button>
-            <button class="btn" id="open-btn" onclick="startRoulette()" style="margin:0; background-color: #4CAF50;">ОТКРЫТЬ ($3.00)</button>
+            <button class="btn" id="open-btn" onclick="startRoulette()" style="margin:0; background-color: #4CAF50;">ОТКРЫТЬ</button>
         </div>
     </div>
 
@@ -300,9 +302,13 @@
     const tg = window.Telegram?.WebApp;
     
     if (tg) {
-        tg.ready();
-        tg.expand();
-        tg.enableClosingConfirmation();
+        try {
+            tg.ready();
+            tg.expand();
+            tg.enableClosingConfirmation();
+        } catch (e) {
+            console.warn('Telegram WebApp частично инициализирован:', e);
+        }
     } else {
         console.warn('Telegram WebApp не инициализирован. Работаем в режиме разработки.');
     }
@@ -310,10 +316,13 @@
     // Получение данных пользователя из Telegram
     const tgUser = tg?.initDataUnsafe?.user || { 
         id: Math.floor(Math.random() * 1000000), 
-        first_name: "Игрок" 
+        first_name: "Игрок",
+        username: "tomcase_player"
     };
     
     const startParam = tg?.initDataUnsafe?.start_param;
+    console.log('👤 Telegram User:', tgUser);
+    console.log('🔗 Start Param:', startParam);
 
     // ============================================
     // ПЕРЕМЕННЫЕ СОСТОЯНИЯ ИГРЫ
@@ -330,6 +339,7 @@
     };
     let currentItem = null;
     let currentCaseType = 'backpack';
+    let casePrice = 3.00;
     let introSkipped = false;
     let audioEnabled = true;
     let isLoadingData = true;
@@ -342,6 +352,27 @@
             { id: 3, name: "Poco x3", collection: "School collection", price: 150.00, icon: "📱", color: "#D500F9", bg: "#fff" },
             { id: 4, name: "Charon", collection: "School collection", price: 20.00, icon: "🔋", color: "#B71C1C", bg: "#E0F7FA" },
             { id: 5, name: "Tom", collection: "Impossible collection", price: 500.00, icon: "🐻", color: "#FBC02D", bg: "#FFF9C4" }
+        ],
+        chest: [
+            { id: 6, name: "Золотая монета", collection: "Treasure", price: 25.00, icon: "🪙", color: "#FF6F00", bg: "#FFF3E0" },
+            { id: 7, name: "Шапка капитана", collection: "Treasure", price: 50.00, icon: "🎩", color: "#424242", bg: "#ECEFF1" },
+            { id: 8, name: "Карта сокровищ", collection: "Treasure", price: 75.00, icon: "🗺️", color: "#8B4513", bg: "#FBE9E7" },
+            { id: 9, name: "Жемчужина", collection: "Treasure", price: 100.00, icon: "🌊", color: "#00838F", bg: "#E0F2F1" },
+            { id: 10, name: "Корона", collection: "Legendary", price: 1000.00, icon: "👑", color: "#FFD700", bg: "#FFFDE7" }
+        ],
+        crypto: [
+            { id: 11, name: "Bitcoin", collection: "Crypto", price: 200.00, icon: "₿", color: "#F39C12", bg: "#FFF8E1" },
+            { id: 12, name: "Ethereum", collection: "Crypto", price: 150.00, icon: "Ξ", color: "#627EEA", bg: "#EFF6FF" },
+            { id: 13, name: "Dogecoin", collection: "Crypto", price: 100.00, icon: "🐕", color: "#C1A800", bg: "#FFFDE7" },
+            { id: 14, name: "NFT Арт", collection: "Crypto", price: 300.00, icon: "🖼️", color: "#AB47BC", bg: "#F3E5F5" },
+            { id: 15, name: "Криптозвезда", collection: "Ultra Rare", price: 2000.00, icon: "⭐", color: "#FFD700", bg: "#FFFDE7" }
+        ],
+        legendary: [
+            { id: 16, name: "Меч легенды", collection: "Legendary", price: 300.00, icon: "⚔️", color: "#C41C3B", bg: "#FFEBEE" },
+            { id: 17, name: "Магический посох", collection: "Legendary", price: 400.00, icon: "🔱", color: "#6A1B9A", bg: "#F3E5F5" },
+            { id: 18, name: "Панцирь дракона", collection: "Legendary", price: 500.00, icon: "🐉", color: "#DD2C00", bg: "#FFEBEE" },
+            { id: 19, name: "Святой Грааль", collection: "Mythical", price: 1500.00, icon: "🏆", color: "#FFD700", bg: "#FFFDE7" },
+            { id: 20, name: "Артефакт Богов", collection: "Godly", price: 5000.00, icon: "✨", color: "#00BCD4", bg: "#E0F2F1" }
         ]
     };
 
@@ -349,14 +380,19 @@
     // ОБЛАЧНОЕ ХРАНИЛИЩЕ (Cloud Storage)
     // ============================================
     function saveDataToCloud() {
-        if (!tg?.CloudStorage) return;
+        if (!tg?.CloudStorage) {
+            saveDataToLocalStorage();
+            return;
+        }
         
         try {
-            tg.CloudStorage.setItem(`user_${tgUser.id}_balance`, JSON.stringify(balance));
-            tg.CloudStorage.setItem(`user_${tgUser.id}_inventory`, JSON.stringify(inventory));
-            tg.CloudStorage.setItem(`user_${tgUser.id}_stats`, JSON.stringify(stats));
+            const key = `user_${tgUser.id}`;
+            tg.CloudStorage.setItem(key + '_balance', balance.toString());
+            tg.CloudStorage.setItem(key + '_inventory', JSON.stringify(inventory));
+            tg.CloudStorage.setItem(key + '_stats', JSON.stringify(stats));
+            console.log('☁️ Данные сохранены в облако');
         } catch (e) {
-            console.error('Ошибка при сохранении в облако:', e);
+            console.error('Ошибка облачного хранилища:', e);
             saveDataToLocalStorage();
         }
     }
@@ -365,48 +401,70 @@
         if (!tg?.CloudStorage) {
             loadDataFromLocalStorage();
             isLoadingData = false;
+            checkReferral();
+            updateAllUI();
             return;
         }
 
         try {
-            tg.CloudStorage.getItem(`user_${tgUser.id}_balance`, (err, data) => {
+            const key = `user_${tgUser.id}`;
+            let loaded = 0;
+            const checkComplete = () => {
+                loaded++;
+                if (loaded >= 3) {
+                    isLoadingData = false;
+                    checkReferral();
+                    updateAllUI();
+                    console.log('✅ Данные загружены из облака');
+                }
+            };
+
+            tg.CloudStorage.getItem(key + '_balance', (err, data) => {
                 if (!err && data) balance = parseFloat(data);
+                checkComplete();
             });
-            tg.CloudStorage.getItem(`user_${tgUser.id}_inventory`, (err, data) => {
+
+            tg.CloudStorage.getItem(key + '_inventory', (err, data) => {
                 if (!err && data) {
                     try { inventory = JSON.parse(data); } catch (e) { inventory = []; }
                 }
+                checkComplete();
             });
-            tg.CloudStorage.getItem(`user_${tgUser.id}_stats`, (err, data) => {
+
+            tg.CloudStorage.getItem(key + '_stats', (err, data) => {
                 if (!err && data) {
                     try { stats = JSON.parse(data); } catch (e) { stats = getDefaultStats(); }
                 }
-                isLoadingData = false;
-                checkReferral();
-                updateAllUI();
+                checkComplete();
             });
         } catch (e) {
             console.error('Ошибка при чтении облака:', e);
             loadDataFromLocalStorage();
             isLoadingData = false;
+            checkReferral();
+            updateAllUI();
         }
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(`user_${tgUser.id}_balance`, JSON.stringify(balance));
-        localStorage.setItem(`user_${tgUser.id}_inventory`, JSON.stringify(inventory));
-        localStorage.setItem(`user_${tgUser.id}_stats`, JSON.stringify(stats));
+        const key = `user_${tgUser.id}`;
+        localStorage.setItem(key + '_balance', balance.toString());
+        localStorage.setItem(key + '_inventory', JSON.stringify(inventory));
+        localStorage.setItem(key + '_stats', JSON.stringify(stats));
     }
 
     function loadDataFromLocalStorage() {
         try {
-            const b = localStorage.getItem(`user_${tgUser.id}_balance`);
-            const inv = localStorage.getItem(`user_${tgUser.id}_inventory`);
-            const s = localStorage.getItem(`user_${tgUser.id}_stats`);
+            const key = `user_${tgUser.id}`;
+            const b = localStorage.getItem(key + '_balance');
+            const inv = localStorage.getItem(key + '_inventory');
+            const s = localStorage.getItem(key + '_stats');
             
             if (b) balance = parseFloat(b);
             if (inv) inventory = JSON.parse(inv);
             if (s) stats = JSON.parse(s);
+            
+            console.log('📦 Данные загружены из localStorage');
         } catch (e) {
             console.error('Ошибка локального хранилища:', e);
         }
@@ -432,47 +490,37 @@
     // РЕФЕРАЛЬНАЯ СИСТЕМА
     // ============================================
     function checkReferral() {
-        if (!startParam || introSkipped) return;
+        if (introSkipped === false) return; // Проверяем только после интро
+        if (!startParam) return;
         
         const referrerID = parseInt(startParam);
         if (isNaN(referrerID) || referrerID === tgUser.id) return;
-        if (stats.referralsClaimed && stats.referralsClaimed.includes(referrerID)) return;
+        
+        if (stats.referralsClaimed && stats.referralsClaimed.includes(referrerID)) {
+            console.log('🎯 Рефбронус уже получен');
+            return;
+        }
 
         // Даём бонус текущему игроку
         balance += 50;
         stats.totalEarned += 50;
+        stats.referralsCount += 1;
         
-        // Инициализируем массив если его нет
         if (!Array.isArray(stats.referralsClaimed)) {
             stats.referralsClaimed = [];
         }
         stats.referralsClaimed.push(referrerID);
 
-        // Даём бонус реферреру через API (если есть backend)
-        notifyReferrer(referrerID);
-
-        saveData();
+        console.log('🎉 Реф-бонус активирован! +$50');
         showToast("🎉 Бонус за приглашение: +$50.00!");
         updateBalance();
-    }
-
-    function notifyReferrer(referrerID) {
-        // Здесь можно отправить webhook на сервер
-        if (tg?.sendData) {
-            tg.sendData(JSON.stringify({
-                action: 'referral_bonus',
-                referrer_id: referrerID,
-                user_id: tgUser.id,
-                bonus: 50
-            }));
-        }
+        saveData();
     }
 
     function copyRefLink() {
-        const botUsername = "TomCase_Official_Bot"; // Замени на реальное имя бота
+        const botUsername = "TomCase_Official_Bot";
         const refLink = `https://t.me/${botUsername}?startapp=${tgUser.id}`;
         
-        // Копирование для веб-версии
         if (navigator.clipboard) {
             navigator.clipboard.writeText(refLink).then(() => {
                 playSfx('click');
@@ -489,18 +537,22 @@
     // АУДИО
     // ============================================
     const bgAudio = document.getElementById('bg-audio');
-    bgAudio.volume = 0.3;
+    if (bgAudio) bgAudio.volume = 0.3;
 
     function toggleAudio() {
         audioEnabled = !audioEnabled;
         const btn = document.getElementById('audio-btn');
         
         if (audioEnabled) {
-            bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
-            btn.innerText = "🔊";
+            if (bgAudio) {
+                bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+            }
+            if (btn) btn.innerText = "🔊";
+            showToast("🔊 Звук включен");
         } else {
-            bgAudio.pause();
-            btn.innerText = "🔇";
+            if (bgAudio) bgAudio.pause();
+            if (btn) btn.innerText = "🔇";
+            showToast("🔇 Звук отключен");
         }
     }
 
@@ -514,7 +566,7 @@
         
         if (sfx) {
             sfx.currentTime = 0;
-            sfx.play().catch(e => console.log('Звук заблокирован:', e));
+            sfx.play().catch(e => console.log('SFX заблокирован:', e));
         }
     }
 
@@ -530,7 +582,9 @@
             stats.level++;
             
             if (tg?.HapticFeedback) {
-                tg.HapticFeedback.notificationOccurred('success');
+                try {
+                    tg.HapticFeedback.notificationOccurred('success');
+                } catch (e) {}
             }
             showToast(`⭐ УРОВЕНЬ ПОВЫШЕН! (${stats.level})`);
         }
@@ -550,8 +604,8 @@
         const statEarned = document.getElementById('stat-earned');
         const statRefs = document.getElementById('stat-refs');
         
-        if (profName) profName.innerText = tgUser.first_name || 'Игрок';
-        if (profId) profId.innerText = tgUser.id;
+        if (profName) profName.innerText = tgUser.first_name || tgUser.username || 'Игрок';
+        if (profId) profId.innerText = tgUser.id || '000000';
         if (profLvl) profLvl.innerText = stats.level;
         if (profXp) profXp.innerText = Math.floor(stats.xp);
         
@@ -561,7 +615,7 @@
         
         if (statCases) statCases.innerText = stats.casesOpened;
         if (statEarned) statEarned.innerText = "$" + stats.totalEarned.toFixed(2);
-        if (statRefs) statRefs.innerText = stats.referralsClaimed?.length || 0;
+        if (statRefs) statRefs.innerText = (stats.referralsClaimed?.length || 0);
     }
 
     // ============================================
@@ -580,7 +634,7 @@
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 300);
-        }, 2000);
+        }, 2500);
     }
 
     function updateBalance() {
@@ -686,12 +740,13 @@
 
     function skipIntro() {
         introSkipped = true;
-        checkReferral();
+        console.log('⏭️ Интро пропущено');
         
         if (audioEnabled && bgAudio) {
             bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
         }
         
+        checkReferral();
         nav('screen-main');
     }
 
@@ -700,8 +755,17 @@
     // ============================================
     function openCaseDetails(caseType = 'backpack') {
         currentCaseType = caseType;
-        const grid = document.getElementById('possible-items');
         
+        // Устанавливаем цену кейса
+        const prices = {
+            backpack: 3.00,
+            chest: 10.00,
+            crypto: 50.00,
+            legendary: 100.00
+        };
+        casePrice = prices[caseType] || 3.00;
+        
+        const grid = document.getElementById('possible-items');
         if (!grid) return;
         
         grid.innerHTML = '';
@@ -720,16 +784,22 @@
             grid.appendChild(card);
         });
         
+        // Обновляем кнопку
+        const openBtn = document.getElementById('open-btn');
+        if (openBtn) {
+            openBtn.innerText = `ОТКРЫТЬ ($${casePrice.toFixed(2)})`;
+        }
+        
         nav('screen-case-details');
     }
 
     function startRoulette() {
-        const casePrice = 3.00;
-        
         if (balance < casePrice) {
             showToast(`❌ Недостаточно средств! (Нужно $${casePrice.toFixed(2)})`);
             if (tg?.HapticFeedback) {
-                tg.HapticFeedback.notificationOccurred('error');
+                try {
+                    tg.HapticFeedback.notificationOccurred('error');
+                } catch (e) {}
             }
             return;
         }
@@ -747,7 +817,9 @@
         nav('screen-opening');
         
         if (tg?.HapticFeedback) {
-            tg.HapticFeedback.impactOccurred('medium');
+            try {
+                tg.HapticFeedback.impactOccurred('medium');
+            } catch (e) {}
         }
 
         // Генерируем рулетку
@@ -792,7 +864,9 @@
             ticks++;
             if (ticks < 15) {
                 if (tg?.HapticFeedback) {
-                    tg.HapticFeedback.impactOccurred('light');
+                    try {
+                        tg.HapticFeedback.impactOccurred('light');
+                    } catch (e) {}
                 }
                 playSfx('click');
             } else {
@@ -804,7 +878,9 @@
         setTimeout(() => {
             clearInterval(tickInterval);
             if (tg?.HapticFeedback) {
-                tg.HapticFeedback.notificationOccurred('success');
+                try {
+                    tg.HapticFeedback.notificationOccurred('success');
+                } catch (e) {}
             }
             playSfx('win');
             showResult();
@@ -867,7 +943,7 @@
         if (!invList) return;
         
         if (inventory.length === 0) {
-            invList.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; margin-top: 50px; color: #aaa;">Пусто. Откройте кейс!</div>';
+            invList.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; margin-top: 50px; color: #aaa; font-size: 16px;">Пусто. Откройте кейс!</div>';
             return;
         }
 
@@ -890,14 +966,16 @@
     }
 
     function sellFromInventory(invId, price) {
-        inventory = inventory.filter(item => item.invId !== invId);
+        inventory = inventory.filter(item => item.invId != invId);
         balance += price;
         stats.totalEarned += price;
         updateBalance();
         renderInventory();
         
         if (tg?.HapticFeedback) {
-            tg.HapticFeedback.impactOccurred('light');
+            try {
+                tg.HapticFeedback.impactOccurred('light');
+            } catch (e) {}
         }
         playSfx('cash');
         showToast(`💰 Продано за $${price.toFixed(2)}`);
@@ -913,7 +991,9 @@
         updateBalance();
         
         if (tg?.HapticFeedback) {
-            tg.HapticFeedback.impactOccurred('light');
+            try {
+                tg.HapticFeedback.impactOccurred('light');
+            } catch (e) {}
         }
         playSfx('click');
 
@@ -935,8 +1015,12 @@
     }
 
     function claimVideoBonus() {
-        playSfx('click');
-        showToast('🎬 Видео пока недоступно в TG версии. Следите за обновлениями!');
+        balance += 50;
+        stats.totalEarned += 50;
+        addXp(25);
+        updateBalance();
+        playSfx('cash');
+        showToast('✅ Бонус за видео: +$50.00!');
     }
 
     function resetProgress() {
@@ -955,8 +1039,9 @@
     // ИНИЦИАЛИЗАЦИЯ
     // ============================================
     document.addEventListener("DOMContentLoaded", () => {
-        console.log('🎮 Инициализация игры...');
-        console.log('👤 Пользователь:', tgUser.first_name, `(${tgUser.id})`);
+        console.log('🎮 Инициализация TOM CASE...');
+        console.log('👤 Пользователь:', tgUser.first_name || tgUser.username, `(ID: ${tgUser.id})`);
+        console.log('💾 Загрузка данных...');
         
         loadDataFromCloud();
         playIntro();
@@ -966,4 +1051,13 @@
     window.addEventListener('beforeunload', () => {
         saveData();
     });
-</script>*
+
+    // Обработка видимости страницы
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            saveData();
+        }
+    });
+</script>
+</body>
+</html>
