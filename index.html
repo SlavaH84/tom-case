@@ -20,10 +20,10 @@
         .screen.active { display: flex; }
         
         /* Intro */
-        #screen-intro { background: #000; z-index: 100; justify-content: center; align-items: center; text-align: center; padding: 20px;}
-        .intro-text { font-size: 20px; opacity: 0; position: absolute; transition: opacity 0.5s ease; line-height: 1.5; color: #fff;}
+        #screen-intro { background: #000; z-index: 100; justify-content: center; align-items: center; text-align: center; padding: 20px; flex-direction: column;}
+        .intro-text { font-size: 20px; opacity: 0; position: relative; transition: opacity 0.5s ease; line-height: 1.5; color: #fff; margin: 10px 0; z-index: 10; background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 10px; width: fit-content; max-width: 90%;}
         .intro-show { opacity: 1; }
-        .intro-names { position: relative; font-size: 36px; font-weight: bold; opacity: 0; transition: opacity 0.5s; display: flex; flex-direction: column; align-items: center;}
+        .intro-names { position: relative; font-size: 36px; font-weight: bold; opacity: 0; transition: opacity 0.5s; display: flex; flex-direction: column; align-items: center; margin-top: 20px;}
         .name-old { color: #888; position: relative; display: inline-block; transition: transform 0.8s, opacity 0.8s; }
         .strike { position: absolute; top: 50%; left: -10%; width: 0; height: 4px; background: red; transition: width 0.5s ease-out; transform: translateY(-50%) rotate(-5deg); z-index: 2;}
         .name-old.falling { transform: translateY(100px) rotate(20deg); opacity: 0; }
@@ -36,7 +36,7 @@
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
         /* UI Elements */
-        .header { background-color: #8A0030; padding: 10px 15px; font-size: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fff; z-index: 5;}
+        .header { background-color: #8A0 padding: 10px 15px; font-size: 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fff; z-index: 5;}
         .btn { background-color: #2196F3; color: white; border: none; padding: 12px; margin: 5px 0; font-size: 16px; cursor: pointer; width: 100%; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: all 0.2s; }
         .btn:active { background-color: #1976D2; transform: scale(0.95); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -50,7 +50,7 @@
         .logo-subtitle { font-size: 36px; font-weight: bold; color: #fff; text-shadow: 2px 2px 0 #000; }
         .logo-img { font-size: 80px; margin-top: -20px; margin-bottom: 20px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
         .version-tag { font-size: 12px; color: #FFD700; margin-bottom: 20px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 10px;}
-        
+
         /* Grids & Cards */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; overflow-y: auto; padding-bottom: 70px;}
         .card { background: white; color: black; text-align: center; font-size: 14px; position: relative; cursor: pointer; display: flex; flex-direction: column; border-radius: 5px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.2s; }
@@ -58,20 +58,20 @@
         .card-img { font-size: 50px; flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; background: #fff; }
         .card-title { font-weight: bold; padding: 5px; color: white; background: #8B0000; font-size: 14px;}
         .card-price { padding: 5px; color: white; font-size: 12px; font-weight: bold;}
-        
+
         /* Roulette */
         .roulette-container { width: 100%; height: 150px; background: rgba(0,0,0,0.9); position: absolute; top: 40%; overflow: hidden; display: flex; align-items: center; border-top: 4px solid #FFD700; border-bottom: 4px solid #FFD700; }
         .roulette-track { display: flex; height: 100%; align-items: center; transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1);}
         .roulette-item { min-width: 120px; height: 120px; background: white; margin: 0 5px; display: flex; align-items: center; justify-content: center; font-size: 50px; border-bottom: 6px solid; border-radius: 5px; }
         .pointer { position: absolute; top: 25%; left: 50%; transform: translateX(-50%); width: 4px; height: 230px; background: #FFD700; z-index: 10; box-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700; border-radius: 2px; }
-        
+
         /* Result Screen */
         #screen-result { background: linear-gradient(to bottom, #4A148C 0%, #311B92 50%, #4527A0 100%);}
         .result-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;}
         .result-img { font-size: 130px; background: radial-gradient(circle, #fff 0%, #eee 100%); padding: 40px; margin-bottom: 20px; border-bottom: 15px solid #8A2BE2; width: 80%; text-align: center; border-radius: 10px; animation: dropIn 0.5s ease-out; }
         @keyframes dropIn { 0% { transform: scale(0) rotate(-20deg); } 100% { transform: scale(1) rotate(0deg); } }
         .result-buttons { display: flex; gap: 10px; width: 100%; padding: 0 10px; margin-bottom: 20px; margin-top: auto; position: sticky; bottom: 10px;}
-        
+
         /* Inventory */
         .inventory-list { padding: 10px; overflow-y: auto; flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; padding-bottom: 70px;}
         .inv-item { background: white; text-align: center; padding: 15px 0 25px 0; font-size: 40px; position: relative; border-bottom: 5px solid #000; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
@@ -79,17 +79,17 @@
         .inv-price { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: #4CAF50; font-size: 11px; padding: 4px; font-weight: bold; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
         .inv-sell-btn { position: absolute; top: 2px; right: 2px; background: red; color: white; border: none; border-radius: 3px; font-size: 10px; padding: 2px 5px; cursor: pointer; transition: background 0.2s; }
         .inv-sell-btn:active { background: darkred; }
-        
+
         /* Bonuses */
         .bonus-card { background: linear-gradient(135deg, #34495E, #2C3E50); color: white; text-align: center; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: transform 0.2s; }
         .bonus-card:active { transform: scale(0.95); }
         .bonus-icon { font-size: 45px; padding: 20px 0; background: rgba(0,0,0,0.2);}
         .bonus-text { padding: 15px 5px; font-size: 14px; font-weight: bold;}
-        
+
         /* Floating Text */
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0);} 100% { opacity: 0; transform: translateY(-50px);}}
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0);} 100%0; transform: translateY(-50px);}}
         .click-floating-text { position: absolute; color: #4CAF50; font-weight: bold; font-size: 20px; pointer-events: none; animation: floatUp 1s ease-out forwards; z-index: 100; text-shadow: 1px 1px 2px #000; }
-        
+
         /* Profile & Levels */
         .profile-card { background: rgba(0,0,0,0.5); border: 2px solid #FFD700; border-radius: 10px; padding: 15px; margin: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
         .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: #fff; margin: 0 auto 10px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; border: 3px solid #FFD700; }
@@ -101,7 +101,32 @@
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;}
         .stat-box { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 5px; font-size: 12px; color: #ccc;}
         .stat-box span { display: block; font-size: 18px; font-weight: bold; color: #fff; margin-top: 5px;}
-        
+
+        /* Coin Flip */
+        #screen-coinflip { background: linear-gradient(45deg, #1a237e, #4a148c); }
+        .coinflip-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .coin { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #FFD700, #B8860B); display: flex; align-items: center; justify-content: center; font-size: 60px; margin: 20px 0; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); position: relative; transition: transform 1s ease-in-out; }
+        .coin.flipping { transform: rotateY(1800deg); }
+        .coin-heads::after { content: '🐻'; }
+        .coin-tails::after { content: '🔥'; }
+        .bet-controls { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
+        .bet-input { padding: 15px; font-size: 18px; border: 2px solid #FFD700; border-radius: 5px; background: rgba(0,0,0,0.5); color: white; text-align: center; }
+        .coinflip-result { font-size: 24px; font-weight: bold; margin: 15px 0; min-height: 30px; }
+        .win { color: #4CAF50; }
+        .lose { color: #F44336; }
+
+        /* Contracts */
+        #screen-contracts { background: linear-gradient(45deg, #0d47a1, #1976d2); }
+        .contracts-container { flex: 1; display: flex; flex-direction: column; padding: 20px; }
+        .contract { background: rgba(255,255,255,0.1); border: 2px solid #FFD700; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .contract-title { font-size: 18px; font-weight: bold; color: #FFD700; margin-bottom: 10px; }
+        .contract-desc { font-size: 14px; color: #ccc; margin-bottom: 10px; }
+        .contract-reward { font-size: 16px; color: #4CAF50; font-weight: bold; }
+        .contract-status { padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-top: 10px; }
+        .status-active { background: #4CAF50; color: white; }
+        .status-completed { background: #2196F3; color: white; }
+        .status-claimed { background: #9E9E9E; color: white; }
+
         /* Audio Toggle */
         .audio-toggle { background: transparent; border: none; font-size: 24px; cursor: pointer; color: white; transition: transform 0.2s; }
         .audio-toggle:active { transform: scale(0.9); }
@@ -114,13 +139,14 @@
     </style>
 </head>
 <body>
-    <!-- 🔊 АУДИО (исправлено) -->
+    <!-- 🔊 АУДИО -->
     <audio id="bg-audio" loop preload="auto">
         <source src="Sakura-Girl-Cat-Walk-chosic.com_.mp3" type="audio/mpeg">
     </audio>
     <audio id="sfx-click" preload="auto" src="buttonclickrelease.mp3"></audio>
     <audio id="sfx-win" preload="auto" src="gambling.mp3"></audio>
     <audio id="sfx-cash" preload="auto" src="gambling.mp3"></audio>
+    <audio id="sfx-lose" preload="auto" src="buttonclickrelease.mp3"></audio>
 
     <div id="app">
         <div id="screen-intro" class="screen active" onclick="skipIntro()">
@@ -153,8 +179,9 @@
                 <div class="version-tag">Telegram Edition by byblek 👑</div>
                 <button class="btn" onclick="nav('screen-cases')">ОТКРЫТЬ КЕЙСЫ</button>
                 <button class="btn" onclick="nav('screen-inventory')">ИНВЕНТАРЬ (<span id="inv-count-disp">0</span>)</button>
-                <button class="btn" style="background:#8E24AA;" onclick="nav('screen-profile')">ПРОФИЛЬ & РЕФЕРАЛЫ</button>
-                <button class="btn" onclick="nav('screen-bonuses')">БОНУСЫ</button>
+                <button class="btn" style="background:#AA;" onclick="nav('screen-profile')">ПРОФИЛЬ & РЕФЕРАЛЫ</button>
+                <button class="btn" style="background:#FF9800;" onclick="nav('screen-coinflip')">TOMCOIN ФЛИП</button>
+                <button class="btn" style="background:#4CAF50;" onclick="nav('screen-contracts')">КОНТРАКТЫ</button>
             </div>
         </div>
 
@@ -191,7 +218,7 @@
                     <p style="font-size:12px; color:#ccc; margin-bottom:10px;">Приглашай друзей и получай <strong style="color:#FFD700;">$50.00</strong> за каждого!</p>
                     <div style="font-size:14px; margin-bottom:10px;">Приглашено: <strong id="stat-refs" style="color:#FFD700;">0</strong> друзей</div>
                     <button class="btn" style="background:#4CAF50;" onclick="copyRefLink()">СКОПИРОВАТЬ ССЫЛКУ</button>
-                    <div style="font-size:10px; color:#aaa; margin-top:8px;">Ваша реф. ссылка скопируется в ба</div>
+                    <div style="font-size:10px; color:#aaa; margin-top:8px;">Ваша реф. ссылка скопируется в буфер обмена</div>
                 </div>
             </div>
 
@@ -212,7 +239,7 @@
                 <div class="card" onclick="openCaseDetails('chest')">
                     <div class="card-img" style="background:#E6A8A8;">💼</div>
                     <div class="card-title">Ларец тома</div>
-                    <div class="card-price" style="backgroundA53;">$10.00</div>
+                    <div class="card-price" style="background:#689A53;">$10.00</div>
                 </div>
                 <div class="card" onclick="openCaseDetails('crypto')">
                     <div class="card-img" style="background:#F39C12; border-radius: 50%; color: white; width: 60px; height: 60px; margin: auto;">₿</div>
@@ -270,25 +297,34 @@
             <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
         </div>
 
-        <div id="screen-bonuses" class="screen">
-            <div class="header" style="justify-content: space-between;">
-                <span>Бонусы:</span>
+        <div id="screen-coinflip" class="screen">
+            <div class="header">
+                <span>TOMCOIN ФЛИП</span>
                 <span class="balance-disp">$100.00</span>
             </div>
-            <div class="grid" style="grid-template-columns: 1fr 1fr; margin-top: 20px;">
-                <div class="bonus-card" onclick="claimVideoBonus()">
-                    <div class="bonus-icon">🎬</div>
-                    <div class="bonus-text">Рекламное видео<br><span style="color:#4CAF50;">+$50.00</span></div>
-                </div>
-                <div class="bonus-card" onclick="clickerTap(event)" id="clicker-btn">
-                    <div class="bonus-icon">💰</div>
-                    <div class="bonus-text">Тап-Кликер<br><span style="color:#4CAF50;">+$0.60 за тап</span></div>
-                </div>
-                <div class="bonus-card" onclick="resetProgress()" style="grid-column: 1 / -1; margin-top: 20px; background: #8B0000;">
-                    <div class="bonus-icon" style="font-size: 20px; padding: 10px;">⚠️</div>
-                    <div class="bonus-text">СБРОСИТЬ ПРОГРЕСС</div>
+            <div class="coinflip-container">
+                <div class="coin" id="coin">?</div>
+                <div class="coinflip-result" id="coinflip-result">Сделай ставку и выбери сторону!</div>
+                <div class="bet-controls">
+                    <input type="number" class="bet-input" id="bet-amount" placeholder="Введите сумму ставки" min="1" step="0.01">
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" style="flex: 1; background: #E91E63;" onclick="flipCoin('heads')">🐻 TOM</button>
+                        <button class="btn" style="flex: 1; background: #9C27B0;" onclick="flipCoin('tails')">🔥 OGON</button>
+                    </div>
                 </div>
             </div>
+            <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
+        </div>
+
+        <div id="screen-contracts" class="screen">
+            <div class="header">
+                <span>КОНТРАКТЫ</span>
+                <span class="balance-disp">$100.00</span>
+            </div>
+            <div class="contracts-container" id="contracts-list">
+                <!-- Контракты будут добавлены через JS -->
+            </div>
+            <button class="btn btn-bottom" onclick="refreshContracts()">ОБНОВИТЬ</button>
             <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
         </div>
     </div>
@@ -335,7 +371,10 @@
             casesOpened: 0,
             totalEarned: 0,
             referralsCount: 0,
-            referralsClaimed: []
+            referralsClaimed: [],
+            coinflipWins: 0,
+            coinflipLosses: 0,
+            contracts: []
         };
         let currentItem = null;
         let currentCaseType = 'backpack';
@@ -377,6 +416,139 @@
         };
 
         // ============================================
+        // КОНТРАКТЫ
+        // ============================================
+        const contractTemplates = [
+            { id: 1, title: "Открыть 5 кейсов", desc: "Откройте 5 кейсов любого типа", reward: 10, condition: (s) => s.casesOpened >= 5 },
+            { id: 2, title: "Накопить $50", desc: "Достигните баланса в $50", reward: 20, condition: (s) => balance >= 50 },
+            { id: 3, title: "Выиграть 3 раза в TomCoin", desc: "Выиграйте в мини-игре 3 раза подряд", reward: 30, condition: (s) => s.coinflipWins >= 3 },
+            { id: 4, title: "Продать 10 предметов", desc: "Продайте 10 предметов из инвентаря", reward: 15, condition: (s) => s.totalEarned >= 50 },
+            { id: 5, title: "Достичь 5 уровня", desc: "Прокачайтесь до 5 уровня", reward: 50, condition: (s) => s.level >= 5 }
+        ];
+
+        function generateContracts() {
+            if (stats.contracts.length > 0) return;
+            // Выбираем 3 случайных контракта
+            const shuffled = [...contractTemplates].sort(() => 0.5 - Math.random());
+            stats.contracts = shuffled.slice(0, 3).map(c => ({
+                ...c,
+                completed: false,
+                claimed: false
+            }));
+        }
+
+        function renderContracts() {
+           .getElementById('contracts-list');
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            stats.contracts.forEach(contract => {
+                const div = document.createElement('div');
+                div.className = 'contract';
+                
+                let statusClass = 'status-active';
+                let statusText = 'Активен';
+                if (contract.claimed) {
+                    statusClass = 'status-claimed';
+                    statusText = 'Получено';
+                } else if (contract.completed) {
+                    statusClass = 'status-completed';
+                    statusText = 'Готово!';
+                }
+                
+                div.innerHTML = `
+                    <div class="contract-title">${contract.title}</div>
+                    <div class="contract-desc">${contract.desc}</div>
+                    <div class="contract-reward">Награда: $${contract.reward.toFixed(2)}</div>
+                    <div class="${statusClass} contract-status">${statusText}</div>
+                    ${contract.completed && !contract.claimed ? `<button class="btn" style="margin-top: 10px; background: #4CAF50;" onclick="claimContract(${contract.id})">ПОЛУЧИТЬ НАГРАДУ</button>` : ''}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function claimContract(id) {
+            const contract = stats.contracts.find(c => c.id === id);
+            if (!contract || !contract.completed || contract.claimed) return;
+            
+            balance += contract.reward;
+            contract.claimed = true;
+            addXp(20);
+            updateBalance();
+            showToast(`🎉 Контракт завершён! +$${contract.reward.toFixed(2)}`);
+            renderContracts();
+        }
+
+        function refreshContracts() {
+            stats.contracts = [];
+            generateContracts();
+            renderContracts();
+            showToast("✅ Контракты обновлены!");
+        }
+
+        // ============================================
+        // TOMCOIN ФЛИП
+        // ============================================
+        function flipCoin(choice) {
+            const betInput = document.getElementById('bet-amount');
+            const betAmount = parseFloat(betInput.value);
+            
+            if (!betAmount || betAmount <= 0) {
+                showToast("Введите корректную сумму ставки!");
+                return;
+            }
+            
+            if (betAmount > balance) {
+                showToast("Недостаточно средств!");
+                return;
+            }
+            
+            const coin = document.getElementById('coin');
+            const resultDiv = document.getElementById('coinflip-result');
+            
+            coin.classList.add('flipping');
+            resultDiv.textContent = "Крутится...";
+            resultDiv.className = 'coinflip-result';
+            
+            // Анимация
+            setTimeout(() => {
+                coin.classList.remove('flipping');
+                
+                const win = Math.random() < 0.5; // 50/50
+                const won = choice === 'heads' ? win : !win;
+                
+                if (won) {
+                    coin.className = 'coin coin-heads';
+                    balance += betAmount;
+                    stats.coinflipWins++;
+                    resultDiv.textContent = `ПОБЕДА! +$${betAmount.toFixed(2)}`;
+                    resultDiv.className = 'coinflip-result win';
+                    playSfx('win');
+                } else {
+                    coin.className = 'coin coin-tails';
+                    balance -= betAmount;
+                    stats.coinflipLosses++;
+                    resultDiv.textContent = `ПОРАЖЕНИЕ! -$${betAmount.toFixed(2)}`;
+                    resultDiv.className = 'coinflip-result lose';
+                    playSfx('lose');
+                }
+                
+                updateBalance();
+                checkContractCompletion();
+            }, 1000);
+        }
+
+        function checkContractCompletion() {
+            stats.contracts.forEach(contract => {
+                if (!contract.completed && !contract.claimed && contract.condition(stats)) {
+                    contract.completed = true;
+                    showToast(`✅ Контракт выполнено: "${contract.title}"`);
+                }
+            });
+        }
+
+        // ============================================
         // ОБЛАЧНОЕ ХРАНИЛИЩЕ (Cloud Storage)
         // ============================================
         function saveDataToCloud() {
@@ -410,12 +582,13 @@
                 const key = `user_${tgUser.id}`;
                 let loaded = 0;
                 const checkComplete = () => {
-                    loaded++;
-                    if (loaded >= 3) {
+ if (loaded >= 3) {
                         isLoadingData = false;
                         checkReferral();
                         updateAllUI();
                         console.log('✅ Данные загружены из облака');
+                        generateContracts();
+                        renderContracts();
                     }
                 };
 
@@ -433,7 +606,11 @@
 
                 tg.CloudStorage.getItem(key + '_stats', (err, data) => {
                     if (!err && data) {
-                        try { stats = JSON.parse(data); } catch (e) { stats = getDefaultStats(); }
+                        try { 
+                            stats = JSON.parse(data);
+                            // Убедимся, что контракты есть
+                            if (!stats.contracts) stats.contracts = [];
+                        } catch (e) { stats = getDefaultStats(); }
                     }
                     checkComplete();
                 });
@@ -443,6 +620,8 @@
                 isLoadingData = false;
                 checkReferral();
                 updateAllUI();
+                generateContracts();
+                renderContracts();
             }
         }
 
@@ -477,7 +656,10 @@
                 casesOpened: 0,
                 totalEarned: 0,
                 referralsCount: 0,
-                referralsClaimed: []
+                referralsClaimed: [],
+                coinflipWins: 0,
+                coinflipLosses: 0,
+                contracts: []
             };
         }
 
@@ -563,6 +745,7 @@
             if (type === 'click') sfx = document.getElementById('sfx-click');
             else if (type === 'win') sfx = document.getElementById('sfx-win');
             else if (type === 'cash') sfx = document.getElementById('sfx-cash');
+            else if (type === 'lose') sfx = document.getElementById('sfx-lose');
             
             if (sfx) {
                 sfx.currentTime = 0;
@@ -596,6 +779,7 @@
         function updateProfileUI() {
             const profName = document.getElementById('prof-name');
             const profId = document.getElementById('prof-id');
+            const profAvatar = document.getElementById('prof-avatar');
             const profLvl = document.getElementById('prof-lvl');
             const profXp = document.getElementById('prof-xp');
             const profMaxXp = document.getElementById('prof-max-xp');
@@ -606,6 +790,10 @@
             
             if (profName) profName.innerText = tgUser.first_name || tgUser.username || 'Игрок';
             if (profId) profId.innerText = tgUser.id || '000000';
+            // Используем фото из tgUser если доступно, иначе стандартный символ
+            if (profAvatar) {
+                profAvatar.innerHTML = tgUser.photo_url ? `<img src="${tgUser.photo_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : '👤';
+            }
             if (profLvl) profLvl.innerText = stats.level;
             if (profXp) profXp.innerText = Math.floor(stats.xp);
             
@@ -677,6 +865,7 @@
             
             if (screenId === 'screen-inventory') renderInventory();
             if (screenId === 'screen-profile') updateProfileUI();
+            if (screenId === 'screen-contracts') renderContracts();
         }
 
         // ============================================
@@ -850,8 +1039,7 @@
             }
             track.innerHTML = html;
 
-            // Запускаем анимацию
-            setTimeout(() => {
+            // Запускаем            setTimeout(() => {
                 if (!track) return;
                 track.style.transition = 'transform 4s cubic-bezier(0.1, 0.7, 0.1, 1)';
                 const offset = -(winnerIndex * 130) + (window.innerWidth / 2) - 65;
@@ -982,60 +1170,6 @@
         }
 
         // ============================================
-        // БОНУСЫ
-        // ============================================
-        function clickerTap(event) {
-            balance += 0.60;
-            stats.totalEarned += 0.60;
-            addXp(1);
-            updateBalance();
-            
-            if (tg?.HapticFeedback) {
-                try {
-                    tg.HapticFeedback.impactOccurred('light');
-                } catch (e) {}
-            }
-            playSfx('click');
-
-            const clickerBtn = document.getElementById('clicker-btn');
-            if (!clickerBtn) return;
-
-            const rect = clickerBtn.getBoundingClientRect();
-            let x = event?.clientX ? event.clientX - rect.left : rect.width / 2;
-            let y = event?.clientY ? event.clientY - rect.top : rect.height / 2;
-
-            const floatTxt = document.createElement('div');
-            floatTxt.className = 'click-floating-text';
-            floatTxt.innerText = "+$0.60";
-            floatTxt.style.left = `${x}px`;
-            floatTxt.style.top = `${y}px`;
-            clickerBtn.appendChild(floatTxt);
-            
-            setTimeout(() => floatTxt.remove(), 1000);
-        }
-
-        function claimVideoBonus() {
-            balance += 50;
-            stats.totalEarned += 50;
-            addXp(25);
-            updateBalance();
-            playSfx('cash');
-            showToast('✅ Бонус за видео: +$50.00!');
-        }
-
-        function resetProgress() {
-            if (confirm("⚠️ Точно сбросить весь прогресс? Это удалит баланс, уровень и инвентарь!")) {
-                balance = 100.00;
-                inventory = [];
-                stats = getDefaultStats();
-                updateAllUI();
-                renderInventory();
-                saveData();
-                showToast("✅ Прогресс сброшен!");
-            }
-        }
-
-        // ============================================
         // ИНИЦИАЛИЗАЦИЯ
         // ============================================
         document.addEventListener("DOMContentLoaded", () => {
@@ -1060,4 +1194,4 @@
         });
     </script>
 </body>
-                                                                   </html>
+    </html>
