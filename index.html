@@ -114,369 +114,222 @@
     </style>
 </head>
 <body>
+    <!-- 🔊 АУДИО (исправлено) -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="Sakura-Girl-Cat-Walk-chosic.com_.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-click" preload="auto" src="buttonclickrelease.mp3"></audio>
+    <audio id="sfx-win" preload="auto" src="gambling.mp3"></audio>
+    <audio id="sfx-cash" preload="auto" src="gambling.mp3"></audio>
 
-<audio id="bg-audio" loop preload="auto" volume="0.3">
-    <source src="Sakura-Girl-Cat-Walk-chosic.com_.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="sfx-click" preload="auto" src="buttonclickrelease.mp3"></audio>
-<audio id="sfx-win" preload="auto" src="gambling.mp3"></audio>
-<audio id="sfx-cash" preload="auto" src="gambling.mp3"></audio>
-</audio>
-
-<audio id="sfx-click" preload="auto" src="buttonclickrelease.mp3"></audio>
-<audio id="sfx-win" preload="auto" src="gambling.mp3"></audio>
-<audio id="sfx-cash" preload="auto" src="gambling.mp3"></audio>
-<div id="app">
-    <div id="screen-intro" class="screen active" onclick="skipIntro()">
-        <div id="intro-text-1" class="intro-text">спустя 6 лет мучений с кодом...</div>
-        <div id="intro-text-2" class="intro-text">представляю полноценную версию в telegram!</div>
-        <div id="intro-names" class="intro-names">
-            <div id="name-old" class="name-old">ATT12AFTS
-                <div id="strike" class="strike"></div>
-            </div>
-            <div id="name-new-container" class="name-new-container">
-                <div class="crown">👑</div>
-                <div class="name-new">byblek</div>
-                <div id="subtitle" class="subtitle">ответственный за разработку порта в Telegram</div>
-            </div>
-        </div>
-        <div class="skip-hint">нажми, чтобы начать (и включить звук)</div>
-    </div>
-    
-    <div id="screen-main" class="screen">
-        <div class="header">
-            <span>Главное меню</span>
-            <button class="audio-toggle" onclick="toggleAudio()" id="audio-btn">🔊</button>
-        </div>
-        <div class="main-menu">
-            <div class="logo-container">
-                <div class="logo-title">TOM</div>
-                <div class="logo-subtitle">КЕЙС</div>
-            </div>
-            <div class="logo-img">🐻</div>
-            <div class="version-tag">Telegram Edition by byblek 👑</div>
-            <button class="btn" onclick="nav('screen-cases')">ОТКРЫТЬ КЕЙСЫ</button>
-            <button class="btn" onclick="nav('screen-inventory')">ИНВЕНТАРЬ (<span id="inv-count-disp">0</span>)</button>
-            <button class="btn" style="background:#8E24AA;" onclick="nav('screen-profile')">ПРОФИЛЬ & РЕФЕРАЛЫ</button>
-            <button class="btn" onclick="nav('screen-bonuses')">БОНУСЫ</button>
-        </div>
-    </div>
-
-    <div id="screen-profile" class="screen">
-        <div class="header">
-            <span>Твой Профиль</span>
-            <span class="balance-disp">$100.00</span>
-        </div>
-        <div style="overflow-y: auto; flex: 1; padding-bottom: 70px;">
-            <div class="profile-card">
-                <div class="profile-avatar" id="prof-avatar">👤</div>
-                <div class="profile-name" id="prof-name">Игрок</div>
-                <div style="font-size: 12px; color: #888;">ID: <span id="prof-id">000000</span></div>
-                
-                <div class="level-container">
-                    <div class="level-text">
-                        <span style="color:#FFD700; font-weight:bold;">УРОВЕНЬ <span id="prof-lvl">1</span></span>
-                        <span><span id="prof-xp">0</span> / <span id="prof-max-xp">100</span> XP</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="prof-progress"></div>
-                    </div>
-                    <div style="font-size:10px; margin-top:5px; color:#888;">Получай XP за открытие кейсов и клики!</div>
+    <div id="app">
+        <div id="screen-intro" class="screen active" onclick="skipIntro()">
+            <div id="intro-text-1" class="intro-text">спустя 6 лет мучений с кодом...</div>
+            <div id="intro-text-2" class="intro-text">представляю полноценную версию в telegram!</div>
+            <div id="intro-names" class="intro-names">
+                <div id="name-old" class="name-old">ATT12AFTS
+                    <div id="strike" class="strike"></div>
                 </div>
-
-                <div class="stats-grid">
-                    <div class="stat-box">Открыто кейсов<span id="stat-cases">0</span></div>
-                    <div class="stat-box">Всего заработано<span id="stat-earned">$0.00</span></div>
+                <div id="name-new-container" class="name-new-container">
+                    <div class="crown">👑</div>
+                    <div class="name-new">byblek</div>
+                    <div id="subtitle" class="subtitle">ответственный за разработку порта в Telegram</div>
                 </div>
             </div>
-
-            <div class="profile-card" style="margin-top: 0; background: #1B5E20; border-color: #4CAF50;">
-                <h3 style="color:#fff; margin-bottom:10px;">Реферальная система</h3>
-                <p style="font-size:12px; color:#ccc; margin-bottom:10px;">Приглашай друзей и получай <strong style="color:#FFD700;">$50.00</strong> за каждого!</p>
-                <div style="font-size:14px; margin-bottom:10px;">Приглашено: <strong id="stat-refs" style="color:#FFD700;">0</strong> друзей</div>
-                <button class="btn" style="background:#4CAF50;" onclick="copyRefLink()">СКОПИРОВАТЬ ССЫЛКУ</button>
-                <div style="font-size:10px; color:#aaa; margin-top:8px;">Ваша реф. ссылка скопируется в буфер обмена</div>
-            </div>
+            <div class="skip-hint">нажми, чтобы начать (и включить звук)</div>
         </div>
-
-        <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
-    </div>
-
-    <div id="screen-cases" class="screen">
-        <div class="header">
-            <span>Выберите кейс:</span>
-            <span class="balance-disp">$100.00</span>
-        </div>
-        <div class="grid">
-            <div class="card" onclick="openCaseDetails('backpack')">
-                <div class="card-img" style="background:#E6A8A8;">🎒</div>
-                <div class="card-title">Рюкзак тома</div>
-                <div class="card-price" style="background:#689A53;">$3.00</div>
-            </div>
-            <div class="card" onclick="openCaseDetails('chest')">
-                <div class="card-img" style="background:#E6A8A8;">💼</div>
-                <div class="card-title">Ларец тома</div>
-                <div class="card-price" style="background:#689A53;">$10.00</div>
-            </div>
-            <div class="card" onclick="openCaseDetails('crypto')">
-                <div class="card-img" style="background:#F39C12; border-radius: 50%; color: white; width: 60px; height: 60px; margin: auto;">₿</div>
-                <div class="card-title" style="background:#4B6995;">Crypto case</div>
-                <div class="card-price" style="background:#4B6995;">$50.00</div>
-            </div>
-            <div class="card" onclick="openCaseDetails('legendary')">
-                <div class="card-img" style="background:#000;">💎</div>
-                <div class="card-title" style="background:#4B6995;">Легендарный</div>
-                <div class="card-price" style="background:#4B6995;">$100.00</div>
-            </div>
-        </div>
-        <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
-    </div>
-
-    <div id="screen-case-details" class="screen">
-        <div class="header">
-            <span>Возможные предметы:</span>
-            <span class="balance-disp">$100.00</span>
-        </div>
-        <div class="grid" id="possible-items"></div>
-        <div style="display:flex; gap:10px; padding: 0 10px; position: sticky; bottom: 10px; width: 100%;">
-            <button class="btn" onclick="nav('screen-cases')" style="margin:0;">НАЗАД</button>
-            <button class="btn" id="open-btn" onclick="startRoulette()" style="margin:0; background-color: #4CAF50;">ОТКРЫТЬ</button>
-        </div>
-    </div>
-
-    <div id="screen-opening" class="screen">
-        <div class="pointer"></div>
-        <div class="roulette-container">
-            <div class="roulette-track" id="roulette-track"></div>
-        </div>
-    </div>
-
-    <div id="screen-result" class="screen">
-        <div class="header" style="background: transparent; border-bottom: none; font-size: 22px; flex-direction: column; align-items: flex-start; text-align: center; width: 100%;">
-            <div id="result-header" style="width: 100%;">Нож | School collection</div>
-            <div id="result-price-top" style="font-size: 20px; color: #4CAF50; font-weight: bold; width: 100%; margin-top: 5px;">$7.00</div>
-        </div>
-        <div class="result-content">
-            <div class="result-img" id="result-icon">🔪</div>
-        </div>
-        <div class="result-buttons">
-            <button class="btn btn-danger" onclick="sellCurrentItem()">ПРОДАТЬ</button>
-            <button class="btn" style="background: #4CAF50;" onclick="keepCurrentItem()">В ИНВЕНТАРЬ</button>
-        </div>
-    </div>
-
-    <div id="screen-inventory" class="screen">
-        <div class="header">
-            <span>Инвентарь (<span id="inv-count-header">0</span>):</span>
-            <span class="balance-disp">$100.00</span>
-        </div>
-        <div class="inventory-list" id="inventory-list"></div>
-        <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
-    </div>
-
-    <div id="screen-bonuses" class="screen">
-        <div class="header" style="justify-content: space-between;">
-            <span>Бонусы:</span>
-            <span class="balance-disp">$100.00</span>
-        </div>
-        <div class="grid" style="grid-template-columns: 1fr 1fr; margin-top: 20px;">
-            <div class="bonus-card" onclick="claimVideoBonus()">
-                <div class="bonus-icon">🎬</div>
-                <div class="bonus-text">Рекламное видео<br><span style="color:#4CAF50;">+$50.00</span></div>
-            </div>
-            <div class="bonus-card" onclick="clickerTap(event)" id="clicker-btn">
-                <div class="bonus-icon">💰</div>
-                <div class="bonus-text">Тап-Кликер<br><span style="color:#4CAF50;">+$0.60 за тап</span></div>
-            </div>
-            <div class="bonus-card" onclick="resetProgress()" style="grid-column: 1 / -1; margin-top: 20px; background: #8B0000;">
-                <div class="bonus-icon" style="font-size: 20px; padding: 10px;">⚠️</div>
-                <div class="bonus-text">СБРОСИТЬ ПРОГРЕСС</div>
-            </div>
-        </div>
-        <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
-    </div>
-</div>
-
-<div id="toast">Уведомление</div>
-
-<script>
-    // ============================================
-    // TELEGRAM WebApp ИНИЦИАЛИЗАЦИЯ
-    // ============================================
-    const tg = window.Telegram?.WebApp;
-    
-    if (tg) {
-        try {
-            tg.ready();
-            tg.expand();
-            tg.enableClosingConfirmation();
-        } catch (e) {
-            console.warn('Telegram WebApp частично инициализирован:', e);
-        }
-    } else {
-        console.warn('Telegram WebApp не инициализирован. Работаем в режиме разработки.');
-    }
-
-    // Получение данных пользователя из Telegram
-    const tgUser = tg?.initDataUnsafe?.user || { 
-        id: Math.floor(Math.random() * 1000000), 
-        first_name: "Игрок",
-        username: "tomcase_player"
-    };
-    
-    const startParam = tg?.initDataUnsafe?.start_param;
-    console.log('👤 Telegram User:', tgUser);
-    console.log('🔗 Start Param:', startParam);
-
-    // ============================================
-    // ПЕРЕМЕННЫЕ СОСТОЯНИЯ ИГРЫ
-    // ============================================
-    let balance = 100.00;
-    let inventory = [];
-    let stats = {
-        level: 1,
-        xp: 0,
-        casesOpened: 0,
-        totalEarned: 0,
-        referralsCount: 0,
-        referralsClaimed: []
-    };
-    let currentItem = null;
-    let currentCaseType = 'backpack';
-    let casePrice = 3.00;
-    let introSkipped = false;
-    let audioEnabled = true;
-    let isLoadingData = true;
-
-    // Товары по типам кейсов
-    const caseItems = {
-        backpack: [
-            { id: 1, name: "Линейка", collection: "School collection", price: 0.50, icon: "📏", color: "#B71C1C", bg: "#fff" },
-            { id: 2, name: "Нож", collection: "School collection", price: 7.00, icon: "🔪", color: "#6A1B9A", bg: "#fff" },
-            { id: 3, name: "Poco x3", collection: "School collection", price: 150.00, icon: "📱", color: "#D500F9", bg: "#fff" },
-            { id: 4, name: "Charon", collection: "School collection", price: 20.00, icon: "🔋", color: "#B71C1C", bg: "#E0F7FA" },
-            { id: 5, name: "Tom", collection: "Impossible collection", price: 500.00, icon: "🐻", color: "#FBC02D", bg: "#FFF9C4" }
-        ],
-        chest: [
-            { id: 6, name: "Золотая монета", collection: "Treasure", price: 25.00, icon: "🪙", color: "#FF6F00", bg: "#FFF3E0" },
-            { id: 7, name: "Шапка капитана", collection: "Treasure", price: 50.00, icon: "🎩", color: "#424242", bg: "#ECEFF1" },
-            { id: 8, name: "Карта сокровищ", collection: "Treasure", price: 75.00, icon: "🗺️", color: "#8B4513", bg: "#FBE9E7" },
-            { id: 9, name: "Жемчужина", collection: "Treasure", price: 100.00, icon: "🌊", color: "#00838F", bg: "#E0F2F1" },
-            { id: 10, name: "Корона", collection: "Legendary", price: 1000.00, icon: "👑", color: "#FFD700", bg: "#FFFDE7" }
-        ],
-        crypto: [
-            { id: 11, name: "Bitcoin", collection: "Crypto", price: 200.00, icon: "₿", color: "#F39C12", bg: "#FFF8E1" },
-            { id: 12, name: "Ethereum", collection: "Crypto", price: 150.00, icon: "Ξ", color: "#627EEA", bg: "#EFF6FF" },
-            { id: 13, name: "Dogecoin", collection: "Crypto", price: 100.00, icon: "🐕", color: "#C1A800", bg: "#FFFDE7" },
-            { id: 14, name: "NFT Арт", collection: "Crypto", price: 300.00, icon: "🖼️", color: "#AB47BC", bg: "#F3E5F5" },
-            { id: 15, name: "Криптозвезда", collection: "Ultra Rare", price: 2000.00, icon: "⭐", color: "#FFD700", bg: "#FFFDE7" }
-        ],
-        legendary: [
-            { id: 16, name: "Меч легенды", collection: "Legendary", price: 300.00, icon: "⚔️", color: "#C41C3B", bg: "#FFEBEE" },
-            { id: 17, name: "Магический посох", collection: "Legendary", price: 400.00, icon: "🔱", color: "#6A1B9A", bg: "#F3E5F5" },
-            { id: 18, name: "Панцирь дракона", collection: "Legendary", price: 500.00, icon: "🐉", color: "#DD2C00", bg: "#FFEBEE" },
-            { id: 19, name: "Святой Грааль", collection: "Mythical", price: 1500.00, icon: "🏆", color: "#FFD700", bg: "#FFFDE7" },
-            { id: 20, name: "Артефакт Богов", collection: "Godly", price: 5000.00, icon: "✨", color: "#00BCD4", bg: "#E0F2F1" }
-        ]
-    };
-
-    // ============================================
-    // ОБЛАЧНОЕ ХРАНИЛИЩЕ (Cloud Storage)
-    // ============================================
-    function saveDataToCloud() {
-        if (!tg?.CloudStorage) {
-            saveDataToLocalStorage();
-            return;
-        }
         
-        try {
-            const key = `user_${tgUser.id}`;
-            tg.CloudStorage.setItem(key + '_balance', balance.toString());
-            tg.CloudStorage.setItem(key + '_inventory', JSON.stringify(inventory));
-            tg.CloudStorage.setItem(key + '_stats', JSON.stringify(stats));
-            console.log('☁️ Данные сохранены в облако');
-        } catch (e) {
-            console.error('Ошибка облачного хранилища:', e);
-            saveDataToLocalStorage();
+        <div id="screen-main" class="screen">
+            <div class="header">
+                <span>Главное меню</span>
+                <button class="audio-toggle" onclick="toggleAudio()" id="audio-btn">🔊</button>
+            </div>
+            <div class="main-menu">
+                <div class="logo-container">
+                    <div class="logo-title">TOM</div>
+                    <div class="logo-subtitle">КЕЙС</div>
+                </div>
+                <div class="logo-img">🐻</div>
+                <div class="version-tag">Telegram Edition by byblek 👑</div>
+                <button class="btn" onclick="nav('screen-cases')">ОТКРЫТЬ КЕЙСЫ</button>
+                <button class="btn" onclick="nav('screen-inventory')">ИНВЕНТАРЬ (<span id="inv-count-disp">0</span>)</button>
+                <button class="btn" style="background:#8E24AA;" onclick="nav('screen-profile')">ПРОФИЛЬ & РЕФЕРАЛЫ</button>
+                <button class="btn" onclick="nav('screen-bonuses')">БОНУСЫ</button>
+            </div>
+        </div>
+
+        <div id="screen-profile" class="screen">
+            <div class="header">
+                <span>Твой Профиль</span>
+                <span class="balance-disp">$100.00</span>
+            </div>
+            <div style="overflow-y: auto; flex: 1; padding-bottom: 70px;">
+                <div class="profile-card">
+                    <div class="profile-avatar" id="prof-avatar">👤</div>
+                    <div class="profile-name" id="prof-name">Игрок</div>
+                    <div style="font-size: 12px; color: #888;">ID: <span id="prof-id">000000</span></div>
+                    
+                    <div class="level-container">
+                        <div class="level-text">
+                            <span style="color:#FFD700; font-weight:bold;">УРОВЕНЬ <span id="prof-lvl">1</span></span>
+                            <span><span id="prof-xp">0</span> / <span id="prof-max-xp">100</span> XP</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="prof-progress"></div>
+                        </div>
+                        <div style="font-size:10px; margin-top:5px; color:#888;">Получай XP за открытие кейсов и клики!</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">Открыто кейсов<span id="stat-cases">0</span></div>
+                        <div class="stat-box">Всего заработано<span id="stat-earned">$0.00</span></div>
+                    </div>
+                </div>
+
+                <div class="profile-card" style="margin-top: 0; background: #1B5E20; border-color: #4CAF50;">
+                    <h3 style="color:#fff; margin-bottom:10px;">Реферальная система</h3>
+                    <p style="font-size:12px; color:#ccc; margin-bottom:10px;">Приглашай друзей и получай <strong style="color:#FFD700;">$50.00</strong> за каждого!</p>
+                    <div style="font-size:14px; margin-bottom:10px;">Приглашено: <strong id="stat-refs" style="color:#FFD700;">0</strong> друзей</div>
+                    <button class="btn" style="background:#4CAF50;" onclick="copyRefLink()">СКОПИРОВАТЬ ССЫЛКУ</button>
+                    <div style="font-size:10px; color:#aaa; margin-top:8px;">Ваша реф. ссылка скопируется в ба</div>
+                </div>
+            </div>
+
+            <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
+        </div>
+
+        <div id="screen-cases" class="screen">
+            <div class="header">
+                <span>Выберите кейс:</span>
+                <span class="balance-disp">$100.00</span>
+            </div>
+            <div class="grid">
+                <div class="card" onclick="openCaseDetails('backpack')">
+                    <div class="card-img" style="background:#E6A8A8;">🎒</div>
+                    <div class="card-title">Рюкзак тома</div>
+                    <div class="card-price" style="background:#689A53;">$3.00</div>
+                </div>
+                <div class="card" onclick="openCaseDetails('chest')">
+                    <div class="card-img" style="background:#E6A8A8;">💼</div>
+                    <div class="card-title">Ларец тома</div>
+                    <div class="card-price" style="backgroundA53;">$10.00</div>
+                </div>
+                <div class="card" onclick="openCaseDetails('crypto')">
+                    <div class="card-img" style="background:#F39C12; border-radius: 50%; color: white; width: 60px; height: 60px; margin: auto;">₿</div>
+                    <div class="card-title" style="background:#4B6995;">Crypto case</div>
+                    <div class="card-price" style="background:#4B6995;">$50.00</div>
+                </div>
+                <div class="card" onclick="openCaseDetails('legendary')">
+                    <div class="card-img" style="background:#000;">💎</div>
+                    <div class="card-title" style="background:#4B6995;">Легендарный</div>
+                    <div class="card-price" style="background:#4B6995;">$100.00</div>
+                </div>
+            </div>
+            <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
+        </div>
+
+        <div id="screen-case-details" class="screen">
+            <div class="header">
+                <span>Возможные предметы:</span>
+                <span class="balance-disp">$100.00</span>
+            </div>
+            <div class="grid" id="possible-items"></div>
+            <div style="display:flex; gap:10px; padding: 0 10px; position: sticky; bottom: 10px; width: 100%;">
+                <button class="btn" onclick="nav('screen-cases')" style="margin:0;">НАЗАД</button>
+                <button class="btn" id="open-btn" onclick="startRoulette()" style="margin:0; background-color: #4CAF50;">ОТКРЫТЬ</button>
+            </div>
+        </div>
+
+        <div id="screen-opening" class="screen">
+            <div class="pointer"></div>
+            <div class="roulette-container">
+                <div class="roulette-track" id="roulette-track"></div>
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen">
+            <div class="header" style="background: transparent; border-bottom: none; font-size: 22px; flex-direction: column; align-items: flex-start; text-align: center; width: 100%;">
+                <div id="result-header" style="width: 100%;">Нож | School collection</div>
+                <div id="result-price-top" style="font-size: 20px; color: #4CAF50; font-weight: bold; width: 100%; margin-top: 5px;">$7.00</div>
+            </div>
+            <div class="result-content">
+                <div class="result-img" id="result-icon">🔪</div>
+            </div>
+            <div class="result-buttons">
+                <button class="btn btn-danger" onclick="sellCurrentItem()">ПРОДАТЬ</button>
+                <button class="btn" style="background: #4CAF50;" onclick="keepCurrentItem()">В ИНВЕНТАРЬ</button>
+            </div>
+        </div>
+
+        <div id="screen-inventory" class="screen">
+            <div class="header">
+                <span>Инвентарь (<span id="inv-count-header">0</span>):</span>
+                <span class="balance-disp">$100.00</span>
+            </div>
+            <div class="inventory-list" id="inventory-list"></div>
+            <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
+        </div>
+
+        <div id="screen-bonuses" class="screen">
+            <div class="header" style="justify-content: space-between;">
+                <span>Бонусы:</span>
+                <span class="balance-disp">$100.00</span>
+            </div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; margin-top: 20px;">
+                <div class="bonus-card" onclick="claimVideoBonus()">
+                    <div class="bonus-icon">🎬</div>
+                    <div class="bonus-text">Рекламное видео<br><span style="color:#4CAF50;">+$50.00</span></div>
+                </div>
+                <div class="bonus-card" onclick="clickerTap(event)" id="clicker-btn">
+                    <div class="bonus-icon">💰</div>
+                    <div class="bonus-text">Тап-Кликер<br><span style="color:#4CAF50;">+$0.60 за тап</span></div>
+                </div>
+                <div class="bonus-card" onclick="resetProgress()" style="grid-column: 1 / -1; margin-top: 20px; background: #8B0000;">
+                    <div class="bonus-icon" style="font-size: 20px; padding: 10px;">⚠️</div>
+                    <div class="bonus-text">СБРОСИТЬ ПРОГРЕСС</div>
+                </div>
+            </div>
+            <button class="btn btn-bottom" onclick="nav('screen-main')">НАЗАД</button>
+        </div>
+    </div>
+
+    <div id="toast">Уведомление</div>
+
+    <script>
+        // ============================================
+        // TELEGRAM WebApp ИНИЦИАЛИЗАЦИЯ
+        // ============================================
+        const tg = window.Telegram?.WebApp;
+        
+        if (tg) {
+            try {
+                tg.ready();
+                tg.expand();
+                tg.enableClosingConfirmation();
+            } catch (e) {
+                console.warn('Telegram WebApp частично инициализирован:', e);
+            }
+        } else {
+            console.warn('Telegram WebApp не инициализирован. Работаем в режиме разработки.');
         }
-    }
 
-    function loadDataFromCloud() {
-        if (!tg?.CloudStorage) {
-            loadDataFromLocalStorage();
-            isLoadingData = false;
-            checkReferral();
-            updateAllUI();
-            return;
-        }
+        // Получение данных пользователя из Telegram
+        const tgUser = tg?.initDataUnsafe?.user || { 
+            id: Math.floor(Math.random() * 1000000), 
+            first_name: "Игрок",
+            username: "tomcase_player"
+        };
+        
+        const startParam = tg?.initDataUnsafe?.start_param;
+        console.log('👤 Telegram User:', tgUser);
+        console.log('🔗 Start Param:', startParam);
 
-        try {
-            const key = `user_${tgUser.id}`;
-            let loaded = 0;
-            const checkComplete = () => {
-                loaded++;
-                if (loaded >= 3) {
-                    isLoadingData = false;
-                    checkReferral();
-                    updateAllUI();
-                    console.log('✅ Данные загружены из облака');
-                }
-            };
-
-            tg.CloudStorage.getItem(key + '_balance', (err, data) => {
-                if (!err && data) balance = parseFloat(data);
-                checkComplete();
-            });
-
-            tg.CloudStorage.getItem(key + '_inventory', (err, data) => {
-                if (!err && data) {
-                    try { inventory = JSON.parse(data); } catch (e) { inventory = []; }
-                }
-                checkComplete();
-            });
-
-            tg.CloudStorage.getItem(key + '_stats', (err, data) => {
-                if (!err && data) {
-                    try { stats = JSON.parse(data); } catch (e) { stats = getDefaultStats(); }
-                }
-                checkComplete();
-            });
-        } catch (e) {
-            console.error('Ошибка при чтении облака:', e);
-            loadDataFromLocalStorage();
-            isLoadingData = false;
-            checkReferral();
-            updateAllUI();
-        }
-    }
-
-    function saveDataToLocalStorage() {
-        const key = `user_${tgUser.id}`;
-        localStorage.setItem(key + '_balance', balance.toString());
-        localStorage.setItem(key + '_inventory', JSON.stringify(inventory));
-        localStorage.setItem(key + '_stats', JSON.stringify(stats));
-    }
-
-    function loadDataFromLocalStorage() {
-        try {
-            const key = `user_${tgUser.id}`;
-            const b = localStorage.getItem(key + '_balance');
-            const inv = localStorage.getItem(key + '_inventory');
-            const s = localStorage.getItem(key + '_stats');
-            
-            if (b) balance = parseFloat(b);
-            if (inv) inventory = JSON.parse(inv);
-            if (s) stats = JSON.parse(s);
-            
-            console.log('📦 Данные загружены из localStorage');
-        } catch (e) {
-            console.error('Ошибка локального хранилища:', e);
-        }
-    }
-
-    function getDefaultStats() {
-        return {
+        // ============================================
+        // ПЕРЕМЕННЫЕ СОСТОЯНИЯ ИГРЫ
+        // ============================================
+        let balance = 100.00;
+        let inventory = [];
+        let stats = {
             level: 1,
             xp: 0,
             casesOpened: 0,
@@ -484,585 +337,727 @@
             referralsCount: 0,
             referralsClaimed: []
         };
-    }
+        let currentItem = null;
+        let currentCaseType = 'backpack';
+        let casePrice = 3.00;
+        let introSkipped = false;
+        let audioEnabled = true;
+        let isLoadingData = true;
 
-    function saveData() {
-        saveDataToLocalStorage();
-        saveDataToCloud();
-    }
-
-    // ============================================
-    // РЕФЕРАЛЬНАЯ СИСТЕМА
-    // ============================================
-    function checkReferral() {
-        if (introSkipped === false) return; // Проверяем только после интро
-        if (!startParam) return;
-        
-        const referrerID = parseInt(startParam);
-        if (isNaN(referrerID) || referrerID === tgUser.id) return;
-        
-        if (stats.referralsClaimed && stats.referralsClaimed.includes(referrerID)) {
-            console.log('🎯 Рефбронус уже получен');
-            return;
-        }
-
-        // Даём бонус текущему игроку
-        balance += 50;
-        stats.totalEarned += 50;
-        stats.referralsCount += 1;
-        
-        if (!Array.isArray(stats.referralsClaimed)) {
-            stats.referralsClaimed = [];
-        }
-        stats.referralsClaimed.push(referrerID);
-
-        console.log('🎉 Реф-бонус активирован! +$50');
-        showToast("🎉 Бонус за приглашение: +$50.00!");
-        updateBalance();
-        saveData();
-    }
-
-    function copyRefLink() {
-        const botUsername = "TomCase_Official_Bot";
-        const refLink = `https://t.me/${botUsername}?startapp=${tgUser.id}`;
-        
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(refLink).then(() => {
-                playSfx('click');
-                showToast("✅ Реф. ссылка скопирована!");
-            }).catch(() => {
-                showToast("❌ Ошибка копирования");
-            });
-        } else {
-            showToast(`Ссылка: ${refLink}`);
-        }
-    }
-
-    // ============================================
-    // АУДИО
-    // ============================================
-    const bgAudio = document.getElementById('bg-audio');
-    if (bgAudio) bgAudio.volume = 0.3;
-
-    function toggleAudio() {
-        audioEnabled = !audioEnabled;
-        const btn = document.getElementById('audio-btn');
-        
-        if (audioEnabled) {
-            if (bgAudio) {
-                bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
-            }
-            if (btn) btn.innerText = "🔊";
-            showToast("🔊 Звук включен");
-        } else {
-            if (bgAudio) bgAudio.pause();
-            if (btn) btn.innerText = "🔇";
-            showToast("🔇 Звук отключен");
-        }
-    }
-
-    function playSfx(type) {
-        if (!audioEnabled) return;
-        
-        let sfx;
-        if (type === 'click') sfx = document.getElementById('sfx-click');
-        else if (type === 'win') sfx = document.getElementById('sfx-win');
-        else if (type === 'cash') sfx = document.getElementById('sfx-cash');
-        
-        if (sfx) {
-            sfx.currentTime = 0;
-            sfx.play().catch(e => console.log('SFX заблокирован:', e));
-        }
-    }
-
-    // ============================================
-    // СИСТЕМА ОПЫТА И УРОВНЕЙ
-    // ============================================
-    function addXp(amount) {
-        stats.xp += amount;
-        const maxXp = stats.level * 100;
-        
-        if (stats.xp >= maxXp) {
-            stats.xp -= maxXp;
-            stats.level++;
-            
-            if (tg?.HapticFeedback) {
-                try {
-                    tg.HapticFeedback.notificationOccurred('success');
-                } catch (e) {}
-            }
-            showToast(`⭐ УРОВЕНЬ ПОВЫШЕН! (${stats.level})`);
-        }
-        
-        updateProfileUI();
-        saveData();
-    }
-
-    function updateProfileUI() {
-        const profName = document.getElementById('prof-name');
-        const profId = document.getElementById('prof-id');
-        const profLvl = document.getElementById('prof-lvl');
-        const profXp = document.getElementById('prof-xp');
-        const profMaxXp = document.getElementById('prof-max-xp');
-        const profProgress = document.getElementById('prof-progress');
-        const statCases = document.getElementById('stat-cases');
-        const statEarned = document.getElementById('stat-earned');
-        const statRefs = document.getElementById('stat-refs');
-        
-        if (profName) profName.innerText = tgUser.first_name || tgUser.username || 'Игрок';
-        if (profId) profId.innerText = tgUser.id || '000000';
-        if (profLvl) profLvl.innerText = stats.level;
-        if (profXp) profXp.innerText = Math.floor(stats.xp);
-        
-        const maxXp = stats.level * 100;
-        if (profMaxXp) profMaxXp.innerText = maxXp;
-        if (profProgress) profProgress.style.width = `${(stats.xp / maxXp) * 100}%`;
-        
-        if (statCases) statCases.innerText = stats.casesOpened;
-        if (statEarned) statEarned.innerText = "$" + stats.totalEarned.toFixed(2);
-        if (statRefs) statRefs.innerText = (stats.referralsClaimed?.length || 0);
-    }
-
-    // ============================================
-    // ИНТЕРФЕЙС
-    // ============================================
-    function showToast(text) {
-        const toast = document.getElementById('toast');
-        if (!toast) return;
-        
-        toast.innerText = text;
-        toast.style.display = 'block';
-        toast.style.opacity = '1';
-        
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 300);
-        }, 2500);
-    }
-
-    function updateBalance() {
-        document.querySelectorAll('.balance-disp').forEach(d => {
-            if (d) d.innerText = "$" + balance.toFixed(2);
-        });
-        
-        const invCountDisp = document.getElementById('inv-count-disp');
-        const invCountHeader = document.getElementById('inv-count-header');
-        
-        if (invCountDisp) invCountDisp.innerText = inventory.length;
-        if (invCountHeader) invCountHeader.innerText = inventory.length;
-        
-        saveData();
-    }
-
-    function updateAllUI() {
-        updateBalance();
-        updateProfileUI();
-    }
-
-    function nav(screenId) {
-        if (isLoadingData) {
-            showToast('⏳ Загрузка данных...');
-            return;
-        }
-
-        playSfx('click');
-        
-        document.querySelectorAll('.screen').forEach(s => {
-            if (s) s.classList.remove('active');
-        });
-        
-        const screen = document.getElementById(screenId);
-        if (screen) {
-            screen.classList.add('active');
-        }
-        
-        updateBalance();
-        
-        if (screenId === 'screen-inventory') renderInventory();
-        if (screenId === 'screen-profile') updateProfileUI();
-    }
-
-    // ============================================
-    // ИНТРО
-    // ============================================
-    function playIntro() {
-        const t1 = document.getElementById('intro-text-1');
-        const t2 = document.getElementById('intro-text-2');
-        const names = document.getElementById('intro-names');
-        const oldName = document.getElementById('name-old');
-        const strike = document.getElementById('strike');
-        const newNameCont = document.getElementById('name-new-container');
-        const subtitle = document.getElementById('subtitle');
-        
-        if (introSkipped) return;
-
-        setTimeout(() => { if (!introSkipped && t1) t1.classList.add('intro-show'); }, 500);
-        setTimeout(() => { 
-            if (!introSkipped) {
-                if (t1) t1.classList.remove('intro-show');
-                if (t2) t2.classList.add('intro-show');
-            }
-        }, 2500);
-        
-        setTimeout(() => { 
-            if (!introSkipped && names) {
-                names.style.opacity = '1';
-            }
-        }, 4500);
-        
-        setTimeout(() => { 
-            if (!introSkipped && strike) {
-                strike.style.width = '120%';
-                playSfx('click');
-            }
-        }, 5500);
-        
-        setTimeout(() => { 
-            if (!introSkipped && oldName) {
-                oldName.classList.add('falling');
-            }
-        }, 6500);
-        
-        setTimeout(() => { 
-            if (!introSkipped) {
-                if (newNameCont) newNameCont.classList.add('pop');
-                playSfx('win');
-            }
-        }, 6800);
-        
-        setTimeout(() => { 
-            if (!introSkipped && subtitle) {
-                subtitle.style.opacity = '1';
-            }
-        }, 7500);
-        
-        setTimeout(() => { 
-            if (!introSkipped) skipIntro();
-        }, 10500);
-    }
-
-    function skipIntro() {
-        introSkipped = true;
-        console.log('⏭️ Интро пропущено');
-        
-        if (audioEnabled && bgAudio) {
-            bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
-        }
-        
-        checkReferral();
-        nav('screen-main');
-    }
-
-    // ============================================
-    // КЕЙСЫ И РУЛЕТКА
-    // ============================================
-    function openCaseDetails(caseType = 'backpack') {
-        currentCaseType = caseType;
-        
-        // Устанавливаем цену кейса
-        const prices = {
-            backpack: 3.00,
-            chest: 10.00,
-            crypto: 50.00,
-            legendary: 100.00
+        // Товары по типам кейсов
+        const caseItems = {
+            backpack: [
+                { id: 1, name: "Линейка", collection: "School collection", price: 0.50, icon: "📏", color: "#B71C1C", bg: "#fff" },
+                { id: 2, name: "Нож", collection: "School collection", price: 7.00, icon: "🔪", color: "#6A1B9A", bg: "#fff" },
+                { id: 3, name: "Poco x3", collection: "School collection", price: 150.00, icon: "📱", color: "#D500F9", bg: "#fff" },
+                { id: 4, name: "Charon", collection: "School collection", price: 20.00, icon: "🔋", color: "#B71C1C", bg: "#E0F7FA" },
+                { id: 5, name: "Tom", collection: "Impossible collection", price: 500.00, icon: "🐻", color: "#FBC02D", bg: "#FFF9C4" }
+            ],
+            chest: [
+                { id: 6, name: "Золотая монета", collection: "Treasure", price: 25.00, icon: "🪙", color: "#FF6F00", bg: "#FFF3E0" },
+                { id: 7, name: "Шапка капитана", collection: "Treasure", price: 50.00, icon: "🎩", color: "#424242", bg: "#ECEFF1" },
+                { id: 8, name: "Карта сокровищ", collection: "Treasure", price: 75.00, icon: "🗺️", color: "#8B4513", bg: "#FBE9E7" },
+                { id: 9, name: "Жемчужина", collection: "Treasure", price: 100.00, icon: "🌊", color: "#00838F", bg: "#E0F2F1" },
+                { id: 10, name: "Корона", collection: "Legendary", price: 1000.00, icon: "👑", color: "#FFD700", bg: "#FFFDE7" }
+            ],
+            crypto: [
+                { id: 11, name: "Bitcoin", collection: "Crypto", price: 200.00, icon: "₿", color: "#F39C12", bg: "#FFF8E1" },
+                { id: 12, name: "Ethereum", collection: "Crypto", price: 150.00, icon: "Ξ", color: "#627EEA", bg: "#EFF6FF" },
+                { id: 13, name: "Dogecoin", collection: "Crypto", price: 100.00, icon: "🐕", color: "#C1A800", bg: "#FFFDE7" },
+                { id: 14, name: "NFT Арт", collection: "Crypto", price: 300.00, icon: "🖼️", color: "#AB47BC", bg: "#F3E5F5" },
+                { id: 15, name: "Криптозвезда", collection: "Ultra Rare", price: 2000.00, icon: "⭐", color: "#FFD700", bg: "#FFFDE7" }
+            ],
+            legendary: [
+                { id: 16, name: "Меч легенды", collection: "Legendary", price: 300.00, icon: "⚔️", color: "#C41C3B", bg: "#FFEBEE" },
+                { id: 17, name: "Магический посох", collection: "Legendary", price: 400.00, icon: " Trident", color: "#6A1B9A", bg: "#F3E5F5" },
+                { id: 18, name: "Панцирь дракона", collection: "Legendary", price: 500.00, icon: "🐉", color: "#DD2C00", bg: "#FFEBEE" },
+                { id: 19, name: "Святой Грааль", collection: "Mythical", price: 1500.00, icon: "🏆", color: "#FFD700", bg: "#FFFDE7" },
+                { id: 20, name: "Артефакт Богов", collection: "Godly", price: 5000.00, icon: "✨", color: "#00BCD4", bg: "#E0F2F1" }
+            ]
         };
-        casePrice = prices[caseType] || 3.00;
-        
-        const grid = document.getElementById('possible-items');
-        if (!grid) return;
-        
-        grid.innerHTML = '';
-        const items = caseItems[caseType] || caseItems.backpack;
-        
-        items.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.style.borderLeft = `6px solid ${item.color}`;
-            card.innerHTML = `
-                <div class="card-img" style="background: ${item.bg}; font-size: 50px;">${item.icon}</div>
-                <div class="card-title" style="background: #8B0000; text-align: left; padding: 5px 10px;">
-                    ${item.name}<br><span style="font-weight:normal; font-size:10px; color:#ccc;">${item.collection}</span>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-        
-        // Обновляем кнопку
-        const openBtn = document.getElementById('open-btn');
-        if (openBtn) {
-            openBtn.innerText = `ОТКРЫТЬ ($${casePrice.toFixed(2)})`;
-        }
-        
-        nav('screen-case-details');
-    }
 
-    function startRoulette() {
-        if (balance < casePrice) {
-            showToast(`❌ Недостаточно средств! (Нужно $${casePrice.toFixed(2)})`);
-            if (tg?.HapticFeedback) {
-                try {
-                    tg.HapticFeedback.notificationOccurred('error');
-                } catch (e) {}
+        // ============================================
+        // ОБЛАЧНОЕ ХРАНИЛИЩЕ (Cloud Storage)
+        // ============================================
+        function saveDataToCloud() {
+            if (!tg?.CloudStorage) {
+                saveDataToLocalStorage();
+                return;
             }
-            return;
-        }
-
-        const openBtn = document.getElementById('open-btn');
-        if (openBtn) {
-            openBtn.disabled = true;
-        }
-
-        balance -= casePrice;
-        stats.casesOpened++;
-        addXp(50);
-        updateBalance();
-        playSfx('click');
-        nav('screen-opening');
-        
-        if (tg?.HapticFeedback) {
+            
             try {
-                tg.HapticFeedback.impactOccurred('medium');
-            } catch (e) {}
+                const key = `user_${tgUser.id}`;
+                tg.CloudStorage.setItem(key + '_balance', balance.toString());
+                tg.CloudStorage.setItem(key + '_inventory', JSON.stringify(inventory));
+                tg.CloudStorage.setItem(key + '_stats', JSON.stringify(stats));
+                console.log('☁️ Данные сохранены в облако');
+            } catch (e) {
+                console.error('Ошибка облачного хранилища:', e);
+                saveDataToLocalStorage();
+            }
         }
 
-        // Генерируем рулетку
-        const track = document.getElementById('roulette-track');
-        if (!track) return;
-        
-        track.style.transition = 'none';
-        track.style.transform = 'translateX(0px)';
-        track.innerHTML = '';
+        function loadDataFromCloud() {
+            if (!tg?.CloudStorage) {
+                loadDataFromLocalStorage();
+                isLoadingData = false;
+                checkReferral();
+                updateAllUI();
+                return;
+            }
 
-        const items = caseItems[currentCaseType] || caseItems.backpack;
-        const winnerIndex = 40;
-        
-        // Выбираем победителя по вероятности
-        const rand = Math.random();
-        if (rand < 0.5) currentItem = items[0];
-        else if (rand < 0.8) currentItem = items[1];
-        else if (rand < 0.95) currentItem = items[3];
-        else if (rand < 0.99) currentItem = items[2];
-        else currentItem = items[4];
+            try {
+                const key = `user_${tgUser.id}`;
+                let loaded = 0;
+                const checkComplete = () => {
+                    loaded++;
+                    if (loaded >= 3) {
+                        isLoadingData = false;
+                        checkReferral();
+                        updateAllUI();
+                        console.log('✅ Данные загружены из облака');
+                    }
+                };
 
-        // Генерируем предметы на ленте
-        let html = '';
-        for (let i = 0; i < 50; i++) {
-            let itemObj = items[Math.floor(Math.random() * items.length)];
-            if (i === winnerIndex) itemObj = currentItem;
-            html += `<div class="roulette-item" style="border-bottom-color: ${itemObj.color}; background: ${itemObj.bg};">${itemObj.icon}</div>`;
+                tg.CloudStorage.getItem(key + '_balance', (err, data) => {
+                    if (!err && data) balance = parseFloat(data);
+                    checkComplete();
+                });
+
+                tg.CloudStorage.getItem(key + '_inventory', (err, data) => {
+                    if (!err && data) {
+                        try { inventory = JSON.parse(data); } catch (e) { inventory = []; }
+                    }
+                    checkComplete();
+                });
+
+                tg.CloudStorage.getItem(key + '_stats', (err, data) => {
+                    if (!err && data) {
+                        try { stats = JSON.parse(data); } catch (e) { stats = getDefaultStats(); }
+                    }
+                    checkComplete();
+                });
+            } catch (e) {
+                console.error('Ошибка при чтении облака:', e);
+                loadDataFromLocalStorage();
+                isLoadingData = false;
+                checkReferral();
+                updateAllUI();
+            }
         }
-        track.innerHTML = html;
 
-        // Запускаем анимацию
-        setTimeout(() => {
-            if (!track) return;
-            track.style.transition = 'transform 4s cubic-bezier(0.1, 0.7, 0.1, 1)';
-            const offset = -(winnerIndex * 130) + (window.innerWidth / 2) - 65;
-            track.style.transform = `translateX(${offset}px)`;
-        }, 50);
+        function saveDataToLocalStorage() {
+            const key = `user_${tgUser.id}`;
+            localStorage.setItem(key + '_balance', balance.toString());
+            localStorage.setItem(key + '_inventory', JSON.stringify(inventory));
+            localStorage.setItem(key + '_stats', JSON.stringify(stats));
+        }
 
-        // Звуковые эффекты во время прокрутки
-        let ticks = 0;
-        let tickInterval = setInterval(() => {
-            ticks++;
-            if (ticks < 15) {
+        function loadDataFromLocalStorage() {
+            try {
+                const key = `user_${tgUser.id}`;
+                const b = localStorage.getItem(key + '_balance');
+                const inv = localStorage.getItem(key + '_inventory');
+                const s = localStorage.getItem(key + '_stats');
+                
+                if (b) balance = parseFloat(b);
+                if (inv) inventory = JSON.parse(inv);
+                if (s) stats = JSON.parse(s);
+                
+                console.log('📦 Данные загружены из localStorage');
+            } catch (e) {
+                console.error('Ошибка локального хранилища:', e);
+            }
+        }
+
+        function getDefaultStats() {
+            return {
+                level: 1,
+                xp: 0,
+                casesOpened: 0,
+                totalEarned: 0,
+                referralsCount: 0,
+                referralsClaimed: []
+            };
+        }
+
+        function saveData() {
+            saveDataToLocalStorage();
+            saveDataToCloud();
+        }
+
+        // ============================================
+        // РЕФЕРАЛЬНАЯ СИСТЕМА
+        // ============================================
+        function checkReferral() {
+            if (introSkipped === false) return; // Проверяем только после интро
+            if (!startParam) return;
+            
+            const referrerID = parseInt(startParam);
+            if (isNaN(referrerID) || referrerID === tgUser.id) return;
+            
+            if (stats.referralsClaimed && stats.referralsClaimed.includes(referrerID)) {
+                console.log('🎯 Рефбронус уже получен');
+                return;
+            }
+
+            // Даём бонус текущему игроку
+            balance += 50;
+            stats.totalEarned += 50;
+            stats.referralsCount += 1;
+            
+            if (!Array.isArray(stats.referralsClaimed)) {
+                stats.referralsClaimed = [];
+            }
+            stats.referralsClaimed.push(referrerID);
+
+            console.log('🎉 Реф-бонус активирован! +$50');
+            showToast("🎉 Бонус за приглашение: +$50.00!");
+            updateBalance();
+            saveData();
+        }
+
+        function copyRefLink() {
+            const botUsername = "TomCase_Official_Bot";
+            const refLink = `https://t.me/${botUsername}?startapp=${tgUser.id}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(refLink).then(() => {
+                    playSfx('click');
+                    showToast("✅ Реф. ссылка скопирована!");
+                }).catch(() => {
+                    showToast("❌ Ошибка копирования");
+                });
+            } else {
+                showToast(`Ссылка: ${refLink}`);
+            }
+        }
+
+        // ============================================
+        // АУДИО
+        // ============================================
+        const bgAudio = document.getElementById('bg-audio');
+        if (bgAudio) bgAudio.volume = 0.3;
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('audio-btn');
+            
+            if (audioEnabled) {
+                if (bgAudio) {
+                    bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+                }
+                if (btn) btn.innerText = "🔊";
+                showToast("🔊 Звук включен");
+            } else {
+                if (bgAudio) bgAudio.pause();
+                if (btn) btn.innerText = "🔇";
+                showToast("🔇 Звук отключен");
+            }
+        }
+
+        function playSfx(type) {
+            if (!audioEnabled) return;
+            
+            let sfx;
+            if (type === 'click') sfx = document.getElementById('sfx-click');
+            else if (type === 'win') sfx = document.getElementById('sfx-win');
+            else if (type === 'cash') sfx = document.getElementById('sfx-cash');
+            
+            if (sfx) {
+                sfx.currentTime = 0;
+                sfx.play().catch(e => console.log('SFX заблокирован:', e));
+            }
+        }
+
+        // ============================================
+        // СИСТЕМА ОПЫТА И УРОВНЕЙ
+        // ============================================
+        function addXp(amount) {
+            stats.xp += amount;
+            const maxXp = stats.level * 100;
+            
+            if (stats.xp >= maxXp) {
+                stats.xp -= maxXp;
+                stats.level++;
+                
                 if (tg?.HapticFeedback) {
                     try {
-                        tg.HapticFeedback.impactOccurred('light');
+                        tg.HapticFeedback.notificationOccurred('success');
                     } catch (e) {}
                 }
-                playSfx('click');
-            } else {
-                clearInterval(tickInterval);
+                showToast(`⭐ УРОВЕНЬ ПОВЫШЕН! (${stats.level})`);
             }
-        }, 250);
+            
+            updateProfileUI();
+            saveData();
+        }
 
-        // Показываем результат
-        setTimeout(() => {
-            clearInterval(tickInterval);
+        function updateProfileUI() {
+            const profName = document.getElementById('prof-name');
+            const profId = document.getElementById('prof-id');
+            const profLvl = document.getElementById('prof-lvl');
+            const profXp = document.getElementById('prof-xp');
+            const profMaxXp = document.getElementById('prof-max-xp');
+            const profProgress = document.getElementById('prof-progress');
+            const statCases = document.getElementById('stat-cases');
+            const statEarned = document.getElementById('stat-earned');
+            const statRefs = document.getElementById('stat-refs');
+            
+            if (profName) profName.innerText = tgUser.first_name || tgUser.username || 'Игрок';
+            if (profId) profId.innerText = tgUser.id || '000000';
+            if (profLvl) profLvl.innerText = stats.level;
+            if (profXp) profXp.innerText = Math.floor(stats.xp);
+            
+            const maxXp = stats.level * 100;
+            if (profMaxXp) profMaxXp.innerText = maxXp;
+            if (profProgress) profProgress.style.width = `${(stats.xp / maxXp) * 100}%`;
+            
+            if (statCases) statCases.innerText = stats.casesOpened;
+            if (statEarned) statEarned.innerText = "$" + stats.totalEarned.toFixed(2);
+            if (statRefs) statRefs.innerText = (stats.referralsClaimed?.length || 0);
+        }
+
+        // ============================================
+        // ИНТЕРФЕЙС
+        // ============================================
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            
+            toast.innerText = text;
+            toast.style.display = 'block';
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }, 2500);
+        }
+
+        function updateBalance() {
+            document.querySelectorAll('.balance-disp').forEach(d => {
+                if (d) d.innerText = "$" + balance.toFixed(2);
+            });
+            
+            const invCountDisp = document.getElementById('inv-count-disp');
+            const invCountHeader = document.getElementById('inv-count-header');
+            
+            if (invCountDisp) invCountDisp.innerText = inventory.length;
+            if (invCountHeader) invCountHeader.innerText = inventory.length;
+            
+            saveData();
+        }
+
+        function updateAllUI() {
+            updateBalance();
+            updateProfileUI();
+        }
+
+        function nav(screenId) {
+            if (isLoadingData) {
+                showToast('⏳ Загрузка данных...');
+                return;
+            }
+
+            playSfx('click');
+            
+            document.querySelectorAll('.screen').forEach(s => {
+                if (s) s.classList.remove('active');
+            });
+            
+            const screen = document.getElementById(screenId);
+            if (screen) {
+                screen.classList.add('active');
+            }
+            
+            updateBalance();
+            
+            if (screenId === 'screen-inventory') renderInventory();
+            if (screenId === 'screen-profile') updateProfileUI();
+        }
+
+        // ============================================
+        // ИНТРО
+        // ============================================
+        function playIntro() {
+            const t1 = document.getElementById('intro-text-1');
+            const t2 = document.getElementById('intro-text-2');
+            const names = document.getElementById('intro-names');
+            const oldName = document.getElementById('name-old');
+            const strike = document.getElementById('strike');
+            const newNameCont = document.getElementById('name-new-container');
+            const subtitle = document.getElementById('subtitle');
+            
+            if (introSkipped) return;
+
+            setTimeout(() => { if (!introSkipped && t1) t1.classList.add('intro-show'); }, 500);
+            setTimeout(() => { 
+                if (!introSkipped) {
+                    if (t1) t1.classList.remove('intro-show');
+                    if (t2) t2.classList.add('intro-show');
+                }
+            }, 2500);
+            
+            setTimeout(() => { 
+                if (!introSkipped && names) {
+                    names.style.opacity = '1';
+                }
+            }, 4500);
+            
+            setTimeout(() => { 
+                if (!introSkipped && strike) {
+                    strike.style.width = '120%';
+                    playSfx('click');
+                }
+            }, 5500);
+            
+            setTimeout(() => { 
+                if (!introSkipped && oldName) {
+                    oldName.classList.add('falling');
+                }
+            }, 6500);
+            
+            setTimeout(() => { 
+                if (!introSkipped) {
+                    if (newNameCont) newNameCont.classList.add('pop');
+                    playSfx('win');
+                }
+            }, 6800);
+            
+            setTimeout(() => { 
+                if (!introSkipped && subtitle) {
+                    subtitle.style.opacity = '1';
+                }
+            }, 7500);
+            
+            setTimeout(() => { 
+                if (!introSkipped) skipIntro();
+            }, 10500);
+        }
+
+        function skipIntro() {
+            introSkipped = true;
+            console.log('⏭️ Интро пропущено');
+            
+            if (audioEnabled && bgAudio) {
+                bgAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+            }
+            
+            checkReferral();
+            nav('screen-main');
+        }
+
+        // ============================================
+        // КЕЙСЫ И РУЛЕТКА
+        // ============================================
+        function openCaseDetails(caseType = 'backpack') {
+            currentCaseType = caseType;
+            
+            // Устанавливаем цену кейса
+            const prices = {
+                backpack: 3.00,
+                chest: 10.00,
+                crypto: 50.00,
+                legendary: 100.00
+            };
+            casePrice = prices[caseType] || 3.00;
+            
+            const grid = document.getElementById('possible-items');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            const items = caseItems[caseType] || caseItems.backpack;
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.borderLeft = `6px solid ${item.color}`;
+                card.innerHTML = `
+                    <div class="card-img" style="background: ${item.bg}; font-size: 50px;">${item.icon}</div>
+                    <div class="card-title" style="background: #8B0000; text-align: left; padding: 5px 10px;">
+                        ${item.name}<br><span style="font-weight:normal; font-size:10px; color:#ccc;">${item.collection}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Обновляем кнопку
+            const openBtn = document.getElementById('open-btn');
+            if (openBtn) {
+                openBtn.innerText = `ОТКРЫТЬ ($${casePrice.toFixed(2)})`;
+            }
+            
+            nav('screen-case-details');
+        }
+
+        function startRoulette() {
+            if (balance < casePrice) {
+                showToast(`❌ Недостаточно средств! (Нужно $${casePrice.toFixed(2)})`);
+                if (tg?.HapticFeedback) {
+                    try {
+                        tg.HapticFeedback.notificationOccurred('error');
+                    } catch (e) {}
+                }
+                return;
+            }
+
+            const openBtn = document.getElementById('open-btn');
+            if (openBtn) {
+                openBtn.disabled = true;
+            }
+
+            balance -= casePrice;
+            stats.casesOpened++;
+            addXp(50);
+            updateBalance();
+            playSfx('click');
+            nav('screen-opening');
+            
             if (tg?.HapticFeedback) {
                 try {
-                    tg.HapticFeedback.notificationOccurred('success');
+                    tg.HapticFeedback.impactOccurred('medium');
                 } catch (e) {}
             }
-            playSfx('win');
-            showResult();
+
+            // Генерируем рулетку
+            const track = document.getElementById('roulette-track');
+            if (!track) return;
             
-            if (openBtn) {
-                openBtn.disabled = false;
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0px)';
+            track.innerHTML = '';
+
+            const items = caseItems[currentCaseType] || caseItems.backpack;
+            const winnerIndex = 40;
+            
+            // Выбираем победителя по вероятности
+            const rand = Math.random();
+            if (rand < 0.5) currentItem = items[0];
+            else if (rand < 0.8) currentItem = items[1];
+            else if (rand < 0.95) currentItem = items[3];
+            else if (rand < 0.99) currentItem = items[2];
+            else currentItem = items[4];
+
+            // Генерируем предметы на ленте
+            let html = '';
+            for (let i = 0; i < 50; i++) {
+                let itemObj = items[Math.floor(Math.random() * items.length)];
+                if (i === winnerIndex) itemObj = currentItem;
+                html += `<div class="roulette-item" style="border-bottom-color: ${itemObj.color}; background: ${itemObj.bg};">${itemObj.icon}</div>`;
             }
-        }, 4200);
-    }
+            track.innerHTML = html;
 
-    function showResult() {
-        if (!currentItem) return;
-        
-        const resultHeader = document.getElementById('result-header');
-        const resultPrice = document.getElementById('result-price-top');
-        const resultIcon = document.getElementById('result-icon');
-        
-        if (resultHeader) resultHeader.innerText = `${currentItem.name} | ${currentItem.collection}`;
-        if (resultPrice) resultPrice.innerText = "$" + currentItem.price.toFixed(2);
-        if (resultIcon) {
-            resultIcon.innerText = currentItem.icon;
-            resultIcon.style.borderBottomColor = currentItem.color;
-        }
-        
-        nav('screen-result');
-    }
+            // Запускаем анимацию
+            setTimeout(() => {
+                if (!track) return;
+                track.style.transition = 'transform 4s cubic-bezier(0.1, 0.7, 0.1, 1)';
+                const offset = -(winnerIndex * 130) + (window.innerWidth / 2) - 65;
+                track.style.transform = `translateX(${offset}px)`;
+            }, 50);
 
-    function sellCurrentItem() {
-        if (!currentItem) return;
-        
-        balance += currentItem.price;
-        stats.totalEarned += currentItem.price;
-        playSfx('cash');
-        showToast(`💰 Продано за $${currentItem.price.toFixed(2)}`);
-        currentItem = null;
-        updateBalance();
-        nav('screen-cases');
-    }
+            // Звуковые эффекты во время прокрутки
+            let ticks = 0;
+            let tickInterval = setInterval(() => {
+                ticks++;
+                if (ticks < 15) {
+                    if (tg?.HapticFeedback) {
+                        try {
+                            tg.HapticFeedback.impactOccurred('light');
+                        } catch (e) {}
+                    }
+                    playSfx('click');
+                } else {
+                    clearInterval(tickInterval);
+                }
+            }, 250);
 
-    function keepCurrentItem() {
-        if (!currentItem) return;
-        
-        inventory.push({
-            ...currentItem,
-            invId: Date.now() + Math.random()
-        });
-        
-        playSfx('click');
-        showToast("✅ Добавлено в инвентарь");
-        currentItem = null;
-        updateBalance();
-        nav('screen-cases');
-    }
-
-    // ============================================
-    // ИНВЕНТАРЬ
-    // ============================================
-    function renderInventory() {
-        const invList = document.getElementById('inventory-list');
-        if (!invList) return;
-        
-        if (inventory.length === 0) {
-            invList.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; margin-top: 50px; color: #aaa; font-size: 16px;">Пусто. Откройте кейс!</div>';
-            return;
+            // Показываем результат
+            setTimeout(() => {
+                clearInterval(tickInterval);
+                if (tg?.HapticFeedback) {
+                    try {
+                        tg.HapticFeedback.notificationOccurred('success');
+                    } catch (e) {}
+                }
+                playSfx('win');
+                showResult();
+                
+                if (openBtn) {
+                    openBtn.disabled = false;
+                }
+            }, 4200);
         }
 
-        invList.innerHTML = '';
-        
-        [...inventory].reverse().forEach((item, index) => {
-            const invItem = document.createElement('div');
-            invItem.className = 'inv-item';
-            invItem.style.borderBottomColor = item.color || '#000';
-            invItem.style.background = item.bg || '#fff';
+        function showResult() {
+            if (!currentItem) return;
             
-            invItem.innerHTML = `
-                ${item.icon || '?'}
-                <div class="inv-price">$${item.price.toFixed(2)}</div>
-                <button class="inv-sell-btn" onclick="sellFromInventory('${item.invId}', ${item.price})">SELL</button>
-            `;
+            const resultHeader = document.getElementById('result-header');
+            const resultPrice = document.getElementById('result-price-top');
+            const resultIcon = document.getElementById('result-icon');
             
-            invList.appendChild(invItem);
-        });
-    }
-
-    function sellFromInventory(invId, price) {
-        inventory = inventory.filter(item => item.invId != invId);
-        balance += price;
-        stats.totalEarned += price;
-        updateBalance();
-        renderInventory();
-        
-        if (tg?.HapticFeedback) {
-            try {
-                tg.HapticFeedback.impactOccurred('light');
-            } catch (e) {}
+            if (resultHeader) resultHeader.innerText = `${currentItem.name} | ${currentItem.collection}`;
+            if (resultPrice) resultPrice.innerText = "$" + currentItem.price.toFixed(2);
+            if (resultIcon) {
+                resultIcon.innerText = currentItem.icon;
+                resultIcon.style.borderBottomColor = currentItem.color;
+            }
+            
+            nav('screen-result');
         }
-        playSfx('cash');
-        showToast(`💰 Продано за $${price.toFixed(2)}`);
-    }
 
-    // ============================================
-    // БОНУСЫ
-    // ============================================
-    function clickerTap(event) {
-        balance += 0.60;
-        stats.totalEarned += 0.60;
-        addXp(1);
-        updateBalance();
-        
-        if (tg?.HapticFeedback) {
-            try {
-                tg.HapticFeedback.impactOccurred('light');
-            } catch (e) {}
+        function sellCurrentItem() {
+            if (!currentItem) return;
+            
+            balance += currentItem.price;
+            stats.totalEarned += currentItem.price;
+            playSfx('cash');
+            showToast(`💰 Продано за $${currentItem.price.toFixed(2)}`);
+            currentItem = null;
+            updateBalance();
+            nav('screen-cases');
         }
-        playSfx('click');
 
-        const clickerBtn = document.getElementById('clicker-btn');
-        if (!clickerBtn) return;
+        function keepCurrentItem() {
+            if (!currentItem) return;
+            
+            inventory.push({
+                ...currentItem,
+                invId: Date.now() + Math.random()
+            });
+            
+            playSfx('click');
+            showToast("✅ Добавлено в инвентарь");
+            currentItem = null;
+            updateBalance();
+            nav('screen-cases');
+        }
 
-        const rect = clickerBtn.getBoundingClientRect();
-        let x = event?.clientX ? event.clientX - rect.left : rect.width / 2;
-        let y = event?.clientY ? event.clientY - rect.top : rect.height / 2;
+        // ============================================
+        // ИНВЕНТАРЬ
+        // ============================================
+        function renderInventory() {
+            const invList = document.getElementById('inventory-list');
+            if (!invList) return;
+            
+            if (inventory.length === 0) {
+                invList.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; margin-top: 50px; color: #aaa; font-size: 16px;">Пусто. Откройте кейс!</div>';
+                return;
+            }
 
-        const floatTxt = document.createElement('div');
-        floatTxt.className = 'click-floating-text';
-        floatTxt.innerText = "+$0.60";
-        floatTxt.style.left = `${x}px`;
-        floatTxt.style.top = `${y}px`;
-        clickerBtn.appendChild(floatTxt);
-        
-        setTimeout(() => floatTxt.remove(), 1000);
-    }
+            invList.innerHTML = '';
+            
+            [...inventory].reverse().forEach((item, index) => {
+                const invItem = document.createElement('div');
+                invItem.className = 'inv-item';
+                invItem.style.borderBottomColor = item.color || '#000';
+                invItem.style.background = item.bg || '#fff';
+                
+                invItem.innerHTML = `
+                    ${item.icon || '?'}
+                    <div class="inv-price">$${item.price.toFixed(2)}</div>
+                    <button class="inv-sell-btn" onclick="sellFromInventory('${item.invId}', ${item.price})">SELL</button>
+                `;
+                
+                invList.appendChild(invItem);
+            });
+        }
 
-    function claimVideoBonus() {
-        balance += 50;
-        stats.totalEarned += 50;
-        addXp(25);
-        updateBalance();
-        playSfx('cash');
-        showToast('✅ Бонус за видео: +$50.00!');
-    }
-
-    function resetProgress() {
-        if (confirm("⚠️ Точно сбросить весь прогресс? Это удалит баланс, уровень и инвентарь!")) {
-            balance = 100.00;
-            inventory = [];
-            stats = getDefaultStats();
-            updateAllUI();
+        function sellFromInventory(invId, price) {
+            inventory = inventory.filter(item => item.invId != invId);
+            balance += price;
+            stats.totalEarned += price;
+            updateBalance();
             renderInventory();
-            saveData();
-            showToast("✅ Прогресс сброшен!");
+            
+            if (tg?.HapticFeedback) {
+                try {
+                    tg.HapticFeedback.impactOccurred('light');
+                } catch (e) {}
+            }
+            playSfx('cash');
+            showToast(`💰 Продано за $${price.toFixed(2)}`);
         }
-    }
 
-    // ============================================
-    // ИНИЦИАЛИЗАЦИЯ
-    // ============================================
-    document.addEventListener("DOMContentLoaded", () => {
-        console.log('🎮 Инициализация TOM CASE...');
-        console.log('👤 Пользователь:', tgUser.first_name || tgUser.username, `(ID: ${tgUser.id})`);
-        console.log('💾 Загрузка данных...');
-        
-        loadDataFromCloud();
-        playIntro();
-    });
+        // ============================================
+        // БОНУСЫ
+        // ============================================
+        function clickerTap(event) {
+            balance += 0.60;
+            stats.totalEarned += 0.60;
+            addXp(1);
+            updateBalance();
+            
+            if (tg?.HapticFeedback) {
+                try {
+                    tg.HapticFeedback.impactOccurred('light');
+                } catch (e) {}
+            }
+            playSfx('click');
 
-    // Сохранение при выходе
-    window.addEventListener('beforeunload', () => {
-        saveData();
-    });
+            const clickerBtn = document.getElementById('clicker-btn');
+            if (!clickerBtn) return;
 
-    // Обработка видимости страницы
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            saveData();
+            const rect = clickerBtn.getBoundingClientRect();
+            let x = event?.clientX ? event.clientX - rect.left : rect.width / 2;
+            let y = event?.clientY ? event.clientY - rect.top : rect.height / 2;
+
+            const floatTxt = document.createElement('div');
+            floatTxt.className = 'click-floating-text';
+            floatTxt.innerText = "+$0.60";
+            floatTxt.style.left = `${x}px`;
+            floatTxt.style.top = `${y}px`;
+            clickerBtn.appendChild(floatTxt);
+            
+            setTimeout(() => floatTxt.remove(), 1000);
         }
-    });
-</script>
+
+        function claimVideoBonus() {
+            balance += 50;
+            stats.totalEarned += 50;
+            addXp(25);
+            updateBalance();
+            playSfx('cash');
+            showToast('✅ Бонус за видео: +$50.00!');
+        }
+
+        function resetProgress() {
+            if (confirm("⚠️ Точно сбросить весь прогресс? Это удалит баланс, уровень и инвентарь!")) {
+                balance = 100.00;
+                inventory = [];
+                stats = getDefaultStats();
+                updateAllUI();
+                renderInventory();
+                saveData();
+                showToast("✅ Прогресс сброшен!");
+            }
+        }
+
+        // ============================================
+        // ИНИЦИАЛИЗАЦИЯ
+        // ============================================
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log('🎮 Инициализация TOM CASE...');
+            console.log('👤 Пользователь:', tgUser.first_name || tgUser.username, `(ID: ${tgUser.id})`);
+            console.log('💾 Загрузка данных...');
+            
+            loadDataFromCloud();
+            playIntro();
+        });
+
+        // Сохранение при выходе
+        window.addEventListener('beforeunload', () => {
+            saveData();
+        });
+
+        // Обработка видимости страницы
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                saveData();
+            }
+        });
+    </script>
 </body>
-</html>
+                                                                   </html>
