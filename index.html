@@ -2,14 +2,22 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>Сделка Тома</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+
+:root{
+    --app-height:100vh;
+}
 
 *{
     margin:0;
@@ -18,9 +26,22 @@ content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no
     -webkit-tap-highlight-color:transparent;
 }
 
+html,
 body{
+    width:100%;
+    height:100%;
+}
+
+body{
+
+    overflow:auto;
+
     background:
-    linear-gradient(180deg,#0d1117,#141b22);
+    linear-gradient(
+    180deg,
+    #0d1117,
+    #121923,
+    #161f2b);
 
     color:white;
 
@@ -28,121 +49,163 @@ body{
     system-ui,
     -apple-system,
     sans-serif;
-
-    overflow:hidden;
 }
 
-/* Верх */
+/* ВЕРХ */
 
 .topbar{
-    height:70px;
+
+    height:80px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:14px;
+    padding:18px;
 
-    background:rgba(255,255,255,0.03);
+    background:
+    rgba(255,255,255,0.04);
 
     border-bottom:
     1px solid rgba(255,255,255,0.06);
 
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(14px);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:20;
 }
 
 .logo{
-    font-size:24px;
-    font-weight:700;
+
+    font-size:28px;
+
+    font-weight:800;
 }
 
 .round{
-    font-size:15px;
-    opacity:0.7;
+
+    opacity:0.75;
+
+    font-size:16px;
 }
 
-/* Стол */
+/* СТОЛ */
 
 .table{
-    padding:14px;
-    height:calc(100vh - 70px);
+
+    min-height:
+    calc(var(--app-height) - 80px);
+
+    padding:16px;
 
     display:flex;
+
     flex-direction:column;
 
-    gap:14px;
+    gap:16px;
 }
 
-/* Карточки блоков */
+/* ПАНЕЛИ */
 
 .panel{
+
     background:
-    rgba(255,255,255,0.04);
+    rgba(255,255,255,0.045);
 
     border:
     1px solid rgba(255,255,255,0.05);
 
-    border-radius:24px;
+    border-radius:28px;
 
-    padding:14px;
-
-    backdrop-filter:blur(12px);
+    padding:18px;
 
     box-shadow:
-    0 10px 30px rgba(0,0,0,0.3);
+    0 10px 35px rgba(0,0,0,0.35);
+
+    backdrop-filter:blur(12px);
 }
 
-/* Том */
+/* ТОМ */
 
 .tom-title{
+
     text-align:center;
-    font-size:24px;
-    margin-bottom:10px;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:14px;
 }
 
 .market{
+
     display:flex;
+
     justify-content:center;
-    gap:10px;
+
+    gap:14px;
+
     margin-bottom:12px;
 }
 
-.card{
-    width:72px;
-    height:100px;
+/* КАРТЫ */
 
-    border-radius:16px;
+.card{
+
+    width:82px;
+
+    height:116px;
+
+    border-radius:18px;
 
     background:white;
+
     color:black;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    font-size:28px;
-    font-weight:700;
+    font-size:30px;
+
+    font-weight:800;
 
     user-select:none;
 
-    transition:0.15s;
+    transition:
+    transform 0.14s,
+    box-shadow 0.14s;
 
     animation:spawn 0.25s ease;
 }
 
 .card.red{
-    color:#c71d1d;
+    color:#c61e1e;
 }
 
 .card.back{
+
     background:
-    linear-gradient(145deg,#252525,#0d0d0d);
+    linear-gradient(
+    145deg,
+    #252525,
+    #0f0f0f);
+
     color:white;
 }
 
 .card.selected{
+
     transform:
-    translateY(-10px)
+    translateY(-12px)
     scale(1.04);
 
     box-shadow:
@@ -150,129 +213,201 @@ body{
 }
 
 @keyframes spawn{
+
     from{
-        transform:scale(0.7);
         opacity:0;
+        transform:scale(0.7);
     }
+
     to{
-        transform:scale(1);
         opacity:1;
+        transform:scale(1);
     }
+
 }
 
+/* КУРС */
+
 .course{
+
     text-align:center;
+
     font-size:18px;
-    opacity:0.9;
+
+    opacity:0.8;
 }
 
 .bid{
+
     text-align:center;
-    font-size:28px;
-    font-weight:700;
-    margin-top:4px;
+
+    font-size:34px;
+
+    font-weight:800;
+
+    margin-top:6px;
 }
 
 /* GPT */
 
-.enemy{
-    display:flex;
-    justify-content:center;
-    gap:6px;
-    margin-top:10px;
-}
+.enemy-title{
 
-/* Игрок */
+    text-align:center;
 
-.player-title{
-    font-size:20px;
+    font-size:22px;
+
     margin-bottom:12px;
 }
 
-.player-cards{
+.enemy{
+
     display:flex;
+
+    justify-content:center;
+
     gap:8px;
-    overflow-x:auto;
-    padding-bottom:4px;
+
+    flex-wrap:wrap;
 }
 
-/* Кнопки */
+/* ИГРОК */
+
+.player-title{
+
+    font-size:24px;
+
+    margin-bottom:14px;
+
+    font-weight:700;
+}
+
+.player-cards{
+
+    display:flex;
+
+    gap:10px;
+
+    overflow-x:auto;
+
+    padding-bottom:8px;
+
+    padding-top:10px;
+}
+
+.player-cards::-webkit-scrollbar{
+    height:5px;
+}
+
+.player-cards::-webkit-scrollbar-thumb{
+
+    background:#555;
+
+    border-radius:999px;
+}
+
+/* КНОПКИ */
 
 .buttons{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:10px;
-    margin-top:14px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    margin-top:22px;
 }
 
 button{
+
     border:none;
 
+    padding:20px;
+
+    border-radius:20px;
+
     background:
-    linear-gradient(145deg,#2f81f7,#1f5cb6);
+    linear-gradient(
+    145deg,
+    #2f81f7,
+    #1b5fc5);
 
     color:white;
 
-    padding:14px;
+    font-size:18px;
 
-    border-radius:16px;
+    font-weight:800;
 
-    font-size:15px;
-    font-weight:700;
+    transition:0.12s;
 
-    transition:0.15s;
+    box-shadow:
+    0 10px 24px rgba(0,0,0,0.3);
 }
 
 button:active{
-    transform:scale(0.96);
+
+    transform:scale(0.97);
 }
 
-/* Лог */
+/* ЛОГ */
 
 .log{
-    flex:1;
+
+    min-height:170px;
+
+    max-height:240px;
 
     overflow:auto;
 
-    font-size:14px;
+    font-size:15px;
 
-    opacity:0.88;
-
-    line-height:1.5;
+    line-height:1.55;
 }
 
 .log div{
-    margin-bottom:6px;
+    margin-bottom:7px;
 }
 
-/* Победа */
+/* ПОБЕДА */
 
 .overlay{
+
     position:fixed;
+
     inset:0;
 
-    display:none;
-    align-items:center;
-    justify-content:center;
+    background:
+    rgba(0,0,0,0.8);
 
-    background:rgba(0,0,0,0.8);
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
 
     z-index:100;
 }
 
 .overlay-box{
-    background:#151515;
+
+    width:90%;
+
+    max-width:340px;
+
+    background:#171717;
+
+    border-radius:30px;
+
     padding:30px;
-    border-radius:24px;
+
     text-align:center;
 }
 
-.overlay h1{
-    margin-bottom:16px;
-}
+.overlay-box h1{
 
-.overlay button{
-    width:100%;
+    margin-bottom:20px;
+
+    font-size:36px;
 }
 
 </style>
@@ -293,7 +428,7 @@ button:active{
 
 <div class="table">
 
-<!-- Том -->
+<!-- ТОМ -->
 
 <div class="panel">
 
@@ -303,11 +438,13 @@ button:active{
 
 <div class="market" id="market"></div>
 
-<div class="course" id="course">
+<div class="course"
+id="course">
 Курс: ♦
 </div>
 
-<div class="bid" id="bid">
+<div class="bid"
+id="bid">
 Ставка: 0
 </div>
 
@@ -317,15 +454,17 @@ button:active{
 
 <div class="panel">
 
-<div style="text-align:center;font-size:18px;">
+<div class="enemy-title">
 🤖 GPT
 </div>
 
-<div class="enemy" id="botCards"></div>
+<div class="enemy"
+id="botCards">
+</div>
 
 </div>
 
-<!-- Игрок -->
+<!-- ИГРОК -->
 
 <div class="panel">
 
@@ -333,42 +472,48 @@ button:active{
 🧍 Твои карты
 </div>
 
-<div class="player-cards" id="playerCards"></div>
+<div class="player-cards"
+id="playerCards">
+</div>
 
 <div class="buttons">
 
 <button onclick="makeBid()">
-💸 ставка
+💸 Сделать ставку
 </button>
 
 <button onclick="changeCourse()">
-🔄 курс
+🔄 Сменить курс
 </button>
 
 <button onclick="passTurn()">
-🚬 пас
+🚬 Пас
 </button>
 
 </div>
 
 </div>
 
-<!-- Лог -->
+<!-- ЛОГ -->
 
-<div class="panel log" id="log"></div>
+<div class="panel log"
+id="log">
+</div>
 
 </div>
 
-<!-- Конец -->
+<!-- ПОБЕДА -->
 
-<div class="overlay" id="overlay">
+<div class="overlay"
+id="overlay">
 
 <div class="overlay-box">
 
-<h1 id="winnerText"></h1>
+<h1 id="winnerText">
+</h1>
 
 <button onclick="location.reload()">
-🔁 заново
+🔁 Играть снова
 </button>
 
 </div>
@@ -378,7 +523,7 @@ button:active{
 <script>
 
 /*
-telegram web app
+telegram fix
 */
 
 if(window.Telegram?.WebApp){
@@ -389,12 +534,39 @@ if(window.Telegram?.WebApp){
 
 }
 
+function telegramResizeFix(){
+
+    document.documentElement
+    .style
+    .setProperty(
+    '--app-height',
+    `${window.innerHeight}px`
+    );
+
+}
+
+telegramResizeFix();
+
+window.addEventListener(
+'resize',
+telegramResizeFix
+);
+
 /*
 игра
 */
 
-const suits=["♠","♥","♦","♣"];
-const values=[2,3,4,5,6,7,8,9,10,"J","Q","K","A"];
+const suits=[
+"♠",
+"♥",
+"♦",
+"♣"
+];
+
+const values=[
+2,3,4,5,6,7,8,9,10,
+"J","Q","K","A"
+];
 
 let deck=[];
 let player=[];
@@ -406,13 +578,15 @@ let market=[];
 let selected=[];
 
 let currentCourse="♦";
+
 let currentBid=0;
+
 let currentWinner=null;
 
 let round=1;
 
 /*
-утилиты
+сила
 */
 
 function power(v){
@@ -425,11 +599,18 @@ function power(v){
     return v;
 }
 
+/*
+перемешка
+*/
+
 function shuffle(arr){
 
     for(let i=arr.length-1;i>0;i--){
 
-        let j=Math.floor(Math.random()*(i+1));
+        let j=
+        Math.floor(
+        Math.random()*(i+1)
+        );
 
         [arr[i],arr[j]]=
         [arr[j],arr[i]];
@@ -437,6 +618,10 @@ function shuffle(arr){
     }
 
 }
+
+/*
+лог
+*/
 
 function log(text){
 
@@ -450,11 +635,13 @@ function log(text){
 
     el.appendChild(div);
 
-    el.scrollTop=el.scrollHeight;
+    el.scrollTop=
+    el.scrollHeight;
+
 }
 
 /*
-создание колоды
+колода
 */
 
 function createDeck(){
@@ -471,7 +658,9 @@ function createDeck(){
 
                     suit,
                     value,
-                    power:power(value)
+
+                    power:
+                    power(value)
 
                 });
 
@@ -485,13 +674,19 @@ function createDeck(){
 
 }
 
+/*
+добор
+*/
+
 function draw(arr,count){
 
     for(let i=0;i<count;i++){
 
         if(deck.length>0){
 
-            arr.push(deck.pop());
+            arr.push(
+            deck.pop()
+            );
 
         }
 
@@ -506,20 +701,28 @@ function draw(arr,count){
 function render(){
 
     renderMarket();
+
     renderPlayer();
+
     renderBot();
 
-    document.getElementById("course")
+    document
+    .getElementById("course")
     .innerHTML=
-    "Курс: " + currentCourse;
+    "Курс: " +
+    currentCourse;
 
-    document.getElementById("bid")
+    document
+    .getElementById("bid")
     .innerHTML=
-    "Ставка: " + currentBid;
+    "Ставка: " +
+    currentBid;
 
-    document.getElementById("roundText")
+    document
+    .getElementById("roundText")
     .innerHTML=
-    "Раунд " + round;
+    "Раунд " +
+    round;
 
 }
 
@@ -537,15 +740,16 @@ function renderMarket(){
 
         div.className="card";
 
-        if(card.suit==="♥"||
-           card.suit==="♦"){
-
+        if(
+        card.suit==="♥"||
+        card.suit==="♦"
+        ){
             div.classList.add("red");
-
         }
 
         div.innerHTML=
-        card.value + card.suit;
+        card.value+
+        card.suit;
 
         el.appendChild(div);
 
@@ -590,28 +794,33 @@ function renderPlayer(){
 
         div.className="card";
 
-        if(card.suit==="♥"||
-           card.suit==="♦"){
-
+        if(
+        card.suit==="♥"||
+        card.suit==="♦"
+        ){
             div.classList.add("red");
-
         }
 
-        if(selected.includes(index)){
-
+        if(
+        selected.includes(index)
+        ){
             div.classList.add("selected");
-
         }
 
         div.innerHTML=
-        card.value + card.suit;
+        card.value+
+        card.suit;
 
         div.onclick=()=>{
 
-            if(selected.includes(index)){
+            if(
+            selected.includes(index)
+            ){
 
                 selected=
-                selected.filter(x=>x!==index);
+                selected.filter(
+                x=>x!==index
+                );
 
             }else{
 
@@ -643,8 +852,8 @@ function nextRound(){
     }
 
     market=[
-        tomDeck.pop(),
-        tomDeck.pop()
+    tomDeck.pop(),
+    tomDeck.pop()
     ];
 
     currentBid=0;
@@ -656,14 +865,16 @@ function nextRound(){
 
     round++;
 
-    log("🐈 Том выложил новые карты");
+    log(
+    "🐈 Том выложил новые карты"
+    );
 
     render();
 
 }
 
 /*
-удаление карт
+взять карты
 */
 
 function takeSelected(){
@@ -674,7 +885,9 @@ function takeSelected(){
 
     for(let index of selected){
 
-        arr.push(player[index]);
+        arr.push(
+        player[index]
+        );
 
         player.splice(index,1);
 
@@ -694,7 +907,9 @@ function makeBid(){
 
     if(selected.length!==1){
 
-        log("❌ выбери 1 карту");
+        log(
+        "❌ выбери 1 карту"
+        );
 
         return;
     }
@@ -705,22 +920,30 @@ function makeBid(){
     let card=
     cards[0];
 
-    if(card.suit!==currentCourse){
+    if(
+    card.suit!==currentCourse
+    ){
 
         player.push(card);
 
-        log("❌ не тот курс");
+        log(
+        "❌ не тот курс"
+        );
 
         render();
 
         return;
     }
 
-    if(card.power<=currentBid){
+    if(
+    card.power<=currentBid
+    ){
 
         player.push(card);
 
-        log("❌ ставка слабее");
+        log(
+        "❌ ставка слабее"
+        );
 
         render();
 
@@ -741,7 +964,10 @@ function makeBid(){
 
     render();
 
-    setTimeout(botTurn,700);
+    setTimeout(
+    botTurn,
+    700
+    );
 
 }
 
@@ -753,7 +979,9 @@ function changeCourse(){
 
     if(selected.length!==2){
 
-        log("❌ выбери 2 карты");
+        log(
+        "❌ выбери 2 карты"
+        );
 
         return;
     }
@@ -761,11 +989,16 @@ function changeCourse(){
     let cards=
     takeSelected();
 
-    if(cards[0].suit!==cards[1].suit){
+    if(
+    cards[0].suit!==
+    cards[1].suit
+    ){
 
         player.push(...cards);
 
-        log("❌ нужна одна масть");
+        log(
+        "❌ нужна одна масть"
+        );
 
         render();
 
@@ -773,14 +1006,20 @@ function changeCourse(){
     }
 
     let total=
+
     cards[0].power+
-    cards[1].power-2;
+
+    cards[1].power
+
+    -2;
 
     if(total<=currentBid){
 
         player.push(...cards);
 
-        log("❌ слишком слабо");
+        log(
+        "❌ слишком слабо"
+        );
 
         render();
 
@@ -803,7 +1042,10 @@ function changeCourse(){
 
     render();
 
-    setTimeout(botTurn,700);
+    setTimeout(
+    botTurn,
+    700
+    );
 
 }
 
@@ -813,47 +1055,59 @@ function changeCourse(){
 
 function passTurn(){
 
-    if(currentWinner==="player"){
+    if(
+    currentWinner==="player"
+    ){
 
         player.push(...market);
 
-        log("💰 Ты купил карты Тома");
+        log(
+        "💰 Ты купил карты Тома"
+        );
 
         nextRound();
 
         return;
     }
 
-    log("🚬 Ты пасанул");
+    log(
+    "🚬 Ты пасанул"
+    );
 
-    botTurn(true);
+    botTurn();
 
 }
 
 /*
-ход GPT
+ход gpt
 */
 
 function botTurn(){
 
     let possible=
+
     bot.filter(c=>
 
-        c.suit===currentCourse &&
-        c.power>currentBid
+    c.suit===currentCourse &&
+
+    c.power>currentBid
 
     );
 
     if(possible.length>0){
 
-        possible.sort((a,b)=>
-        a.power-b.power);
+        possible.sort(
+        (a,b)=>
+        a.power-b.power
+        );
 
         let card=
         possible[0];
 
         bot.splice(
-        bot.indexOf(card),1);
+        bot.indexOf(card),
+        1
+        );
 
         currentBid=
         card.power;
@@ -882,13 +1136,17 @@ function botTurn(){
 
         }
 
-        groups[card.suit].push(card);
+        groups[card.suit]
+        .push(card);
 
     });
 
     for(let suit in groups){
 
-        if(groups[suit].length>=2){
+        if(
+        groups[suit]
+        .length>=2
+        ){
 
             let c1=
             groups[suit][0];
@@ -897,22 +1155,33 @@ function botTurn(){
             groups[suit][1];
 
             let total=
+
             c1.power+
-            c2.power-2;
+
+            c2.power
+
+            -2;
 
             if(total>currentBid){
 
                 bot.splice(
-                bot.indexOf(c1),1);
+                bot.indexOf(c1),
+                1
+                );
 
                 bot.splice(
-                bot.indexOf(c2),1);
+                bot.indexOf(c2),
+                1
+                );
 
-                currentCourse=suit;
+                currentCourse=
+                suit;
 
-                currentBid=total;
+                currentBid=
+                total;
 
-                currentWinner="bot";
+                currentWinner=
+                "bot";
 
                 log(
                 "🔄 GPT сменил курс"
@@ -921,23 +1190,30 @@ function botTurn(){
                 render();
 
                 return;
+
             }
 
         }
 
     }
 
-    if(currentWinner==="bot"){
+    if(
+    currentWinner==="bot"
+    ){
 
         bot.push(...market);
 
-        log("🤖 GPT купил карты");
+        log(
+        "🤖 GPT купил карты"
+        );
 
         nextRound();
 
     }else{
 
-        log("❌ никто не смог купить");
+        log(
+        "❌ никто не смог купить"
+        );
 
         nextRound();
 
@@ -953,12 +1229,18 @@ function endGame(){
 
     let text="";
 
-    if(player.length>bot.length){
+    if(
+    player.length>
+    bot.length
+    ){
 
         text=
         "🏆 ТЫ ПОБЕДИЛ";
 
-    }else if(bot.length>player.length){
+    }else if(
+    bot.length>
+    player.length
+    ){
 
         text=
         "🤖 GPT ПОБЕДИЛ";
@@ -972,11 +1254,13 @@ function endGame(){
 
     document
     .getElementById("overlay")
-    .style.display="flex";
+    .style.display=
+    "flex";
 
     document
     .getElementById("winnerText")
-    .innerHTML=text;
+    .innerHTML=
+    text;
 
 }
 
