@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tom Case Simulator v3.0 // Hidden_Build</title>
+    <title>Tom Case Simulator v3.5 // Production_Build</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -17,25 +17,24 @@
             user-select: none;
         }
 
-        /* ТЕКСТУРА БЕТОННОЙ СТЕНЫ (Изначально скрыта прозрачностью) */
+        /* ТЕКСТУРА БЕТОННОЙ СТЕНЫ */
         .concrete-wall {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            /* Генерируем брутальный шум бетона чистым CSS, без внешних картинок */
-            background-color: #444;
+            background-color: #3a3a3a;
             background-image: 
-                radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0),
-                radial-gradient(rgba(0,0,0,0.5) 1px, transparent 0),
-                linear-gradient(90deg, rgba(30,30,30,0.2) 1px, transparent 0),
-                linear-gradient(rgba(30,30,30,0.2) 1px, transparent 0);
-            background-size: 4px 4px, 6px 6px, 20px 20px, 20px 20px;
+                radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0),
+                radial-gradient(rgba(0,0,0,0.6) 1px, transparent 0),
+                linear-gradient(90deg, rgba(20,20,20,0.3) 1px, transparent 0),
+                linear-gradient(rgba(20,20,20,0.3) 1px, transparent 0);
+            background-size: 4px 4px, 5px 5px, 25px 25px, 25px 25px;
             opacity: 0;
             z-index: 1;
-            transition: opacity 2s ease;
+            transition: opacity 1.5s ease;
             pointer-events: none;
         }
 
-        /* СЛОЙ ИСХОДНОГО КОДА, КОТОРЫЙ БУДЕТ ВЫЛЕЗАТЬ */
+        /* ПОЛОМКА КОДА ПОВЕРХ САЙТА */
         .source-code-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -49,7 +48,7 @@
             transition: color 1s ease;
         }
 
-        /* ГЛАВНЫЙ ИНТЕРФЕЙС ИГРЫ */
+        /* ИНТЕРФЕЙС ИГРЫ */
         #game-ui {
             position: relative;
             z-index: 10;
@@ -99,33 +98,55 @@
             cursor: pointer;
             margin-top: 25px;
             text-transform: uppercase;
+            width: 100%;
         }
 
-        /* ПОЛОМКА И ГЛИТЧИ */
+        /* ПОЛЗАЮЩАЯ ЖИВНОСТЬ */
+        .bug {
+            position: fixed;
+            z-index: 99999;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+            transition: transform 0.08s linear;
+        }
+
+        /* ЭФФЕКТЫ УНИЧТОЖЕНИЯ МАТРИЦЫ */
+        #glitch-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 99998;
+            display: none;
+        }
+
+        .matrix-damage {
+            animation: matrixFlicker 0.04s infinite;
+        }
+
+        @keyframes matrixFlicker {
+            0% { background: #000; filter: invert(0); }
+            25% { background: #fff; border-top: 60px solid #f00; border-bottom: 40px solid #00f; }
+            50% { background: #111; border-left: 120px solid #0f0; }
+            75% { background: #fff; border-right: 80px solid #ff0; }
+            100% { background: #000; filter: invert(1); }
+        }
+
         .glitch-heavy {
             animation: glitchAnim 0.1s infinite alternate;
         }
         @keyframes glitchAnim {
-            0% { transform: translate(4px, -2px) skewX(5deg); filter: invert(0); }
-            50% { transform: translate(-3px, 3px) skewX(-10deg); background: #1a0000; }
-            100% { transform: translate(1px, -4px) rotate(1deg); filter: invert(0.8) contrast(2); }
+            0% { transform: translate(5px, -3px) skewX(6deg); }
+            50% { transform: translate(-4px, 4px) skewX(-12deg); background: #2a0000; }
+            100% { transform: translate(2px, -5px) rotate(2deg); filter: invert(0.6); }
         }
 
-        .flash-red {
-            animation: redAlert 0.04s infinite;
-        }
-        @keyframes redAlert {
-            0% { background: #000; }
-            50% { background: #ff0000; }
-            100% { background: #110000; }
-        }
-
-        /* ЭКРАН ЖЕСТКОГО ВЫКЛЮЧЕНИЯ УСТРОЙСТВА */
+        /* ФИНАЛЬНЫЙ ЧЕРНЫЙ ЭКРАН (ИМИТАЦИЯ ВЫКЛЮЧЕНИЯ) */
         #blackout-screen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000000;
-            z-index: 999999;
+            z-index: 9999999;
             display: none;
             cursor: none;
         }
@@ -133,48 +154,30 @@
 </head>
 <body>
 
-    <!-- Текстура бетона скрытая глубоко под сайтом -->
     <div class="concrete-wall" id="concrete"></div>
-
-    <!-- Наслоение кода -->
     <div class="source-code-overlay" id="codeLayer"></div>
+    <div id="glitch-screen"></div>
+    <div id="blackout-screen"></div>
 
-    <!-- Обычный сайт -->
     <div id="game-ui">
         <header>
-            <div style="color: #58a6ff; font-weight: bold;">[DEV_BRANCH] tom-case-web-test</div>
+            <div style="color: #58a6ff; font-weight: bold;">[MAIN_BRANCH] tom-case-v3.5</div>
             <div>Баланс: <span id="cash-val" style="color: #7ee787;">0$</span></div>
         </header>
         <div class="container">
             <div class="case-box" id="caseBox">
-                <h2 id="caseTitle" style="margin-bottom: 10px;">📦 КЕЙС: ОБНОВЛЕНИЕ АСУП</h2>
-                <p id="caseDesc" style="color: #8b949e; font-size: 14px;">Стабильная сборка. Нажмите кнопку для генерации скина.</p>
-                <div id="caseIcon" style="font-size: 60px; margin: 20px 0;">💻</div>
-                <button class="btn-spin" id="spinBtn">Запустить тест</button>
+                <h2 id="caseTitle" style="margin-bottom: 10px;">📦 НОВОЕ ОБНОВЛЕНИЕ ТОМА</h2>
+                <p id="caseDesc" style="color: #8b949e; font-size: 14px;">Синхронизация с GitHub стабильна. Ошибок 0.</p>
+                <div id="caseIcon" style="font-size: 60px; margin: 20px 0;">🛡️</div>
+                <button class="btn-spin" id="spinBtn">Открыть тестовый кейс</button>
             </div>
         </div>
     </div>
 
-    <!-- Финальный черный экран смерти устройства -->
-    <div id="blackout-screen" id="blackout"></div>
-
     <script>
-        // Копируем кусок кода этой же страницы, чтобы выводить его как "поломку"
-        const rawCodeText = `function triggerTotalHell() {
-    if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-    }
-    document.getElementById('game-ui').style.display = 'none';
-    const wall = document.getElementById('concrete');
-    wall.style.opacity = '1';
-    wall.style.zIndex = '99999';
-    // CRITICAL_HARDWARE_FAILURE_SIMULATOR
-    // ACCESS_VIOLATION_IN_MEM_0x0000F8A
-    audioCtx.close();
-    shutdownDeviceSimulation();
-}`;
-
+        const bugTypes = ['🪳', '🕷️', '🐛'];
         let clicks = 0;
+        
         const spinBtn = document.getElementById('spinBtn');
         const caseBox = document.getElementById('caseBox');
         const concrete = document.getElementById('concrete');
@@ -183,6 +186,10 @@
         const caseDesc = document.getElementById('caseDesc');
         const caseIcon = document.getElementById('caseIcon');
         const cashVal = document.getElementById('cash-val');
+        const glitchScreen = document.getElementById('glitch-screen');
+        const blackoutScreen = document.getElementById('blackout-screen');
+
+        const rawCodeText = `FATAL_ERROR: Memory leak detected in tom-case core.\nSTACK_OVERFLOW: Thread crashed at 0x004F8B\nInjected bug_system.exe... STARTED\nDestroying UI layers... SUCCESS\n`;
 
         // Блокировка кнопки Назад
         window.onbeforeunload = function() { return "ALERT"; };
@@ -192,91 +199,142 @@
             clicks++;
 
             if (clicks === 1) {
-                cashVal.innerText = "450$";
-                caseIcon.innerText = "🪓";
-                caseTitle.innerText = "ВЫБИТ ТОПОР!";
+                cashVal.innerText = "500$";
+                caseIcon.innerText = "🗡️";
+                caseTitle.innerText = "ВЫБИТ НОЖ ТОМА!";
             }
             else if (clicks === 2) {
-                cashVal.innerText = "1200$";
-                caseIcon.innerText = "🌲";
-                caseTitle.innerText = "ВЫБИТА ТАЙГА-М4";
+                cashVal.innerText = "1500$";
+                caseIcon.innerText = "🔫";
+                caseTitle.innerText = "ВЫБИТА СЕКРЕТНАЯ ПУХА";
             }
-            // ЭТАП 2: ПРОЯВЛЕНИЕ БЕТОНА И КОДА
+            // ЭТАП 2: ПРОЯВЛЕНИЕ БЕТОНА, КОДА И ТАРАКАНОВ
             else if (clicks === 3) {
-                // Сайт начинает таять, показывая бетонную плиту позади
-                concrete.style.opacity = "0.75";
-                caseBox.style.background = "rgba(22, 27, 34, 0.4)";
-                caseBox.style.borderColor = "#ef4444";
-                caseDesc.innerText = "ВНИМАНИЕ: Нарушена целостность структуры CSS.";
-                caseDesc.style.color = "#ef4444";
+                concrete.style.opacity = "0.9";
+                caseBox.style.background = "rgba(22, 27, 34, 0.2)";
+                caseBox.style.borderColor = "#ff4444";
+                caseDesc.innerText = "ВНИМАНИЕ: Обнаружена потеря пакетов данных.";
+                caseDesc.style.color = "#ff4444";
+                
+                // Из щелей выползают первые 3 разведчика
+                for(let i=0; i<3; i++) createAIInsect(35); 
             }
             else if (clicks === 4) {
-                // Начинает вылезать код игры поверх всего
-                codeLayer.style.color = "rgba(0, 255, 100, 0.7)";
-                codeLayer.innerText = rawCodeText.repeat(5);
-                caseBox.style.transform = "matrix(1, 0.05, -0.05, 1, 0, 0)";
-                caseTitle.innerText = "СИСТЕМА НЕ СТАБИЛЬНА";
-                spinBtn.style.background = "#ef4444";
-                spinBtn.innerText = "ПОПЫТКА СБРОСА";
+                codeLayer.style.color = "rgba(255, 0, 50, 0.7)";
+                codeLayer.innerText = rawCodeText.repeat(20);
+                caseBox.style.transform = "rotate(-4deg) scale(0.9)";
+                caseTitle.innerText = "КРИТИЧЕСКИЙ СБОЙ БАЗЫ";
+                spinBtn.style.background = "#ff1111";
+                spinBtn.innerText = "ПЕРЕЗАГРУЗИТЬ?";
+                
+                // Еще больше насекомых
+                for(let i=0; i<6; i++) createAIInsect(45);
             }
-            // ЭТАП 3: КРИТИЧЕСКИЙ ГЛИТЧ-ЗАХВАТ
+            // ЭТАП 3: АДСКИЙ КРАШ, ЦИФРОВОЙ БУСТ ЗВУКА И ОРДА
             else if (clicks === 5) {
-                // Переход в фуллскрин
+                // Принудительный Fullscreen
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
                 } else if (document.documentElement.webkitRequestFullscreen) {
                     document.documentElement.webkitRequestFullscreen();
                 }
 
+                // Включаем глитчи интерфейса и безумное мерцание матрицы экрана
                 caseBox.classList.add('glitch-heavy');
-                document.body.classList.add('flash-red');
-                codeLayer.style.fontSize = "18px";
-                codeLayer.style.color = "#fff";
-                codeLayer.innerText = "OVERFLOW ".repeat(200);
+                glitchScreen.style.display = 'block';
+                glitchScreen.classList.add('matrix-damage');
 
-                // Запуск адского низкочастотного гула трансформатора
+                // Показываем огромный лог краша на весь экран
+                codeLayer.style.fontSize = "22px";
+                codeLayer.style.color = "#fff";
+                codeLayer.innerText = "CORE_SYSTEM_DESTROYED_BY_TOM ".repeat(300);
+
+                // Выпускаем ТУЧУ скоростных тварей (45 штук) ПОВЕРХ мигающей матрицы
+                for (let i = 0; i < 45; i++) {
+                    createAIInsect(Math.random() * 30 + 45);
+                }
+
+                // ПРОГРАММНЫЙ БУСТ ГРОМКОСТИ В 25 РАЗ (Если звук на девайсе включен)
                 try {
                     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(75, audioCtx.currentTime); // Низкий страшный гул (75 Гц)
-                    gain.gain.setValueAtTime(4, audioCtx.currentTime); // Очень громко
+                    osc.type = 'sawtooth'; // Пилообразная режущая волна
+                    osc.frequency.setValueAtTime(90, audioCtx.currentTime); // Низкий страшный гул
+                    
+                    // Выкручиваем усиление сигнала на 2500%, заставляя динамики хрипеть на пределе мощности
+                    gain.gain.setValueAtTime(25, audioCtx.currentTime); 
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start();
 
-                    // Звук начинает дико искажаться и падать по частоте, как при поломке движка
+                    // Модуляция частоты: звук ломается, превращаясь в визг и треск
                     setInterval(() => {
-                        osc.frequency.setValueAtTime(Math.max(20, osc.frequency.value - 3), audioCtx.currentTime);
-                    }, 50);
-
+                        osc.frequency.setValueAtTime(Math.random() * 1200 + 40, audioCtx.currentTime);
+                    }, 35);
                 } catch (e) {}
 
-                // Через 4 секунды жесткого мигания и гула наступает ТЕМНОТА (Выключение)
+                // Ровно через 4.5 секунды тотального кошмара наступает ТЕМНОТА (Выключение)
                 setTimeout(() => {
                     triggerDeviceShutdown();
-                }, 4000);
+                }, 4500);
             }
         });
 
-        // ЭТАП 4: СИМУЛЯЦИЯ ПОЛНОГО ВЫКЛЮЧЕНИЯ УСТРОЙСТВА
+        // УМНЫЙ АЛГОРИТМ ПОВЕДЕНИЯ НАСЕКОМЫХ (РЫВКИ И ПОВОРОТЫ)
+        function createAIInsect(size) {
+            const bug = document.createElement('div');
+            bug.className = 'bug';
+            bug.style.fontSize = size + 'px';
+            bug.innerText = bugTypes[Math.floor(Math.random() * bugTypes.length)]; 
+            document.body.appendChild(bug);
+
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight;
+            let angle = Math.random() * 360;
+
+            bug.style.left = '0px';
+            bug.style.top = '0px';
+            bug.style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
+
+            // Имитация реального бега тараканов (Резкий разгон - торможение)
+            setInterval(() => {
+                // Шанс 30%, что таракан резко ускорится, иначе ползет медленно или стоит
+                let speed = Math.random() > 0.7 ? Math.random() * 100 + 50 : Math.random() * 25;
+                
+                // Хаотичная смена направления движения
+                angle += (Math.random() - 0.5) * 80;
+                let rad = angle * Math.PI / 180;
+                
+                x += Math.cos(rad) * speed;
+                y += Math.sin(rad) * speed;
+
+                // Защита от уползания за границы экрана
+                if (x < -60) x = window.innerWidth;
+                if (x > window.innerWidth + 60) x = -50;
+                if (y < -60) y = window.innerHeight;
+                if (y > window.innerHeight + 60) y = -50;
+
+                // Разворачиваем тельце эмодзи по направлению его бега
+                bug.style.transform = `translate(${x}px, ${y}px) rotate(${angle + 90}deg)`;
+            }, 80); // Шаг анимации — 80мс для супер-дерганного мерзкого эффекта
+        }
+
+        // ЭТАП 4: СИМУЛЯЦИЯ ПОЛНОГО КРАША УСТРОЙСТВА (БЛЭКАУТ)
         function triggerDeviceShutdown() {
-            // Прячем абсолютно все слои и врубаем тотальный черный оверлей поверх всего
+            // Мгновенно вырезаем все элементы сайта и орду пауков из DOM
             document.getElementById('game-ui').style.display = 'none';
             concrete.style.display = 'none';
             codeLayer.style.display = 'none';
-            document.body.classList.remove('flash-red');
-            document.body.style.background = '#000000';
+            glitchScreen.style.display = 'none';
             
-            const blackout = document.getElementById('blackout-screen');
-            blackout.style.display = 'block';
+            const activeBugs = document.querySelectorAll('.bug');
+            activeBugs.forEach(b => b.remove());
 
-            // Звук намертво обрывается в абсолютную гробовую тишину.
-            // Жертва остается сидеть перед черным, неотзывчивым экраном своего гаджета,
-            // думая, что телефон полностью вырубился или сгорел. 
+            // Включаем глухой черный экран. Звук полностью обрывается. ТЕЛЕФОН "УМЕР".
+            blackoutScreen.style.display = 'block';
         }
     </script>
 </body>
