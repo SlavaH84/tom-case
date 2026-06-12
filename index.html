@@ -1,1284 +1,770 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
-
-<title>Сделка Тома</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<style>
-
-:root{
-    --app-height:100vh;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
-
-html,
-body{
-    width:100%;
-    height:100%;
-}
-
-body{
-
-    overflow:auto;
-
-    background:
-    linear-gradient(
-    180deg,
-    #0d1117,
-    #121923,
-    #161f2b);
-
-    color:white;
-
-    font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-}
-
-/* ВЕРХ */
-
-.topbar{
-
-    height:80px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    padding:18px;
-
-    background:
-    rgba(255,255,255,0.04);
-
-    border-bottom:
-    1px solid rgba(255,255,255,0.06);
-
-    backdrop-filter:blur(14px);
-
-    position:sticky;
-
-    top:0;
-
-    z-index:20;
-}
-
-.logo{
-
-    font-size:28px;
-
-    font-weight:800;
-}
-
-.round{
-
-    opacity:0.75;
-
-    font-size:16px;
-}
-
-/* СТОЛ */
-
-.table{
-
-    min-height:
-    calc(var(--app-height) - 80px);
-
-    padding:16px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-}
-
-/* ПАНЕЛИ */
-
-.panel{
-
-    background:
-    rgba(255,255,255,0.045);
-
-    border:
-    1px solid rgba(255,255,255,0.05);
-
-    border-radius:28px;
-
-    padding:18px;
-
-    box-shadow:
-    0 10px 35px rgba(0,0,0,0.35);
-
-    backdrop-filter:blur(12px);
-}
-
-/* ТОМ */
-
-.tom-title{
-
-    text-align:center;
-
-    font-size:28px;
-
-    font-weight:700;
-
-    margin-bottom:14px;
-}
-
-.market{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:14px;
-
-    margin-bottom:12px;
-}
-
-/* КАРТЫ */
-
-.card{
-
-    width:82px;
-
-    height:116px;
-
-    border-radius:18px;
-
-    background:white;
-
-    color:black;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:30px;
-
-    font-weight:800;
-
-    user-select:none;
-
-    transition:
-    transform 0.14s,
-    box-shadow 0.14s;
-
-    animation:spawn 0.25s ease;
-}
-
-.card.red{
-    color:#c61e1e;
-}
-
-.card.back{
-
-    background:
-    linear-gradient(
-    145deg,
-    #252525,
-    #0f0f0f);
-
-    color:white;
-}
-
-.card.selected{
-
-    transform:
-    translateY(-12px)
-    scale(1.04);
-
-    box-shadow:
-    0 0 20px gold;
-}
-
-@keyframes spawn{
-
-    from{
-        opacity:0;
-        transform:scale(0.7);
-    }
-
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
-
-}
-
-/* КУРС */
-
-.course{
-
-    text-align:center;
-
-    font-size:18px;
-
-    opacity:0.8;
-}
-
-.bid{
-
-    text-align:center;
-
-    font-size:34px;
-
-    font-weight:800;
-
-    margin-top:6px;
-}
-
-/* GPT */
-
-.enemy-title{
-
-    text-align:center;
-
-    font-size:22px;
-
-    margin-bottom:12px;
-}
-
-.enemy{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:8px;
-
-    flex-wrap:wrap;
-}
-
-/* ИГРОК */
-
-.player-title{
-
-    font-size:24px;
-
-    margin-bottom:14px;
-
-    font-weight:700;
-}
-
-.player-cards{
-
-    display:flex;
-
-    gap:10px;
-
-    overflow-x:auto;
-
-    padding-bottom:8px;
-
-    padding-top:10px;
-}
-
-.player-cards::-webkit-scrollbar{
-    height:5px;
-}
-
-.player-cards::-webkit-scrollbar-thumb{
-
-    background:#555;
-
-    border-radius:999px;
-}
-
-/* КНОПКИ */
-
-.buttons{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-    margin-top:22px;
-}
-
-button{
-
-    border:none;
-
-    padding:20px;
-
-    border-radius:20px;
-
-    background:
-    linear-gradient(
-    145deg,
-    #2f81f7,
-    #1b5fc5);
-
-    color:white;
-
-    font-size:18px;
-
-    font-weight:800;
-
-    transition:0.12s;
-
-    box-shadow:
-    0 10px 24px rgba(0,0,0,0.3);
-}
-
-button:active{
-
-    transform:scale(0.97);
-}
-
-/* ЛОГ */
-
-.log{
-
-    min-height:170px;
-
-    max-height:240px;
-
-    overflow:auto;
-
-    font-size:15px;
-
-    line-height:1.55;
-}
-
-.log div{
-    margin-bottom:7px;
-}
-
-/* ПОБЕДА */
-
-.overlay{
-
-    position:fixed;
-
-    inset:0;
-
-    background:
-    rgba(0,0,0,0.8);
-
-    display:none;
-
-    align-items:center;
-
-    justify-content:center;
-
-    z-index:100;
-}
-
-.overlay-box{
-
-    width:90%;
-
-    max-width:340px;
-
-    background:#171717;
-
-    border-radius:30px;
-
-    padding:30px;
-
-    text-align:center;
-}
-
-.overlay-box h1{
-
-    margin-bottom:20px;
-
-    font-size:36px;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТАЙГА-2026: Симулятор Инженера АСУП Лесхоза</title>
+    <style>
+        :root {
+            --bg-color: #0a0f0d;
+            --panel-bg: rgba(16, 28, 23, 0.85);
+            --border-color: #2e4a3e;
+            --text-color: #cbd5e1;
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.4);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.4);
+            --warning: #f59e0b;
+            --info: #06b6d4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(20, 40, 30, 0.4), transparent),
+                linear-gradient(rgba(18, 18, 18, 0.1) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 100%, 100% 4px, 6px 100%;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            padding: 15px;
+            background: var(--panel-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px var(--primary-glow);
+            backdrop-filter: blur(5px);
+        }
+
+        header h1 {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #84cc16;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .panel-title {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Метрики */
+        .stat-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stat-row {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .stat-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 50%;
+            transition: width 0.5s ease-in-out, background-color 0.3s;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        /* Центральная зона событий */
+        .center-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(20, 35, 25, 0.9);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 0 20px var(--primary-glow);
+            animation: pulse 3s infinite alternate;
+        }
+
+        .card.danger {
+            border-color: var(--danger);
+            box-shadow: 0 0 20px var(--danger-glow);
+            animation: pulse-danger 1.5s infinite alternate;
+        }
+
+        .card-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #e2e8f0;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            background: rgba(16, 24, 20, 0.8);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary);
+            font-weight: bold;
+        }
+
+        .btn:disabled {
+            border-color: #4b5563;
+            color: #6b7280;
+            cursor: not-allowed;
+            background: #1f2937;
+        }
+
+        .btn .cost {
+            font-size: 11px;
+            background: rgba(0,0,0,0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--warning);
+        }
+
+        /* Консоль логов */
+        .log-console {
+            background: #050706;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 12px;
+            height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+        }
+
+        .log-entry {
+            line-height: 1.4;
+            border-left: 2px solid var(--primary);
+            padding-left: 6px;
+        }
+        .log-entry.system { border-color: var(--info); color: var(--info); }
+        .log-entry.bad { border-color: var(--danger); color: var(--danger); }
+        .log-entry.good { border-color: var(--primary); color: var(--primary); }
+        .log-entry.warn { border-color: var(--warning); color: var(--warning); }
+
+        /* Магазин апгрейдов */
+        .market-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .market-info h4 { color: #fff; margin-bottom: 2px; }
+        .market-info p { color: #94a3b8; font-size: 11px; }
+
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 11px;
+            background: transparent;
+            border: 1px solid var(--info);
+            color: var(--info);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-sm:hover:not(:disabled) {
+            background: var(--info);
+            color: #000;
+            box-shadow: 0 0 10px var(--info);
+        }
+
+        /* Экран завершения игры */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 10, 8, 0.95);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal {
+            background: var(--panel-bg);
+            border: 3px solid var(--primary);
+            max-width: 600px;
+            width: 90%;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+        .modal h2 { font-size: 28px; margin-bottom: 15px; }
+        .modal p { margin-bottom: 30px; line-height: 1.6; }
+
+        /* Анимации */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+            100% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); }
+        }
+        @keyframes pulse-danger {
+            0% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+            100% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.7); }
+        }
+
+        /* Скроллбар */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050706; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
 </head>
 <body>
 
-<div class="topbar">
-
-<div class="logo">
-🐈 Сделка Тома
-</div>
-
-<div class="round" id="roundText">
-Раунд 1
-</div>
-
-</div>
-
-<div class="table">
-
-<!-- ТОМ -->
-
-<div class="panel">
-
-<div class="tom-title">
-🐈 Том продаёт
-</div>
-
-<div class="market" id="market"></div>
-
-<div class="course"
-id="course">
-Курс: ♦
-</div>
-
-<div class="bid"
-id="bid">
-Ставка: 0
-</div>
-
-</div>
-
-<!-- GPT -->
-
-<div class="panel">
-
-<div class="enemy-title">
-🤖 GPT
-</div>
-
-<div class="enemy"
-id="botCards">
-</div>
-
-</div>
-
-<!-- ИГРОК -->
-
-<div class="panel">
-
-<div class="player-title">
-🧍 Твои карты
-</div>
-
-<div class="player-cards"
-id="playerCards">
-</div>
-
-<div class="buttons">
-
-<button onclick="makeBid()">
-💸 Сделать ставку
-</button>
-
-<button onclick="changeCourse()">
-🔄 Сменить курс
-</button>
-
-<button onclick="passTurn()">
-🚬 Пас
-</button>
-
-</div>
-
-</div>
-
-<!-- ЛОГ -->
-
-<div class="panel log"
-id="log">
-</div>
-
-</div>
-
-<!-- ПОБЕДА -->
-
-<div class="overlay"
-id="overlay">
-
-<div class="overlay-box">
-
-<h1 id="winnerText">
-</h1>
-
-<button onclick="location.reload()">
-🔁 Играть снова
-</button>
-
-</div>
-
-</div>
-
-<script>
-
-/*
-telegram fix
-*/
-
-if(window.Telegram?.WebApp){
-
-    Telegram.WebApp.ready();
-
-    Telegram.WebApp.expand();
-
-}
-
-function telegramResizeFix(){
-
-    document.documentElement
-    .style
-    .setProperty(
-    '--app-height',
-    `${window.innerHeight}px`
-    );
-
-}
-
-telegramResizeFix();
-
-window.addEventListener(
-'resize',
-telegramResizeFix
-);
-
-/*
-игра
-*/
-
-const suits=[
-"♠",
-"♥",
-"♦",
-"♣"
-];
-
-const values=[
-2,3,4,5,6,7,8,9,10,
-"J","Q","K","A"
-];
-
-let deck=[];
-let player=[];
-let bot=[];
-let tomDeck=[];
-
-let market=[];
-
-let selected=[];
-
-let currentCourse="♦";
-
-let currentBid=0;
-
-let currentWinner=null;
-
-let round=1;
-
-/*
-сила
-*/
-
-function power(v){
-
-    if(v==="J") return 11;
-    if(v==="Q") return 12;
-    if(v==="K") return 13;
-    if(v==="A") return 14;
-
-    return v;
-}
-
-/*
-перемешка
-*/
-
-function shuffle(arr){
-
-    for(let i=arr.length-1;i>0;i--){
-
-        let j=
-        Math.floor(
-        Math.random()*(i+1)
-        );
-
-        [arr[i],arr[j]]=
-        [arr[j],arr[i]];
-
-    }
-
-}
-
-/*
-лог
-*/
-
-function log(text){
-
-    const el=
-    document.getElementById("log");
-
-    let div=
-    document.createElement("div");
-
-    div.innerHTML=text;
-
-    el.appendChild(div);
-
-    el.scrollTop=
-    el.scrollHeight;
-
-}
-
-/*
-колода
-*/
-
-function createDeck(){
-
-    deck=[];
-
-    for(let d=0;d<2;d++){
-
-        for(let suit of suits){
-
-            for(let value of values){
-
-                deck.push({
-
-                    suit,
-                    value,
-
-                    power:
-                    power(value)
-
-                });
-
-            }
-
-        }
-
-    }
-
-    shuffle(deck);
-
-}
-
-/*
-добор
-*/
-
-function draw(arr,count){
-
-    for(let i=0;i<count;i++){
-
-        if(deck.length>0){
-
-            arr.push(
-            deck.pop()
-            );
-
-        }
-
-    }
-
-}
-
-/*
-рендер
-*/
-
-function render(){
-
-    renderMarket();
-
-    renderPlayer();
-
-    renderBot();
-
-    document
-    .getElementById("course")
-    .innerHTML=
-    "Курс: " +
-    currentCourse;
-
-    document
-    .getElementById("bid")
-    .innerHTML=
-    "Ставка: " +
-    currentBid;
-
-    document
-    .getElementById("roundText")
-    .innerHTML=
-    "Раунд " +
-    round;
-
-}
-
-function renderMarket(){
-
-    const el=
-    document.getElementById("market");
-
-    el.innerHTML="";
-
-    market.forEach(card=>{
-
-        let div=
-        document.createElement("div");
-
-        div.className="card";
-
-        if(
-        card.suit==="♥"||
-        card.suit==="♦"
-        ){
-            div.classList.add("red");
-        }
-
-        div.innerHTML=
-        card.value+
-        card.suit;
-
-        el.appendChild(div);
-
-    });
-
-}
-
-function renderBot(){
-
-    const el=
-    document.getElementById("botCards");
-
-    el.innerHTML="";
-
-    bot.forEach(()=>{
-
-        let div=
-        document.createElement("div");
-
-        div.className=
-        "card back";
-
-        div.innerHTML="🂠";
-
-        el.appendChild(div);
-
-    });
-
-}
-
-function renderPlayer(){
-
-    const el=
-    document.getElementById("playerCards");
-
-    el.innerHTML="";
-
-    player.forEach((card,index)=>{
-
-        let div=
-        document.createElement("div");
-
-        div.className="card";
-
-        if(
-        card.suit==="♥"||
-        card.suit==="♦"
-        ){
-            div.classList.add("red");
-        }
-
-        if(
-        selected.includes(index)
-        ){
-            div.classList.add("selected");
-        }
-
-        div.innerHTML=
-        card.value+
-        card.suit;
-
-        div.onclick=()=>{
-
-            if(
-            selected.includes(index)
-            ){
-
-                selected=
-                selected.filter(
-                x=>x!==index
-                );
-
-            }else{
-
-                selected.push(index);
-
-            }
-
-            render();
-
+    <header>
+        <h1>ЛЕСХОЗ АСУП СИМУЛЯТОР v2.6 // ОПЕРАЦИОННАЯ СИСТЕМА «ТАЙГА»</h1>
+        <p>Текущий статус: Мониторинг систем лесозаготовки запущен. Ошибок в ядре: 0</p>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="panel">
+            <div class="panel-title">
+                <span>📊 МОНИТОР РЕСУРСОВ</span>
+                <span id="display-day" style="color: var(--warning)">ДЕНЬ 1/7</span>
+            </div>
+            
+            <div class="stat-group">
+                <div class="stat-row">
+                    <div class="stat-labels">
+                        <span>🪵 Синхронизация ЛесЕГАИС</span>
+                        <span id="val-egais">70%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="bar-egais" class="progress-bar" style="background-color: var(--primary); color: var(--primary);"></div>
+                    </div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-labels">
+                        <span>📡 ИТ-Инфраструктура & Связь</span>
+                        <span id="val-infra">65%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="bar-infra" class="progress-bar" style="background-color: var(--primary); color: var(--primary);"></div>
+                    </div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-labels">
+                        <span>🚜 Психика персонала (1С/Склад)</span>
+                        <span id="val-staff">60%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="bar-staff" class="progress-bar" style="background-color: var(--primary); color: var(--primary);"></div>
+                    </div>
+                </div>
+
+                <div class="stat-row">
+                    <div class="stat-labels">
+                        <span>🧠 Ваше ментальное здоровье</span>
+                        <span id="val-sanity">100%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="bar-sanity" class="progress-bar" style="background-color: var(--primary); color: var(--primary);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-title" style="margin-top: 15px;">
+                <span>💰 ФИНАНСОВЫЙ СЧЕТ ИТ</span>
+            </div>
+            <div style="font-size: 24px; color: var(--warning); font-weight: bold; text-align: center; text-shadow: 0 0 10px rgba(245,158,11,0.3);">
+                <span id="display-budget">100 000</span> ₽
+            </div>
+        </div>
+
+        <div class="center-zone">
+            <div id="event-card" class="card">
+                <div id="event-title" class="card-header">Загрузка системы...</div>
+                <div id="event-text" class="card-text">Инициализация модулей контроля древесины...</div>
+                <div id="options-container" class="options-list">
+                    </div>
+            </div>
+
+            <div class="panel" style="flex-grow: 1;">
+                <div class="panel-title">📟 СИСТЕМНЫЙ ЛОГ И ТЕРМИНАЛ ОШИБОК</div>
+                <div id="log-console" class="log-console">
+                    <div class="log-entry system">[SYSTEM]: ОС Тайга-2026 успешно запущена. Добро пожаловать, Инженер.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">🛒 ИТ-РЫНОК (МОДЕРНИЗАЦИЯ)</div>
+            <div class="stat-group" style="gap: 10px;">
+                
+                <div class="market-item">
+                    <div class="market-info">
+                        <h4>Лицензия Кэш-Сервера ЕГАИС</h4>
+                        <p>Авто-ответы при падении госсайтов (+15% ЛесЕГАИС)</p>
+                    </div>
+                    <button class="btn-sm" onclick="buyUpgrade('egais', 25000)">25к</button>
+                </div>
+
+                <div class="market-item">
+                    <div class="market-info">
+                        <h4>Антенна Усилитель связи</h4>
+                        <p>Стабильный ГЛОНАСС в глуши (+20% Связь)</p>
+                    </div>
+                    <button class="btn-sm" onclick="buyUpgrade('infra', 20000)">20к</button>
+                </div>
+
+                <div class="market-item">
+                    <div class="market-info">
+                        <h4>Коробка Шоколада главбуху</h4>
+                        <p>Снижает ярость к интерфейсам (+20% Кадры)</p>
+                    </div>
+                    <button class="btn-sm" onclick="buyUpgrade('staff', 8000)">8к</button>
+                </div>
+
+                <div class="market-item">
+                    <div class="market-info">
+                        <h4>Ящик энергетиков</h4>
+                        <p>Мгновенно чинит ваши нервы (+25% Ментальность)</p>
+                    </div>
+                    <button class="btn-sm" onclick="buyUpgrade('sanity', 5000)">5к</button>
+                </div>
+
+            </div>
+            <div style="font-size: 11px; color: #6b7280; text-align: center; line-height: 1.4;">
+                * Покупки совершаются мгновенно из бюджета автоматизации лесхоза.
+            </div>
+        </div>
+
+    </div>
+
+    <div id="game-over-overlay" class="overlay">
+        <div class="modal">
+            <h2 id="modal-title" style="color: var(--danger);">ИГРА ОКОНЧЕНА</h2>
+            <p id="modal-desc">Описание исхода вашей работы.</p>
+            <button class="btn" style="text-align: center; display: block; margin: 0 auto;" onclick="location.reload()">ПЕРЕЗАПУСТИТЬ СИСТЕМУ</button>
+        </div>
+    </div>
+
+    <script>
+        // Игровое состояние
+        const state = {
+            egais: 70,
+            infra: 65,
+            staff: 60,
+            sanity: 100,
+            budget: 100000,
+            day: 1,
+            maxDays: 7
         };
 
-        el.appendChild(div);
-
-    });
-
-}
-
-/*
-новый раунд
-*/
-
-function nextRound(){
-
-    if(tomDeck.length<2){
-
-        endGame();
-
-        return;
-    }
-
-    market=[
-    tomDeck.pop(),
-    tomDeck.pop()
-    ];
-
-    currentBid=0;
-
-    currentWinner=null;
-
-    currentCourse=
-    market[0].suit;
-
-    round++;
-
-    log(
-    "🐈 Том выложил новые карты"
-    );
-
-    render();
-
-}
-
-/*
-взять карты
-*/
-
-function takeSelected(){
-
-    selected.sort((a,b)=>b-a);
-
-    let arr=[];
-
-    for(let index of selected){
-
-        arr.push(
-        player[index]
-        );
-
-        player.splice(index,1);
-
-    }
-
-    selected=[];
-
-    return arr;
-
-}
-
-/*
-ставка
-*/
-
-function makeBid(){
-
-    if(selected.length!==1){
-
-        log(
-        "❌ выбери 1 карту"
-        );
-
-        return;
-    }
-
-    let cards=
-    takeSelected();
-
-    let card=
-    cards[0];
-
-    if(
-    card.suit!==currentCourse
-    ){
-
-        player.push(card);
-
-        log(
-        "❌ не тот курс"
-        );
-
-        render();
-
-        return;
-    }
-
-    if(
-    card.power<=currentBid
-    ){
-
-        player.push(card);
-
-        log(
-        "❌ ставка слабее"
-        );
-
-        render();
-
-        return;
-    }
-
-    currentBid=
-    card.power;
-
-    currentWinner=
-    "player";
-
-    log(
-    "🧍 Ты поставил " +
-    card.value +
-    card.suit
-    );
-
-    render();
-
-    setTimeout(
-    botTurn,
-    700
-    );
-
-}
-
-/*
-смена курса
-*/
-
-function changeCourse(){
-
-    if(selected.length!==2){
-
-        log(
-        "❌ выбери 2 карты"
-        );
-
-        return;
-    }
-
-    let cards=
-    takeSelected();
-
-    if(
-    cards[0].suit!==
-    cards[1].suit
-    ){
-
-        player.push(...cards);
-
-        log(
-        "❌ нужна одна масть"
-        );
-
-        render();
-
-        return;
-    }
-
-    let total=
-
-    cards[0].power+
-
-    cards[1].power
-
-    -2;
-
-    if(total<=currentBid){
-
-        player.push(...cards);
-
-        log(
-        "❌ слишком слабо"
-        );
-
-        render();
-
-        return;
-    }
-
-    currentCourse=
-    cards[0].suit;
-
-    currentBid=
-    total;
-
-    currentWinner=
-    "player";
-
-    log(
-    "🔄 Ты сменил курс на " +
-    currentCourse
-    );
-
-    render();
-
-    setTimeout(
-    botTurn,
-    700
-    );
-
-}
-
-/*
-пас
-*/
-
-function passTurn(){
-
-    if(
-    currentWinner==="player"
-    ){
-
-        player.push(...market);
-
-        log(
-        "💰 Ты купил карты Тома"
-        );
-
-        nextRound();
-
-        return;
-    }
-
-    log(
-    "🚬 Ты пасанул"
-    );
-
-    botTurn();
-
-}
-
-/*
-ход gpt
-*/
-
-function botTurn(){
-
-    let possible=
-
-    bot.filter(c=>
-
-    c.suit===currentCourse &&
-
-    c.power>currentBid
-
-    );
-
-    if(possible.length>0){
-
-        possible.sort(
-        (a,b)=>
-        a.power-b.power
-        );
-
-        let card=
-        possible[0];
-
-        bot.splice(
-        bot.indexOf(card),
-        1
-        );
-
-        currentBid=
-        card.power;
-
-        currentWinner=
-        "bot";
-
-        log(
-        "🤖 GPT поставил " +
-        card.value +
-        card.suit
-        );
-
-        render();
-
-        return;
-    }
-
-    let groups={};
-
-    bot.forEach(card=>{
-
-        if(!groups[card.suit]){
-
-            groups[card.suit]=[];
-
-        }
-
-        groups[card.suit]
-        .push(card);
-
-    });
-
-    for(let suit in groups){
-
-        if(
-        groups[suit]
-        .length>=2
-        ){
-
-            let c1=
-            groups[suit][0];
-
-            let c2=
-            groups[suit][1];
-
-            let total=
-
-            c1.power+
-
-            c2.power
-
-            -2;
-
-            if(total>currentBid){
-
-                bot.splice(
-                bot.indexOf(c1),
-                1
-                );
-
-                bot.splice(
-                bot.indexOf(c2),
-                1
-                );
-
-                currentCourse=
-                suit;
-
-                currentBid=
-                total;
-
-                currentWinner=
-                "bot";
-
-                log(
-                "🔄 GPT сменил курс"
-                );
-
-                render();
-
-                return;
-
+        // Пул эпических лесных ивентов
+        const eventsPool = [
+            {
+                title: "🪵 КРАХ ГОСПОРТАЛА ЛесЕГАИС",
+                text: "Министерство выкатило кривое обновление. База лежит. На выезде с делянок застряли 12 лесовозов с кругляком сосны. Водители жгут костры, мастера матерятся в рацию, QR-коды не генерируются.",
+                danger: true,
+                options: [
+                    {
+                        text: "Выдать бумажные накладные от руки (Риск гигантского штрафа от Минприроды)",
+                        action: () => {
+                            updateState('egais', -30);
+                            updateState('staff', +10);
+                            log("Минприроды готовит документы на штраф. Но лесовозы поехали.", "bad");
+                        }
+                    },
+                    {
+                        text: "Поднять локальный скрипт-прокси и вбивать данные вручную всю ночь",
+                        action: () => {
+                            updateState('egais', +15);
+                            updateState('sanity', -30);
+                            log("Вы спасли предприятие от штрафов, но зрение упало до -3.", "good");
+                        }
+                    }
+                ]
+            },
+            {
+                title: "🚜 ДИВЕРСИЯ МИХАЛЫЧА",
+                text: "Тракторист Михалыч на финском харвестере уехал в глухую делянку Б-12. Спутниковый трекер ГЛОНАСС перестал слать пакеты. Директор кричит, что Михалыч пилит вековой дуб 'налево'.",
+                danger: false,
+                options: [
+                    {
+                        text: "Отправить СМС через спутник: 'Михалыч, дерни тумблер под приборкой'",
+                        action: () => {
+                            updateState('staff', -20);
+                            updateState('sanity', -5);
+                            log("Михалыч прислал в ответ фото среднего пальца. Трекер молчит.", "bad");
+                        }
+                    },
+                    {
+                        text: "Взять служебную Ниву, паяльник, ноутбук и трястись 4 часа по болотам в тайгу",
+                        action: () => {
+                            if(state.budget >= 5000) {
+                                updateState('budget', -5000);
+                                updateState('infra', +25);
+                                updateState('sanity', -15);
+                                log("Вы нашли Михалыча, припаяли антенну. ГЛОНАСС на карте!", "good");
+                            }
+                        },
+                        cost: 5000
+                    }
+                ]
+            },
+            {
+                title: "🔥 ПОЖАРООПАСНЫЙ СЕЗОН",
+                text: "Камера тепловизора системы 'Лесной Дозор' на сотовой вышке выдала ошибку 404. Горизонт заволокло дымкой. Директор требует картинку, иначе уволит.",
+                danger: true,
+                options: [
+                    {
+                        text: "Удаленно шить ядро камеры через дохлый китайский 3G-модем",
+                        action: () => {
+                            if(Math.random() > 0.5) {
+                                updateState('infra', +20);
+                                log("Успех! Прошивка встала, камера ожила, дым под контролем.", "good");
+                            } else {
+                                updateState('infra', -30);
+                                log("Камера 'окирпичилась'. Придется вызывать альпинистов.", "bad");
+                            }
+                        }
+                    },
+                    {
+                        text: "Экстренно оплатить замену камеры подрядчикам из ИТ-бюджета",
+                        action: () => {
+                            if(state.budget >= 30000) {
+                                updateState('budget', -30000);
+                                updateState('infra', +25);
+                                log("Подрядчики смонтировали новую камеру. Обзор идеальный.", "good");
+                            }
+                        },
+                        cost: 30000
+                    }
+                ]
+            },
+            {
+                title: "👵 БУНТ В БУХГАЛТЕРИИ",
+                text: "Главбух Тамара Ивановна (65 лет) утверждает, что ваша новая ERP-система считает кубические метры березы не по ГОСТу 2708-75, а 'по-сатанински'. Она закрыла отчетный период.",
+                danger: false,
+                options: [
+                    {
+                        text: "Переписать формулы расчетов в конфигурации под требования Тамары Ивановны",
+                        action: () => {
+                            updateState('sanity', -20);
+                            updateState('staff', +20);
+                            log("Вы кодили всю ночь. Главбух довольна и угостила вас пирожком с брусникой.", "good");
+                        }
+                    },
+                    {
+                        text: "Купить ей французские духи и доказать, что формулы согласованы с Рослесхозом",
+                        action: () => {
+                            if(state.budget >= 10000) {
+                                updateState('budget', -10000);
+                                updateState('staff', +10);
+                                log("Духи сработали. Она ворчит, но заставила девочек вбивать данные.", "info");
+                            }
+                        },
+                        cost: 10000
+                    }
+                ]
+            },
+            {
+                title: "💨 ПОТОП И ПЕРЕГРЕВ",
+                text: "В серверной (которая раньше была каптеркой для валенок) потек потолок прямо на ИБП, а кондиционер гонит горячий воздух. Стойка с 1С разогрелась до 82°C.",
+                danger: true,
+                options: [
+                    {
+                        text: "Поставить тазик, открыть окна, направить бытовой вентилятор 'Ветерок'",
+                        action: () => {
+                            updateState('infra', -20);
+                            updateState('staff', -10);
+                            log("Вентилятор затянул в серверную опилки с пилорамы. Всё гудит на честном слове.", "warn");
+                        }
+                    },
+                    {
+                        text: "Вызвать аварийную бригаду ИТ-климата",
+                        action: () => {
+                            if(state.budget >= 15000) {
+                                updateState('budget', -15000);
+                                updateState('infra', +30);
+                                log("Кондиционер заправлен фреоном. Температура в серверной +17°C.", "good");
+                            }
+                        },
+                        cost: 15000
+                    }
+                ]
             }
+        ];
 
+        // Случайные вечерние события
+        const passiveEvents = [
+            { text: "Местные электрики мигнули фазой. Бесперебойник выдержал, но батарея подсела. (-5% Инфраструктура)", action: () => updateState('infra', -5), type: 'warn' },
+            { text: "Лесничие принесли из тайги брусничный пирог в знак благодарности за работающие рации. (+10% К персоналу)", action: () => updateState('staff', +10), type: 'good' },
+            { text: "Выделен правительственный грант на цифровизацию лесного хозяйства! (+40 000 руб.)", action: () => updateState('budget', 40000), type: 'system' },
+            { text: "Короеды перегрызли витую пару, протянутую по забору до весовой. Пришлось крутить скрутку. (-5% Инфраструктура)", action: () => updateState('infra', -5), type: 'warn' }
+        ];
+
+        // Инициализация интерфейса
+        function updateUI() {
+            document.getElementById('val-egais').innerText = state.egais + '%';
+            document.getElementById('bar-egais').style.width = state.egais + '%';
+            document.getElementById('bar-egais').style.color = state.egais < 30 ? 'var(--danger)' : 'var(--primary)';
+
+            document.getElementById('val-infra').innerText = state.infra + '%';
+            document.getElementById('bar-infra').style.width = state.infra + '%';
+            document.getElementById('bar-infra').style.color = state.infra < 30 ? 'var(--danger)' : 'var(--primary)';
+
+            document.getElementById('val-staff').innerText = state.staff + '%';
+            document.getElementById('bar-staff').style.width = state.staff + '%';
+            document.getElementById('bar-staff').style.color = state.staff < 30 ? 'var(--danger)' : 'var(--primary)';
+
+            document.getElementById('val-sanity').innerText = state.sanity + '%';
+            document.getElementById('bar-sanity').style.width = state.sanity + '%';
+            document.getElementById('bar-sanity').style.color = state.sanity < 30 ? 'var(--danger)' : 'var(--primary)';
+
+            document.getElementById('display-budget').innerText = state.budget.toLocaleString('ru-RU');
+            document.getElementById('display-day').innerText = `ДЕНЬ ${state.day}/${state.maxDays}`;
+
+            // Проверка кнопок рынка на доступность денег
+            const marketButtons = document.querySelectorAll('.btn-sm');
+            marketButtons.forEach(btn => {
+                const cost = parseInt(btn.innerText.replace('к', '000').replace('8к', '8000').replace('5к', '5000'));
+                if (state.budget < cost) btn.disabled = true;
+                else btn.disabled = false;
+            });
         }
 
-    }
+        function updateState(key, value) {
+            if (key === 'budget') state.budget += value;
+            else state[key] = Math.max(0, Math.min(100, state[key] + value));
+            updateUI();
+        }
 
-    if(
-    currentWinner==="bot"
-    ){
+        function log(message, type = 'system') {
+            const consoleEl = document.getElementById('log-console');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerText = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleEl.appendChild(entry);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
 
-        bot.push(...market);
+        // Логика рынка
+        function buyUpgrade(type, cost) {
+            if (state.budget >= cost) {
+                updateState('budget', -cost);
+                if (type === 'egais') { updateState('egais', 15); log("Куплен Кэш-Сервер. ЕГАИС стабилизирован.", "good"); }
+                if (type === 'infra') { updateState('infra', 20); log("Установлена антенна связи. Сигнал усилен.", "good"); }
+                if (type === 'staff') { updateState('staff', 20); log("Шоколад доставлен в бухгалтерию. Напряжение спало.", "good"); }
+                if (type === 'sanity') { updateState('sanity', 25); log("Энергетики выпиты. Силы восстановились.", "good"); }
+            }
+        }
 
-        log(
-        "🤖 GPT купил карты"
-        );
+        // Отрисовка карточки события
+        function renderEvent() {
+            if (checkGameOver()) return;
 
-        nextRound();
+            const card = document.getElementById('event-card');
+            const currentEvent = eventsPool[Math.floor(Math.random() * eventsPool.length)];
 
-    }else{
+            if (currentEvent.danger) card.className = "card danger";
+            else card.className = "card";
 
-        log(
-        "❌ никто не смог купить"
-        );
+            document.getElementById('event-title').innerText = currentEvent.title;
+            document.getElementById('event-text').innerText = currentEvent.text;
 
-        nextRound();
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
 
-    }
+            currentEvent.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                
+                let costText = opt.cost ? `<span class="cost">${opt.cost} ₽</span>` : '';
+                btn.innerHTML = `<span>${idx + 1}. ${opt.text}</span> ${costText}`;
 
-}
+                if (opt.cost && state.budget < opt.cost) {
+                    btn.disabled = true;
+                }
 
-/*
-конец
-*/
+                btn.onclick = () => {
+                    opt.action();
+                    nextTurn();
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
 
-function endGame(){
+        // Переход хода
+        function nextTurn() {
+            // Вечернее пассивное событие
+            const passive = passiveEvents[Math.floor(Math.random() * passiveEvents.length)];
+            log(passive.text, passive.type);
+            passive.action();
 
-    let text="";
+            state.day++;
+            if (state.day > state.maxDays) {
+                endGame(true);
+            } else {
+                updateUI();
+                renderEvent();
+            }
+        }
 
-    if(
-    player.length>
-    bot.length
-    ){
+        // Проверка условий проигрыша
+        function checkGameOver() {
+            if (state.egais <= 0) {
+                endGame(false, "🚨 ШТРАФ И БАН: ЛесЕГАИС заблокирован. Лесхоз оштрафован Рослесхознадзором на 1.5 млн рублей за незаконный оборот древесины. Вас везут на допрос.");
+                return true;
+            }
+            if (state.infra <= 0) {
+                endGame(false, "⚡ КАТАСТРОФА ИТ: Сгорела главная серверная стойка, ГЛОНАСС отключен, рации молчат. Лесхоз полностью парализован. Вас уволили с удержанием стоимости оборудования.");
+                return true;
+            }
+            if (state.staff <= 0) {
+                endGame(false, "🪓 БУНТ В ТАЙГЕ: Озверевшие от ваших программ вальщики леса и мастера участков пришли в серверную с бензопилами 'Штиль'. Вы едва успели убежать через окно.");
+                return true;
+            }
+            if (state.sanity <= 0) {
+                endGame(false, "🧠 ЦИФРОВОЙ ПСИХОЗ: Нервы сдали. Вам начало казаться, что деревья шлют лог-файлы, а птицы пингуют ваш мозг. Вы удалили базу 1С и ушли жить в глухую чащу.");
+                return true;
+            }
+            return false;
+        }
 
-        text=
-        "🏆 ТЫ ПОБЕДИЛ";
+        // Конец игры
+        function endGame(isWin, message = "") {
+            const overlay = document.getElementById('game-over-overlay');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
 
-    }else if(
-    bot.length>
-    player.length
-    ){
+            overlay.classList.add('active');
 
-        text=
-        "🤖 GPT ПОБЕДИЛ";
+            if (isWin) {
+                title.innerText = "🎉 ПОБЕДА! НЕДЕЛЯ ВЫДЕРЖАНА!";
+                title.style.color = "var(--primary)";
+                
+                let score = state.egais + state.infra + state.staff;
+                if(score >= 230) {
+                    desc.innerText = "🏆 ИДЕАЛЬНО: Вы — Легенда АСУП. Рослесхоз ставит вас в пример, ЕГАИС работает без сбоев, Михалыч трезв, а директор выписал вам премию в виде УАЗ-Патриот!";
+                } else if(score >= 140) {
+                    desc.innerText = "🪵 СЕРЕДНЯЧОК: Кое-как системы работают. Где-то на костылях, где-то на синей изоленте, но план по кубам древесины сдан. Вам подарили машину колотых дров.";
+                } else {
+                    desc.innerText = "📉 ЕДВА ВЫЖИЛИ: Всё держится на добром слове и матах. Каким-то чудом вас не посадили и не уволили. Но в понедельник всё начнется заново...";
+                }
+            } else {
+                title.innerText = "💀 МИССИЯ ПРОВАЛЕНА";
+                title.style.color = "var(--danger)";
+                desc.innerText = message;
+            }
+        }
 
-    }else{
-
-        text=
-        "🤝 НИЧЬЯ";
-
-    }
-
-    document
-    .getElementById("overlay")
-    .style.display=
-    "flex";
-
-    document
-    .getElementById("winnerText")
-    .innerHTML=
-    text;
-
-}
-
-/*
-старт
-*/
-
-createDeck();
-
-draw(player,6);
-
-draw(bot,6);
-
-tomDeck=deck;
-
-nextRound();
-
-</script>
-
+        // Запуск
+        updateUI();
+        renderEvent();
+    </script>
 </body>
 </html>
