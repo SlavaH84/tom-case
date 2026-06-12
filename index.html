@@ -3,237 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tom Case Simulator — Официальный сайт</title>
+    <title>Tom Case Simulator v3.0 // Hidden_Build</title>
     <style>
-        /* Стильный дефолтный сайт под симулятор кейсов */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: #0e121b;
-            color: #eceff4;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        header {
-            background-color: #1a2333;
-            padding: 20px;
-            border-bottom: 2px solid #2e3b54;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            color: #4c566a;
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        header h1 span {
-            color: #88c0d0;
-        }
-        .main-container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #1e2838;
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid #2e3b54;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        }
-        .case-preview {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            background: radial-gradient(circle, #3b4252 0%, #2e3440 100%);
-            border-radius: 10px;
-            border: 2px dashed #88c0d0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 80px;
-            box-shadow: 0 0 20px rgba(136, 192, 208, 0.2);
-        }
-        .btn-spin {
-            display: inline-block;
-            background: linear-gradient(90deg, #81a1c1, #88c0d0);
-            color: #2e3440;
-            padding: 18px 40px;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.4);
-            transition: transform 0.1s;
-        }
-        .btn-spin:active {
-            transform: scale(0.95);
-        }
-
-        /* КАТАСТРОФА (Изначально скрыта) */
-        .screamer-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: black;
-            z-index: 99999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        .screamer-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            animation: shake 0.05s infinite alternate;
-        }
-
-        /* Пауки */
-        .spider {
-            position: fixed;
-            width: 80px;
-            height: auto;
-            z-index: 10000;
-            pointer-events: none;
-            display: none;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
             user-select: none;
         }
 
-        @keyframes shake {
-            0% { transform: translate(3px, 2px) rotate(0deg); }
-            10% { transform: translate(-2px, -3px) rotate(-2deg); }
-            20% { transform: translate(-4px, 0px) rotate(2deg); }
-            30% { transform: translate(0px, 3px) rotate(0deg); }
-            40% { transform: translate(2px, -2px) rotate(2deg); }
-            50% { transform: translate(-2px, 3px) rotate(-2deg); }
-            60% { transform: translate(-4px, 2px) rotate(0deg); }
-            75% { transform: translate(3px, 2px) rotate(-4deg); }
-            90% { transform: translate(-2px, -2px) rotate(0deg); }
-            100% { transform: translate(2px, 3px) rotate(2deg); }
+        /* ТЕКСТУРА БЕТОННОЙ СТЕНЫ (Изначально скрыта прозрачностью) */
+        .concrete-wall {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Генерируем брутальный шум бетона чистым CSS, без внешних картинок */
+            background-color: #444;
+            background-image: 
+                radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0),
+                radial-gradient(rgba(0,0,0,0.5) 1px, transparent 0),
+                linear-gradient(90deg, rgba(30,30,30,0.2) 1px, transparent 0),
+                linear-gradient(rgba(30,30,30,0.2) 1px, transparent 0);
+            background-size: 4px 4px, 6px 6px, 20px 20px, 20px 20px;
+            opacity: 0;
+            z-index: 1;
+            transition: opacity 2s ease;
+            pointer-events: none;
+        }
+
+        /* СЛОЙ ИСХОДНОГО КОДА, КОТОРЫЙ БУДЕТ ВЫЛЕЗАТЬ */
+        .source-code-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            font-size: 11px;
+            color: rgba(0, 255, 100, 0);
+            white-space: pre-wrap;
+            padding: 20px;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+            transition: color 1s ease;
+        }
+
+        /* ГЛАВНЫЙ ИНТЕРФЕЙС ИГРЫ */
+        #game-ui {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        header {
+            background: #161b22;
+            padding: 15px;
+            border-bottom: 2px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .case-box {
+            background: #161b22;
+            border: 2px solid #30363d;
+            border-radius: 6px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .btn-spin {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 25px;
+            text-transform: uppercase;
+        }
+
+        /* ПОЛОМКА И ГЛИТЧИ */
+        .glitch-heavy {
+            animation: glitchAnim 0.1s infinite alternate;
+        }
+        @keyframes glitchAnim {
+            0% { transform: translate(4px, -2px) skewX(5deg); filter: invert(0); }
+            50% { transform: translate(-3px, 3px) skewX(-10deg); background: #1a0000; }
+            100% { transform: translate(1px, -4px) rotate(1deg); filter: invert(0.8) contrast(2); }
+        }
+
+        .flash-red {
+            animation: redAlert 0.04s infinite;
+        }
+        @keyframes redAlert {
+            0% { background: #000; }
+            50% { background: #ff0000; }
+            100% { background: #110000; }
+        }
+
+        /* ЭКРАН ЖЕСТКОГО ВЫКЛЮЧЕНИЯ УСТРОЙСТВА */
+        #blackout-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000000;
+            z-index: 999999;
+            display: none;
+            cursor: none;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>⚡ <span>TOM CASE</span> BETA UPDATE v2.6 ⚡</h1>
-    </header>
-    
-    <div class="main-container">
-        <h2>Доступен Секретный Кейс от Тома!</h2>
-        <p style="color: #d8dee9; font-size: 15px;">Вы получили один бесплатный праздничный кейс. Нажмите на кнопку ниже, чтобы запустить прокрутку барабана и выбить лимитированный скин.</p>
-        
-        <div class="case-preview">📦</div>
-        
-        <button class="btn-spin" id="spinBtn">Крутить бесплатно</button>
+    <!-- Текстура бетона скрытая глубоко под сайтом -->
+    <div class="concrete-wall" id="concrete"></div>
+
+    <!-- Наслоение кода -->
+    <div class="source-code-overlay" id="codeLayer"></div>
+
+    <!-- Обычный сайт -->
+    <div id="game-ui">
+        <header>
+            <div style="color: #58a6ff; font-weight: bold;">[DEV_BRANCH] tom-case-web-test</div>
+            <div>Баланс: <span id="cash-val" style="color: #7ee787;">0$</span></div>
+        </header>
+        <div class="container">
+            <div class="case-box" id="caseBox">
+                <h2 id="caseTitle" style="margin-bottom: 10px;">📦 КЕЙС: ОБНОВЛЕНИЕ АСУП</h2>
+                <p id="caseDesc" style="color: #8b949e; font-size: 14px;">Стабильная сборка. Нажмите кнопку для генерации скина.</p>
+                <div id="caseIcon" style="font-size: 60px; margin: 20px 0;">💻</div>
+                <button class="btn-spin" id="spinBtn">Запустить тест</button>
+            </div>
+        </div>
     </div>
 
-    <div class="screamer-layer" id="screamer">
-        <img class="screamer-image" src="https://i.imgur.com/H8M8H7P.jpg" alt="BOO!">
-    </div>
+    <!-- Финальный черный экран смерти устройства -->
+    <div id="blackout-screen" id="blackout"></div>
 
     <script>
-        const spinBtn = document.getElementById('spinBtn');
-        const screamer = document.getElementById('screamer');
+        // Копируем кусок кода этой же страницы, чтобы выводить его как "поломку"
+        const rawCodeText = `function triggerTotalHell() {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    }
+    document.getElementById('game-ui').style.display = 'none';
+    const wall = document.getElementById('concrete');
+    wall.style.opacity = '1';
+    wall.style.zIndex = '99999';
+    // CRITICAL_HARDWARE_FAILURE_SIMULATOR
+    // ACCESS_VIOLATION_IN_MEM_0x0000F8A
+    audioCtx.close();
+    shutdownDeviceSimulation();
+}`;
 
-        // Блокировка закрытия вкладки (покажет системное предупреждение)
-        window.onbeforeunload = function() {
-            return "НЕЛЬЗЯ ПРОСТО ТАК ВЗЯТЬ И УЙТИ!";
-        };
+        let clicks = 0;
+        const spinBtn = document.getElementById('spinBtn');
+        const caseBox = document.getElementById('caseBox');
+        const concrete = document.getElementById('concrete');
+        const codeLayer = document.getElementById('codeLayer');
+        const caseTitle = document.getElementById('caseTitle');
+        const caseDesc = document.getElementById('caseDesc');
+        const caseIcon = document.getElementById('caseIcon');
+        const cashVal = document.getElementById('cash-val');
+
+        // Блокировка кнопки Назад
+        window.onbeforeunload = function() { return "ALERT"; };
+        setInterval(() => { window.history.pushState(null, "", window.location.href); }, 100);
 
         spinBtn.addEventListener('click', () => {
-            // Врубаем фуллскрин, чтобы спрятать крестик и вкладки браузера
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
-                document.documentElement.webkitRequestFullscreen();
+            clicks++;
+
+            if (clicks === 1) {
+                cashVal.innerText = "450$";
+                caseIcon.innerText = "🪓";
+                caseTitle.innerText = "ВЫБИТ ТОПОР!";
             }
-
-            // Показываем скример
-            screamer.style.display = 'flex';
-
-            // ГЕНЕРАЦИЯ ЖЕСТКОГО СИНТЕТИЧЕСКОГО ШУМА И ПИСКА
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-
-                // 'sawtooth' (пила) — дает самый грязный, резкий и мерзкий звук
-                oscillator.type = 'sawtooth'; 
-                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Начальная частота
-
-                // Выкручиваем громкость звукового узла страницы на максимум
-                gainNode.gain.setValueAtTime(2.5, audioCtx.currentTime); 
-
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                oscillator.start();
-
-                // Каждые 40мс меняем частоту звука, создавая эффект визжащей и ломающейся сирены
-                setInterval(() => {
-                    oscillator.frequency.setValueAtTime(Math.random() * 1600 + 300, audioCtx.currentTime);
-                }, 40);
-
-            } catch (e) {
-                console.log("Браузер заблокировал звук:", e);
+            else if (clicks === 2) {
+                cashVal.innerText = "1200$";
+                caseIcon.innerText = "🌲";
+                caseTitle.innerText = "ВЫБИТА ТАЙГА-М4";
             }
+            // ЭТАП 2: ПРОЯВЛЕНИЕ БЕТОНА И КОДА
+            else if (clicks === 3) {
+                // Сайт начинает таять, показывая бетонную плиту позади
+                concrete.style.opacity = "0.75";
+                caseBox.style.background = "rgba(22, 27, 34, 0.4)";
+                caseBox.style.borderColor = "#ef4444";
+                caseDesc.innerText = "ВНИМАНИЕ: Нарушена целостность структуры CSS.";
+                caseDesc.style.color = "#ef4444";
+            }
+            else if (clicks === 4) {
+                // Начинает вылезать код игры поверх всего
+                codeLayer.style.color = "rgba(0, 255, 100, 0.7)";
+                codeLayer.innerText = rawCodeText.repeat(5);
+                caseBox.style.transform = "matrix(1, 0.05, -0.05, 1, 0, 0)";
+                caseTitle.innerText = "СИСТЕМА НЕ СТАБИЛЬНА";
+                spinBtn.style.background = "#ef4444";
+                spinBtn.innerText = "ПОПЫТКА СБРОСА";
+            }
+            // ЭТАП 3: КРИТИЧЕСКИЙ ГЛИТЧ-ЗАХВАТ
+            else if (clicks === 5) {
+                // Переход в фуллскрин
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                }
 
-            // Через 2.5 секунды убираем физиономию скримера, но оставляем ад на сайте
-            setTimeout(() => {
-                screamer.style.display = 'none';
-                // Меняем текст сайта, чтобы добить жертву подколкой
-                document.querySelector('.main-container h2').innerText = "ОЙ! ЧТО-ТО ПОШЛО НЕ ТАК... 🕷️";
-                document.querySelector('.main-container p').innerText = "Кажется, Том закинул в кейс кое-что живое. И оно выбралось наружу. Кнопка выхода заблокирована.";
-                spinBtn.style.display = 'none';
-                
-                // Запускаем нашествие пауков
-                startSpiders();
-            }, 2500);
+                caseBox.classList.add('glitch-heavy');
+                document.body.classList.add('flash-red');
+                codeLayer.style.fontSize = "18px";
+                codeLayer.style.color = "#fff";
+                codeLayer.innerText = "OVERFLOW ".repeat(200);
+
+                // Запуск адского низкочастотного гула трансформатора
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(75, audioCtx.currentTime); // Низкий страшный гул (75 Гц)
+                    gain.gain.setValueAtTime(4, audioCtx.currentTime); // Очень громко
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+
+                    // Звук начинает дико искажаться и падать по частоте, как при поломке движка
+                    setInterval(() => {
+                        osc.frequency.setValueAtTime(Math.max(20, osc.frequency.value - 3), audioCtx.currentTime);
+                    }, 50);
+
+                } catch (e) {}
+
+                // Через 4 секунды жесткого мигания и гула наступает ТЕМНОТА (Выключение)
+                setTimeout(() => {
+                    triggerDeviceShutdown();
+                }, 4000);
+            }
         });
 
-        // Функция спавна ползающих пауков
-        function startSpiders() {
-            for (let i = 0; i < 20; i++) {
-                createSpider();
-            }
+        // ЭТАП 4: СИМУЛЯЦИЯ ПОЛНОГО ВЫКЛЮЧЕНИЯ УСТРОЙСТВА
+        function triggerDeviceShutdown() {
+            // Прячем абсолютно все слои и врубаем тотальный черный оверлей поверх всего
+            document.getElementById('game-ui').style.display = 'none';
+            concrete.style.display = 'none';
+            codeLayer.style.display = 'none';
+            document.body.classList.remove('flash-red');
+            document.body.style.background = '#000000';
+            
+            const blackout = document.getElementById('blackout-screen');
+            blackout.style.display = 'block';
+
+            // Звук намертво обрывается в абсолютную гробовую тишину.
+            // Жертва остается сидеть перед черным, неотзывчивым экраном своего гаджета,
+            // думая, что телефон полностью вырубился или сгорел. 
         }
-
-        function createSpider() {
-            const spider = document.createElement('div');
-            spider.className = 'spider';
-            spider.style.display = 'block';
-            spider.style.fontSize = Math.random() * 50 + 30 + 'px'; // Разные размеры пауков
-            spider.innerText = '🕷️';
-            document.body.appendChild(spider);
-
-            let x = Math.random() * window.innerWidth;
-            let y = Math.random() * window.innerHeight;
-
-            spider.style.left = x + 'px';
-            spider.style.top = y + 'px';
-
-            // Хаотичное движение пауков
-            setInterval(() => {
-                x += (Math.random() - 0.5) * 70;
-                y += (Math.random() - 0.5) * 70;
-                
-                if (x < 0) x = window.innerWidth;
-                if (x > window.innerWidth) x = 0;
-                if (y < 0) y = window.innerHeight;
-                if (y > window.innerHeight) y = 0;
-
-                spider.style.left = x + 'px';
-                spider.style.top = y + 'px';
-            }, 80);
-        }
-
-        // Спам истории (Ломает кнопку "Назад" в мобильных и ПК браузерах)
-        setInterval(() => {
-            window.history.pushState(null, "", window.location.href);
-        }, 400);
     </script>
 </body>
 </html>
