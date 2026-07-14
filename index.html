@@ -1,282 +1,669 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tom Case Simulator // Сбой авторизации</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            user-select: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* ТЕКСТУРА БЕТОННОЙ СТЕНЫ ПОД САЙТОМ */
-        .concrete-wall {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #3a3a3a;
-            background-image: 
-                radial-gradient(rgba(255,255,255,0.1) 1px, transparent 0),
-                radial-gradient(rgba(0,0,0,0.6) 1px, transparent 0),
-                linear-gradient(90deg, rgba(20,20,20,0.3) 1px, transparent 0),
-                linear-gradient(rgba(20,20,20,0.3) 1px, transparent 0);
-            background-size: 4px 4px, 5px 5px, 25px 25px, 25px 25px;
-            opacity: 0;
-            z-index: 1;
-            transition: opacity 1s ease;
-            pointer-events: none;
-        }
-
-        /* КИШКИ ИСХОДНОГО КОДЫ */
-        .source-code-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            font-size: 12px;
-            color: rgba(255, 0, 50, 0);
-            white-space: pre-wrap;
-            padding: 20px;
-            z-index: 2;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        /* ИНТЕРФЕЙС ГОЛОСОВОЙ КАПЧИ */
-        .captcha-box {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 30px;
-            max-width: 420px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            position: relative;
-            z-index: 10;
-        }
-
-        .captcha-title {
-            font-size: 16px;
-            color: #58a6ff;
-            margin-bottom: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .captcha-text {
-            font-size: 13px;
-            color: #8b949e;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .btn-audio {
-            background: #21262d;
-            color: #c9d1d9;
-            border: 1px solid #30363d;
-            padding: 12px 20px;
-            font-size: 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-            justify-content: center;
-        }
-        .btn-audio:hover { background: #30363d; border-color: #8b949e; }
-
-        .input-code {
-            width: 100%;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            padding: 10px;
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            outline: none;
-        }
-
-        /* ТАРАКАНЫ И ПАУКИ */
-        .bug {
-            position: fixed;
-            z-index: 99999;
-            pointer-events: none;
-            user-select: none;
-            transition: transform 0.08s linear;
-        }
-
-        /* ЭФФЕКТЫ УНИЧТОЖЕНИЯ МАТРИЦЫ */
-        #glitch-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 99998;
-            display: none;
-        }
-
-        .matrix-damage {
-            animation: matrixFlicker 0.04s infinite;
-        }
-
-        @keyframes matrixFlicker {
-            0% { background: #000; filter: invert(0); }
-            25% { background: #fff; border-top: 50px solid #f00; border-bottom: 50px solid #00f; }
-            50% { background: #111; border-left: 100px solid #0f0; }
-            75% { background: #fff; border-right: 70px solid #ff0; }
-            100% { background: #000; filter: invert(1); }
-        }
-
-        /* ФИНАЛЬНЫЙ БЛЭКАУТ */
-        #blackout-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000000;
-            z-index: 9999999;
-            display: none;
-            cursor: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/b/ — 24byan — Витебский архив [READ ONLY]</title>
+<style>
+    body { margin:0; padding:0; background-color:#1a1a1a; font-family:'Courier New', monospace; font-size:13px; color:#c4c4c4; line-height:1.5; }
+    .crt-overlay { pointer-events:none; position:fixed; top:0; left:0; right:0; bottom:0; background:linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%), linear-gradient(90deg, rgba(255,0,0,0.06), rgba(0,255,0,0.02), rgba(0,0,255,0.06)); z-index:9999; background-size:100% 2px, 3px 100%; animation:flicker 0.15s infinite; }
+    @keyframes flicker { 0%{opacity:0.85;} 50%{opacity:0.95;} 100%{opacity:0.88;} }
+    #container { width:900px; margin:20px auto; background-color:#2b2b2b; border:1px solid #444; box-shadow:0 0 20px rgba(0,0,0,0.8), 0 0 40px rgba(100,0,0,0.1); }
+    .header { background-color:#111; padding:20px; text-align:center; border-bottom:2px solid #660000; }
+    .header h1 { margin:0; font-size:42px; letter-spacing:4px; color:#8a0c0c; text-shadow:0 0 5px #ff0000, 2px 2px 0 #000; font-family:'Impact', sans-serif; }
+    .header .subtitle { font-size:11px; color:#666; margin-top:5px; }
+    .ip-warning { color:#cc0000; font-size:10px; margin-top:10px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; border-top:1px dashed #333; border-bottom:1px dashed #333; padding:5px 0; }
+    .navbar { background-color:#1f1f1f; padding:8px 10px; text-align:center; border-bottom:1px solid #333; font-size:12px; }
+    .navbar a { color:#4c4cff; text-decoration:none; margin:0 8px; font-weight:bold; } .navbar a:hover { color:#ff0000; background-color:#000; text-shadow:0 0 5px #ff0000; }
+    .navbar a.archive-only { color:#666; cursor:not-allowed; text-decoration:line-through; }
+    .board-container { padding:15px; }
+    .announcement { background:#330000; border:1px solid #660000; padding:10px; margin-bottom:15px; font-size:12px; text-align:center; color:#ff3333; box-shadow:inset 0 0 10px #000; }
+    .thread { background-color:#1a1a1a; border:1px solid #333; margin-bottom:30px; padding:12px; }
+    .thread-title { font-size:14px; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:5px; color:#fff; background:#222; padding:8px; }
+    .post { background-color:#232323; border-left:3px solid #555; margin:10px 0; padding:10px; font-size:13px; overflow:hidden; }
+    .post.op { border-left:3px solid #8a0c0c; background-color:#1c1c1c; }
+    .post-header { color:#777; font-size:11px; margin-bottom:8px; border-bottom:1px dashed #333; padding-bottom:4px; }
+    .post-header .post-number { color:#4c4cff; font-weight:bold; } .post-header .post-name { color:#008000; font-weight:bold; } .post-header .post-date { color:#555; }
+    .post-content { word-wrap:break-word; color:#ccc; } .post-content .quote { color:#789922; font-style:italic; } .post-content .redtext { color:#cc0000; font-weight:bold; text-transform:uppercase; }
+    .post-content .spoiler { background:#000; color:#000; padding:0 3px; } .post-content .spoiler:hover { color:#fff; }
+    .reply-link { font-size:11px; color:#4c4cff; cursor:pointer; margin-top:8px; display:inline-block; } .reply-link:hover { color:#ff0000; }
+    .file-link { display:block; background:#111; border:1px solid #333; padding:8px; margin-bottom:10px; font-family:monospace; font-size:11px; color:#888; overflow:hidden; }
+    .file-link img { max-width:120px; max-height:120px; float:left; margin-right:10px; border:1px solid #000; filter:grayscale(100%) contrast(120%); }
+    .file-link .filename { color:#4c4cff; }
+    .reply-form { display:none; margin-top:10px; background:#111; border:1px solid #333; padding:10px; }
+    .reply-form textarea { width:95%; height:60px; font-family:monospace; font-size:12px; background:#000; color:#555; border:1px solid #333; }
+    .reply-form input[type="submit"] { background:#333; border:1px solid #555; color:#888; padding:5px 15px; cursor:not-allowed; }
+    .footer { background-color:#111; padding:15px; text-align:center; font-size:11px; border-top:2px solid #660000; color:#444; } .footer a { color:#666; }
+    .counter { font-size:10px; color:#ff3333; margin-top:10px; font-family:'Digital-7', monospace; }
+    hr { border:0; border-top:1px dashed #333; margin:10px 0; }
+    pre { color:#00ff00; background:#000; padding:10px; font-size:12px; overflow-x:auto; border:1px solid #333; }
+    .ref-link { color:#4c4cff; cursor:pointer; text-decoration:underline; }
+</style>
 </head>
 <body>
-
-    <div class="concrete-wall" id="concrete"></div>
-    <div class="source-code-overlay" id="codeLayer"></div>
-    <div id="glitch-screen"></div>
-    <div id="blackout-screen"></div>
-
-    <div class="captcha-box" id="captchaBox">
-        <div class="captcha-title">🤖 Проверка: Голосовая капча</div>
-        <div class="captcha-text">
-            Для доступа к обновлению <b>Tom Case v3.5</b> включите звук на вашем устройстве, нажмите кнопку ниже и введите продиктованный код безопасности.
+<div class="crt-overlay"></div>
+<div id="container">
+    <div class="header">
+        <h1>24byan</h1>
+        <div class="subtitle">Витебский независимый борд / Расследования и слухи / 2008–2026 [АРХИВ]</div>
+        <div class="ip-warning">
+            ⚠ ВНИМАНИЕ: ВАШ IP-АДРЕС ЗАФИКСИРОВАН. СВЕТ ГАСНЕТ В 3:24. НЕ ЗАДАВАЙТЕ ЛИШНИХ ВОПРОСОВ.
         </div>
-        
-        <button class="btn-audio" id="playAudioBtn">🔊 Воспроизвести аудио-код</button>
-        
-        <input type="text" class="input-code" placeholder="Введите 4 цифры..." disabled>
     </div>
 
-    <script>
-        const bugTypes = ['🪳', '🕷️', '🐛'];
-        const playAudioBtn = document.getElementById('playAudioBtn');
-        const captchaBox = document.getElementById('captchaBox');
-        const concrete = document.getElementById('concrete');
-        const codeLayer = document.getElementById('codeLayer');
-        const glitchScreen = document.getElementById('glitch-screen');
-        const blackoutScreen = document.getElementById('blackout-screen');
+    <div class="navbar">
+        <a href="#">[ /b/ Беспредел ]</a>
+        <a href="#">[ /bo/ Боюр ]</a>
+        <a href="#">[ /cr/ Криминал ]</a>
+        <a href="#">[ /meat/ Мясной цех ]</a>
+        <a href="#">[ /cult/ Культ ]</a>
+        <a href="#">[ /pol/ Политика ]</a>
+        | 
+        <a href="#" class="archive-only">[ Создать тред ]</a>
+        <a href="#" class="archive-only">[ Ответить ]</a>
+        <a href="#">[ Каталог ]</a>
+        <a href="#">[ Фагготрия ]</a>
+    </div>
 
-        const rawCodeText = `Е7вшпомзещчна9нщаН8АШПХВЕ86А9ОЗМВЕЩФГАХС\nFATAL_CORE_CRASH: Audio overflow at gain_node_30\nDESTROYING_DISPLAY_MATRIX... SUCCESS\n`;
+    <div class="board-container">
+        
+        <div class="announcement">
+            <b>⚠ ФОРУМ ПЕРЕВЕДЁН В РЕЖИМ АРХИВА</b><br>
+            С 1 января 2026 года новые сообщения не принимаются в связи с расследованием.<br>
+            Все материалы сохранены. Последняя активность: 14.07.2026 03:24:00.<br>
+            <span style="font-size: 10px; color: #fff;">Если вы видите это сообщение, значит Мымра ещё не вычеркнула вас из базы.</span>
+        </div>
 
-        // Запрет на выход
-        window.onbeforeunload = function() { return "ALERT"; };
-        setInterval(() => { window.history.pushState(null, "", window.location.href); }, 100);
+        <!-- ТРЕД 1: БИОГРАФИЯ БОЮРА -->
+        <div class="thread">
+            <div class="thread-title">☠ /bo/ — БИОГРАФИЯ БОЮРА. ПОЛНАЯ ХРОНОЛОГИЯ (512 ответов) [ЗАКРЕПЛЁН]</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Модератор-Свидетель</span> <span class="post-date">12.01.2025 18:00:00</span> <span class="post-number">№100001</span></div>
+                <div class="post-content">
+                    <span class="redtext">ТРЕД ДЛЯ НОВИЧКОВ И НОВОПРИБЫВШИХ.</span><br>
+                    Здесь собрана вся хронология Дениса Владимировича Боюренко. Если вы тут впервые — прочитайте этот тред. Если вы тут не впервые — дополните недостающее.<br><br>
+                    <b>1978 г.р.</b> Посёлок ТЭЦ, Витебск. Мать — Зинаида, кондуктор трамвая. Отец алкаш исчез.<br>
+                    <b>1994 г.</b> Судимость за грабёж на Смоленском рынке. Метод — не отжать деньги, а унизить.<br>
+                    <b>1997 г.</b> Выход из тюрьмы. Начало рейдерства. Скупка долгов заводов.<br>
+                    <b>2005 г.</b> Уничтожение наставника "Карася". Создание "БоюрГрупп".<br>
+                    <b>2010 г.</b> Открытие сети "24РУБЛЯ". 20 магазинов. Фасад для отмывания.<br>
+                    <b>2015 г.</b> Выход на международный наркотрафик. "БТК-Логистик".<br>
+                    <b>2018 г.</b> Август. Операция "Кокаиновый шашлык". Казнь Вишкевича.<br>
+                    <b>2025 г.</b> Февраль. Убит Туко Саламанкой в подвале "Волны".<br>
+                    <span class="quote">&gt;мымра всё знает</span><br>
+                    <span class="quote">&gt;24 рубля</span>
+                </div>
+                <span class="reply-link" onclick="document.getElementById('reply1').style.display='block'">[Ответить]</span>
+                <div id="reply1" class="reply-form"><form onsubmit="alert('Архив только для чтения.'); return false;"><textarea disabled placeholder="Ваш билет не прокомпостирован."></textarea><br><input type="submit" value="Отправить" disabled></form></div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 18:15:22</span> <span class="post-number">№100005</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;100001</span><br>
+                    Ты забыл самое главное. Почему именно 24 рубля? Не потому что штраф за безбилетник. В 1994 году, когда его мать избили в трамвае за эти 24 рубля, у неё случился инфаркт. Она умерла в трамвае №3 на маршруте ДСК-Смоленский. Боюр тогда стоял рядом и ничего не сделал. Испугался. С тех пор 24 рубля для него — это цена слабости. Цена предательства самого себя. Он мстит городу за свою трусость.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 18:30:10</span> <span class="post-number">№100012</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;100005</span><br>
+                    База. А ещё есть теория, что он не мстил, а просто сломался. В тюрьме его опустили, и он решил, что если он не хищник, то он корм. Но выбрал стать хищником для тех, кто слабее. Паша "Псих" — его зеркало. Боюр боится Психа больше, чем ментов.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 19:00:45</span> <span class="post-number">№100045</span></div>
+                <div class="post-content">
+                    А кто помнит, как Боюр отжал "Волну" у бывшего мэра в 2007? Пришли штурмовики, закрыли заведение, вынесли всю документацию. Мэр потом спился. Боюр просто пришёл и сказал: "Теперь это мой бассейн". И сделал там красный кабинет. <span class="redtext">Кабинет смерти.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 19:24:00</span> <span class="post-number">№100050</span></div>
+                <div class="post-content">
+                    <pre>
+      ___________________
+     |  _________________  |
+     | |                 | |
+     | |  24РУБЛЯ        | |
+     | |  ВСЕ ПО 24      | |
+     | |_________________| |
+     |_____________________|
+         ||         ||
+         ||  ШАШЛЫК ||
+         ||_________||
+                    </pre>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 20:10:11</span> <span class="post-number">№100088</span></div>
+                <div class="post-content">
+                    Слышал, Боюр коллекционировал компостеры. У него в кабинете на Правды, 24 стояли штук двадцать. Разных годов. От царских до советских. Он ими клеймил "зайцев". Не в переносном смысле. В буквальном. Пробивал руку и выбивал номер долга.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 21:00:00</span> <span class="post-number">№100120</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;100088</span><br>
+                    Подтверждаю. Друг работал в他的 охране. Говорил, что Боюр мог часами сидеть и компостировать чистые талоны. Просто слушал звук "клак-клак-клак". У него был тремор, и этот звук его успокаивал. А потом он пошёл в подвал, где висел Вишкевич...
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 21:15:33</span> <span class="post-number">№100124</span></div>
+                <div class="post-content">
+                    А что за хуйня с его отцом? Кто-то говорил, что его отец не алкаш, а режимный прокурор, и Боюр — побочный сын. Поэтому его никогда не трогали до 2025 года.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">12.01.2025 22:00:00</span> <span class="post-number">№100150</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;100124</span><br>
+                    Бред сивой кобылы. Отец — тракторист с Марковщины. Умер от цирроза в канаве. А не трогали Боюра, потому что Мымра платила 40% в общак минским. Когда платить стало нечем (кокаиновый след всплыл), минские его и слили через Туко. Всё прагматично, никакой магии.
+                </div>
+            </div>
+        </div>
 
-        playAudioBtn.addEventListener('click', () => {
-            // 1. Мгновенно заваливаем в Fullscreen, пока человек ждет цифры
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-                document.documentElement.webkitRequestFullscreen();
-            }
+        <!-- ТРЕД 2: СИСТЕМА ЗАЙЦЫ -->
+        <div class="thread">
+            <div class="thread-title">🐰 /cr/ — СИСТЕМА "ЗАЙЦЫ". КАК ПОПАСТЬ И КАК ВЫЙТИ (340 ответов)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Бывший заяц</span> <span class="post-date">05.03.2024 14:20:00</span> <span class="post-number">№145200</span></div>
+                <div class="post-content">
+                    Я был "зайцем". С 2015 по 2018 год. Долг был 48 000 рублей (два раза прокомпостировали). Работал на складе в Орше. Фуры с коксом, мясо, бананы. Условия — ад. Спали по 3 часа. Кормили шашлыком, от которого тошнило (сейчас понимаю почему).<br>
+                    Как выйти? Никак. Единственный способ — стать штурмовиком. Я сломал руку одному должнику, меня перевели в "живые радары", а потом я сбежал в РФ. Но у меня там осталась сестра. Они её нашли. Пришлось вернуться и отрабатывать ещё год.<br>
+                    <span class="redtext">Если вы едете в трамвае без билета в Витебске — вы уже в базе. Вы просто не знаете об этом.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">05.03.2024 14:45:10</span> <span class="post-number">№145205</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;145200</span><br>
+                    Как они вычисляли безбилетников, если ты просто ехал? Они же не могли всех забрать.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Бывший заяц</span> <span class="post-date">05.03.2024 15:00:00</span> <span class="post-number">№145210</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;145205</span><br>
+                    У них были "кнопки". Бывшие контролёры, которые работали в штатском. Они садились в трамвай, смотрели на тех, кто прячется, кто суетится. Запоминали лицо. Камер тогда было мало. Потом брали базу сотовых операторов (Мымра покупала) — вычисляли, кто в том районе сел. И через пару дней человек просто исчезал. Его находили в лесу с билетом во рту.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">05.03.2024 15:30:44</span> <span class="post-number">№145222</span></div>
+                <div class="post-content">
+                    Жесть. А я помню в 2012 году ездил в 7-м трамвае. Зашёл контролёр, здоровый такой, с татуировкой "24" на пальце. Я билет забыл дома. Он посмотрел на меня, улыбнулся и сказал: "Повезло тебе сегодня, студент. Твой билет уже оплачен". Я тогда охуел, а теперь думаю — может, меня просто в резерв записали?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">05.03.2024 16:00:00</span> <span class="post-number">№145240</span></div>
+                <div class="post-content">
+                    Категории "зайцев" для новичков:<br>
+                    1. <b>Живые радары</b> — стоят у рынков, смотрят за ментами. Самая безопасная категория.<br>
+                    2. <b>Курьеры-камикадзе</b> — возят кокс. Срок жизни — 3-4 месяца. Потом либо садятся, либо "утилизируются".<br>
+                    3. <b>Штурмовики</b> — выбивают долги. Быдло, которое получает удовольствие от насилия. Путь наверх.<br>
+                    4. <b>Живой щит</b> — смертники. Используются при разборках, чтобы принять пули на себя. Обычно это должники с семьями.<br>
+                    5. <b>Мясо</b> — ну, вы поняли. "Шашлык от шефа".
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">05.03.2024 16:15:00</span> <span class="post-number">№145255</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;Мясо</span><br>
+                    Да бросьте. Вы серьёзно верите, что их пускали на шашлык? Это же городская легенда. Просто расчленёнку закапывали в Полоцком лесу. Зачем им возиться с готовкой?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Бывший заяц</span> <span class="post-date">05.03.2024 16:20:00</span> <span class="post-number">№145256</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;145255</span><br>
+                    Ты не понимаешь психологию Боюра. Это не про еду. Это про ритуал. Очистку. Они смешивали фарш. 50% свинины, 50% — "зайца". И подавали это в "Волне" тем, кто не платил долги. Чтобы они съели своего брата. Это было тестом на покорность. Кто ел — тот становился штурмовиком. Кто отказывался — сам становился фаршем.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">05.03.2024 17:00:00</span> <span class="post-number">№145300</span></div>
+                <div class="post-content">
+                    Какой ужас... А что с теми, кто отбывал долг и вышел? Как живёте?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Бывший заяц</span> <span class="post-date">05.03.2024 17:10:00</span> <span class="post-number">№145305</span></div>
+                <div class="post-content">
+                    Никак. Я сплю с включённым светом. Когда слышу звук трамвая на улице, меня начинает тошнить. Каждый раз, когда вижу в магазине этикетку "24", я теряю сознание. Мымра нашла меня даже в Москве в 2020. Просто позвонила и сказала: "Баланс не сведён. Вернись". Я не вернулся. Через неделю мою собаку нашли расчленённой в подъезде. В пакете из "24РУБЛЯ".
+                </div>
+            </div>
+        </div>
 
-            // 2. Включаем безумное мерцание матрицы экрана и глитч-кода
-            captchaBox.style.display = 'none';
-            glitchScreen.style.display = 'block';
-            glitchScreen.classList.add('matrix-damage');
-            
-            concrete.style.opacity = "0.95"; // Проявляется бетон
+        <!-- ТРЕД 3: ВИШКЕВИЧ И КАМИКАДЗЕ -->
+        <div class="thread">
+            <div class="thread-title">🧊 /cr/ — КАЗНЬ ВИШКЕВИЧА. ПОЛНАЯ ХРОНОЛОГИЯ ОПЕРАЦИИ "КОКАИНОВЫЙ ШАШЛЫК" (189 ответов)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Инсайдер МВД</span> <span class="post-date">02.08.2019 02:00:00</span> <span class="post-number">№160000</span></div>
+                <div class="file-link">
+                    <img src="https://placehold.co/120x120/111111/8a0c0c?text=VLNA_BAS" alt="file">
+                    <span class="filename">volna_basement_2018.jpg</span><br>
+                    Файл: 666 КБ, 1024x768<br>
+                    <span style="color: #ff0000;">[ФАЙЛ УДАЛЁН ПО ТРЕБОВАНИЮ МВД]</span>
+                </div>
+                <div class="post-content">
+                    Год назад. Август 2018. Я был в той операции. Сливаю инфу, потому что менты всё равно молчат.<br>
+                    1. Фура шла из Москвы. Водитель — Армен, живёт в Смоленске. Он не знал, что везёт. Внутри коробки со "свиным шашлыком". Внутри мяса — вакуумные пакеты с коксом. 200 кг.<br>
+                    2. На посту ГАИ под Оршей фуру тормозят. ОМОН. Собаки. Армен в шоке. Открывают коробку — кокса нет. Там реально мясо. Боюр подменил груз за 20 км до поста, отправив пустышку. Основной груз ушёл на "Мясокомбинат".<br>
+                    3. Но курьер Даниил Вишкевич (24 года) вскрыл одну коробку ещё в Москве. Увидел порошок. Испугался, позвонил корешу-менту. Корень слил Боюру.<br>
+                    4. Вишкевича арестовывают, но Гольдберг (адвокат) вытаскивает его под подписку за 24 часа.<br>
+                    5. Вечером Вишкевич выходит из РОВД. Его ждёт минивэн "БТК-Логистик". Он садится сам. Думает, его везут домой. А его везут в "Волну".<br>
+                    6. В подвале Боюр ждёт его с компостером. Туко стоит с монтировкой. Мымра сидит в углу с планшетом.<br>
+                    <span class="redtext">Дальше пишу с трудом.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">02.08.2019 02:15:00</span> <span class="post-number">№160005</span></div>
+                <div class="post-content">
+                    Бамп. Пиши дальше, сука. Что в подвале?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Инсайдер МВД</span> <span class="post-date">02.08.2019 02:30:00</span> <span class="post-number">№160010</span></div>
+                <div class="post-content">
+                    Вишкевичу объяснили, что он "сломал систему". Боюр не орал. Он говорил шёпотом. Взял компостер. Подошёл. Вишкевич плакал, умолял. Боюр прокомпостировал ему щёку. Пробил плоть насквозь. Потом Туко замотал ему голову вакуумной плёнкой. Оставил только рот. Боюр смотрел, как он задыхается. Когда Вишкевич терял сознание, ему давали воздух. И снова плёнка. Это длилось 3 часа.<br>
+                    Потом отрубили кисть руки. Кисть положили в вакуумник с этикеткой "24РУБЛЯ". Остальное тело... Туко работал мясником в юности.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">02.08.2019 02:45:00</span> <span class="post-number">№160015</span></div>
+                <div class="post-content">
+                    Пиздец. А кисть правда подбросили в РОВД?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Инсайдер МВД</span> <span class="post-date">02.08.2019 03:00:00</span> <span class="post-number">№160020</span></div>
+                <div class="post-content">
+                    Да. В пакете. С запиской: "Акция в 24РУБЛЯ. Срок годности истёк". Дело закрыли. Мать Вишкевича искала его 7 лет. Тело нашли только в 2025-м, после смерти Боюра, в лесу под Оршей. По зубам. А матери так и не сказали всю правду. Сказали, что несчастный случай. Она сошла с ума.
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">02.08.2019 03:24:00</span> <span class="post-number">№160024</span></div>
+                <div class="post-content">
+                    <span class="redtext">24</span><br>
+                    Код активации. Это не просто убийство. Это сообщение всем. Ты не трогаешь империю.
+                </div>
+            </div>
+        </div>
 
-            codeLayer.style.fontSize = "24px";
-            codeLayer.style.color = "#ffffff";
-            codeLayer.innerText = rawCodeText.repeat(250);
+        <!-- ТРЕД 4: МЫМРА -->
+        <div class="thread">
+            <div class="thread-title">💻 /bo/ — КТО ТАКАЯ МЫМРА? АЛЛА ВИКТОРОВНА И ТЁМНАЯ БУХГАЛТЕРИЯ (277 ответов)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">10.10.2024 23:00:00</span> <span class="post-number">№180000</span></div>
+                <div class="post-content">
+                    Мымра (Алла Викторовна) — 50 лет. Бывший главбух обувной фабрики. Ушла к Боюру в 2005. Серая мышь, очки, вечный серый свитер. Но именно она — мозг империи. Боюр — это кулак, Туко — нож, а Мымра — калькулятор. Она знает каждый рубль, каждую опечатку, каждый труп. Говорят, у неё нет эмоций с рождения. Когда убили Боюра, она не моргнула. Когда Туко убил секретаршу, Мымра просто списала её в убытки. <span class="quote">&gt;Мымра всё знает.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">10.10.2024 23:15:00</span> <span class="post-number">№180005</span></div>
+                <div class="post-content">
+                    Слышал, что она спит в серверной на Правды, 24. У неё там раскладушка между стойками. Она не выходит на улицу. Еду ей приносят "зайцы". Она боится солнца. Буквально. Говорят, у неё аллергия на свет. Поэтому все аудиты проходят в 3:24 ночи.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">10.10.2024 23:30:00</span> <span class="post-number">№180012</span></div>
+                <div class="post-content">
+                    Она ведь и есть настоящий хозяин. Боюр был ширмой. Туко — бык. А она — паук. Если её не убрать, система будет работать вечно. Минские уже поняли. Поэтому Туко пока жив — он новый фасад, а Мымра крутит руль. Но если Туко рыпнется, Мымра нажмёт кнопку "Трамвайное депо", и Туко просто исчезнет. Как Вишкевич.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.10.2024 00:00:00</span> <span class="post-number">№180040</span></div>
+                <div class="post-content">
+                    Легенда гласит, что когда Боюр умирал в подвале, он смотрел на Мымру. Ждал помощи. Она подошла, посмотрела на планшет, потом на него. И сказала: "Денис Владимирович, вы мертвы. Подтвердите". Он дёрнул глазом. Она кивнула: "Подтверждено. Списать". И ушла. А Туко добил его арматурой.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.10.2024 00:24:00</span> <span class="post-number">№180045</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;180040</span><br>
+                    Это не легенда. Это показания уборщицы, которая потом попала в дурку. Мымра реально так сказала. У неё в голове все люди — это строки в Excel. "Статус: списан". "Статус: утилизирован". "Статус: перевод в категорию мясо".
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.10.2024 01:00:00</span> <span class="post-number">№180080</span></div>
+                <div class="post-content">
+                    А что с её семьёй? Есть у неё кто?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.10.2024 01:15:00</span> <span class="post-number">№180085</span></div>
+                <div class="post-content">
+                    Была дочь. В 2012 году её сбила маршрутка на остановке "Площадь Победы". Мымра не плакала на похоронах. Просто записала номер маршрутки и ФИО водителя. Через месяц водитель пропал. Маршрутку продали. А Мымра стала работать ещё больше. С тех пор она не носит ничего, кроме серого.
+                </div>
+            </div>
+        </div>
 
-            // 3. Выпускаем ОРДУ тараканов и пауков (55 штук) поверх мигания
-            for (let i = 0; i < 55; i++) {
-                spawnMadBug();
-            }
+        <!-- ТРЕД 5: ТУКО И ПЕРЕВОРОТ -->
+        <div class="thread">
+            <div class="thread-title">👑 /cr/ — ТУКО САЛАМАНКА. СМЕРТЬ БОЮРА И НОВАЯ ИМПЕРИЯ (411 ответов)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 12:00:00</span> <span class="post-number">№190000</span></div>
+                <div class="post-content">
+                    Боюр мёртв. Официально пропал, но все знают. Туко Саламанка взял власть. Как это вышло? Боюр стал параноиком в 2024. Убил Психа. Начал не доверять Мымре. Туко ждал момента. В феврале Боюр вызвал его в "Волну" для разборок. Но Туко пришёл не один. С тремя штурмовиками. Бояра скрутили. Дальше — месть за все унижения.<br>
+                    <span class="redtext">Империя не рухнула. Она просто сменила вывеску.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 12:30:00</span> <span class="post-number">№190010</span></div>
+                <div class="post-content">
+                    Туко — это кличка. Настоящее имя — Тукаев Рустам. Бывший контрактник. Появился у Бояра в 2016. Молчаливый, вечно в чёрном. Бояр его подобрал на улице, когда Туко резал бомжа у "Платинума". Бояр увидел в нём идеального киллера. Дал ему власть. А Туко просто ждал. Он ненавидел Бояра больше всех. За то, что тот обращался с ним как с собакой.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 13:00:00</span> <span class="post-number">№190025</span></div>
+                <div class="post-content">
+                    Детали убийства:<br>
+                    1. Бояра оглушили током.<br>
+                    2. Раздели. Приковали наручниками к трубе.<br>
+                    3. Туко мочился на него. Бояр плакал и умолял.<br>
+                    4. Дробили пальцы молотком. По одному. 24 пальца? Нет, 20. Но Туко считал до 24 вслух.<br>
+                    5. Вспороли живот. Внутрь засунули компостер.<br>
+                    6. Мымра зашла, когда он ещё дышал. Списала.<br>
+                    7. Тело расчленили. Часть закопали. Часть... ну вы знаете.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 13:24:00</span> <span class="post-number">№190030</span></div>
+                <div class="post-content">
+                    Гольдберг (адвокат) после этого уехал в Израиль. Сказал: "Я оформлял бумаги, а не убийства". Но он всё знал. Мымра осталась. Туко оставил её. Без неё система рассыпется за день. Теперь Туко сидит в кабинете Бояра. Говорят, он носит его часы. А по ночам... по ночам он слышит звук компостера.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 14:00:00</span> <span class="post-number">№190060</span></div>
+                <div class="post-content">
+                    А что с "24РУБЛЯ"? Магазины работают?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 14:15:00</span> <span class="post-number">№190065</span></div>
+                <div class="post-content">
+                    Работают. Цены подняли до 30 рублей. Но на кассе, если пробиваешь товар, чек иногда выдаёт "24". Систему не меняли. Мымра не даёт. Она говорит: "24 — это баланс. Менять нельзя". Туко плюнул, но смирился. Фасад должен оставаться.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 15:00:00</span> <span class="post-number">№190100</span></div>
+                <div class="post-content">
+                    <span class="redtext">ТУКО НЕ ЗАБОТТ.</span><br>
+                    Туко — просто бык. Через год его грохнут минские. Потому что он не умеет вести дела. Он только режет. Мымра это знает. Она уже готовит замену. Говорят, это будет кто-то из бывших "зайцев". Тот, кто прошёл весь ад и не сломался. Боюр был дьяволом, Туко — обезьяной с гранатой. А следующий... следующий будет киборгом.
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 16:00:00</span> <span class="post-number">№190150</span></div>
+                <div class="post-content">
+                    А где тело Боюра? В смысле, основная часть.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">15.02.2025 16:10:00</span> <span class="post-number">№190155</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;190150</span><br>
+                    В бункере под "Волной". Там есть старый колодец XI века. Туко сбросил туда мешок. Колесо фортуны замкнулось. Бояр любил говорить: "Все мы в конце концов станем удобрением". Вот и стал.
+                </div>
+            </div>
+        </div>
 
-            // 4. ЖЕСТКИЙ ПЕРЕГРУЗ ЗВУКА НА МАКСИМУМЕ (Gain = 30)
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'sawtooth'; // Пила — самый режущий звук
-                osc.frequency.setValueAtTime(100, audioCtx.currentTime); // Низкий страшный гул перерастающий в визг
-                
-                // Выкручиваем буст звука на 30! Это заставит динамики хрипеть на физическом пределе
-                gain.gain.setValueAtTime(30, audioCtx.currentTime); 
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
+        <!-- ТРЕД 6: КУЛЬТ И МИСТИКА -->
+        <div class="thread">
+            <div class="thread-title">👻 /cult/ — ПАРАНОРМАЛЬЩИНА. СВЕТ В 3:24, КОМПОСТЕР, ЗВОНКИ (156 ответов)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Охранник</span> <span class="post-date">01.06.2026 01:00:00</span> <span class="post-number">№210000</span></div>
+                <div class="post-content">
+                    Я работаю охранником в БЦ на Ленина, напротив бывшего офиса Бояра (Правды, 24). Здание пустое. Опечатано. Но каждую ночь, ровно в 03:24, на верхнем этаже (бывший кабинет Бояра) загорается свет. Горит ровно 24 минуты. Потом гаснет. Я дежурю на улице. Машин нет. Людей нет. Но свет есть. И звук. Звук тикающего компостера. "Клак. Клак. Клак." Я звонил в ЧОП. Они говорят, камеры ничего не видят. Но я-то вижу свет.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.06.2026 01:15:00</span> <span class="post-number">№210005</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;210000</span><br>
+                    Это Мымра. У неё дубликат ключей. Она проводит ночной аудит. Она помешана на балансе. Пока она не сведёт дебет с кредитом за день, она не уйдёт. А свет горит 24 минуты, потому что это её ритуал. А звук компостера — это она пробивает пустые талоны. Чтобы не забыть цифру.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.06.2026 01:30:00</span> <span class="post-number">№210012</span></div>
+                <div class="post-content">
+                    Звонил на старый номер Бояра. +375 (212) 24-00-24. Долгие гудки. Потом хрип. И голос. Не живой. Синтезированный, но похожий на его. Говорит: "Ваш билет прокомпостирован. Ваш долг 24 рубля. Ожидайте инкассаторов". Я повесил трубку. Через час позвонили с неизвестного номера. Молчание. И звук едущего трамвая. Я теперь сплю с топором.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.06.2026 02:00:00</span> <span class="post-number">№210040</span></div>
+                <div class="post-content">
+                    В магазине "24РУБЛЯ" на ДСК есть одна касса. №24. Она никогда не работает. Но если к ней подойти и положить 24 рубля монетами, она включится. Пробьёт чек. На чеке будет написано: "Спасибо за покупку. Ваша душа списана". Кассирши туда не подходят. Говорят, что однажды касса засосала руку продавщицы и сломала ей запястье. Бояр любил такие шутки.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.06.2026 02:24:00</span> <span class="post-number">№210044</span></div>
+                <div class="post-content">
+                    <pre>
+             .---.
+            /     \
+            \  24  /
+             `---'
+              | |
+           [=====]
+            |   |
+           /     \
+          |  RIP  |
+          |  ДВБ  |
+           \_____/
+                    </pre>
+                    Бояр не умер. Он стал числом. 24. Оно везде. Посмотри на часы. 3:24. Дата смерти. Сумма цифр. Он вшит в матрицу города. Пока в Витебске ездят трамваи, он будет жить.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.06.2026 03:00:00</span> <span class="post-number">№210088</span></div>
+                <div class="post-content">
+                    Бред шизофреников. Свет горит, потому что там стоит сервер с базой данных. Он автоматически запускает бэкап в 3:24. Число 24 — просто совпадение. А звонки — это фишинг. Старые АТС гниют. Хватит мистику наводить.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.06.2026 03:24:00</span> <span class="post-number">№210090</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;210088</span><br>
+                    Скептик тупой. Как сервер может издавать звук компостера? Я был там. Я слышал. Это не сервер. Это эхо. Город помнит. Трамвайное депо — это алтарь. А Бояр — бог, которому принесли жертву. И Мымра — его жрица.
+                </div>
+            </div>
+        </div>
 
-                // Модуляция частоты: симулирует взрыв и поломку звуковой платы
-                setInterval(() => {
-                    osc.frequency.setValueAtTime(Math.random() * 1400 + 50, audioCtx.currentTime);
-                }, 30);
-            } catch (e) {
-                console.log("Audio block error", e);
-            }
+        <!-- ТРЕД 7: БАЗА ЗАЙЦЕВ -->
+        <div class="thread">
+            <div class="thread-title">📋 /cr/ — СЛИВ БАЗЫ ЗАЙЦЕВ. base_hares.txt [В АРХИВЕ]</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">An0nYm0us</span> <span class="post-date">31.12.2023 23:59:59</span> <span class="post-number">№220987</span></div>
+                <div class="file-link">
+                    <span class="filename">base_hares_2023_full.txt</span><br>
+                    Файл: 240 КБ<br>
+                    <span style="color: #00ff00;">[ФАЙЛ ДОСТУПЕН ДЛЯ ЧТЕНИЯ]</span>
+                </div>
+                <div class="post-content">
+                    Взломал сервер на Правды, 24. Сливаю базу. 248 записей. Здесь все: должники, курьеры, менты, штурмовики. Если вас здесь нет — вам повезло. Если есть — бегите. Я уже сбежал.<br>
+                    <span style="font-family: monospace; background: #000; color: #00ff00; padding: 10px; display: block; white-space: pre;">
+ID 001: Карась В.И. – долг ∞ – статус: УТИЛИЗИРОВАН (2005)
+ID 024: Бояренко Д.В. – долг ∞ – статус: [ОШИБКА/УДАЛЁН] (2025)
+ID 045: Вишкевич Д.С. – долг 24 000 – статус: УТИЛИЗИРОВАН (2018)
+ID 072: Петров А.К. – долг 4 800 – статус: ЖИВОЙ РАДАР (Смоленский)
+ID 081: Иванова Л.М. – долг 12 000 – статус: КУРЬЕР-КАМИКАДЗЕ
+ID 099: Сидоров П.П. – долг 72 000 – статус: МЯСО (переработка)
+ID 124: Туко (Тукаев Р.) – долг 0 – статус: ШТУРМОВИК/БРЕХНЯ
+ID 150: Мымра А.В. – долг -∞ – статус: АДМИН СИСТЕМЫ
+ID 156: Гольдберг С.М. – долг 0 – статус: ЮРИСТ (ПОДОЗРИТЕЛЕН)
+...
+ID 200: [ИМЯ УДАЛЕНО] – долг 24 000 – статус: ЖИВОЙ ЩИТ (ДСК)
+ID 201: [ИМЯ УДАЛЕНО] – долг 24 000 – статус: ЖИВОЙ ЩИТ (ДСК)
+ID 202: [ИМЯ УДАЛЕНО] – долг 24 000 – статус: ЖИВОЙ ЩИТ (ДСК)
+...
+ID 248: Аноним (IP: 192.168.24.1) – долг 24 – статус: ОЖИДАНИЕ КОМПОСТИРОВАНИЯ
+                    </span>
+                    Это не просто список. Это квитанции об оплате. Город продавал своих детей за 24 рубля. А мы молчали.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.01.2024 00:15:00</span> <span class="post-number">№220990</span></div>
+                <div class="post-content">
+                    Сука, я тут. ID 112. Долг 48 000. Статус: "Прощён". Что это значит? Я ничего не должен был! Я просто ездил в трамвае в 2011 году!
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.01.2024 00:30:00</span> <span class="post-number">№220995</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;220990</span><br>
+                    "Прощён" — значит, ты отработал. Но ты в базе навсегда. Если Мымре понадобится, тебя вызовут. Статус изменится на "Резерв". Не уезжай из города. Они не любят, когда зайцы убегают.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.01.2024 01:00:00</span> <span class="post-number">№221000</span></div>
+                <div class="post-content">
+                    Почему ID 200-202 без имен?
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">An0nYm0us</span> <span class="post-date">01.01.2024 01:24:00</span> <span class="post-number">№221004</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;221000</span><br>
+                    Потому что это дети. Бояр использовал детей как щит. Когда ехали на стрелку, сажали в машину трех пацанов с района. Если бы кто-то открыл огонь, погибли бы они. Они не знали, кто их отец. Мымра вычеркнула имена, чтобы не было проблем с опекой. Но база помнит.
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">01.01.2024 02:00:00</span> <span class="post-number">№221050</span></div>
+                <div class="post-content">
+                    Файл удалили с форума. Но я скачал. Раздаю через торренты. Магнит-ссылка в личке. Это должно всплыть. Менты не могут это игнорировать. Тут 248 человек. Половина пропала без вести.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Модератор</span> <span class="post-date">01.01.2024 03:00:00</span> <span class="post-number">№221100</span></div>
+                <div class="post-content">
+                    Тред закрыт. Файл удалён. Аноним, который слил базу, найден. Утонул в Западной Двине. Несчастный случай. Прошу больше не поднимать эту тему. Ради вашей же безопасности. <span class="redtext">24.</span>
+                </div>
+            </div>
+        </div>
 
-            // 5. Через 4.5 секунды этого безумия — резкий обрыв в ТЕМНОТУ (Выключение устройства)
-            setTimeout(() => {
-                glitchScreen.style.display = 'none';
-                concrete.style.display = 'none';
-                codeLayer.style.display = 'none';
-                
-                const activeBugs = document.querySelectorAll('.bug');
-                activeBugs.forEach(b => b.remove());
+        <!-- ТРЕД 8: МЕСТНЫЕ КРОПОСТОРИ -->
+        <div class="thread">
+            <div class="thread-title">🏭 /b/ — ВИТЕБСК. ГОВОРИМ О ГОРОДЕ. БАЙКИ И СТРАШИЛКИ (599 ответов)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 20:00:00</span> <span class="post-number">№230000</span></div>
+                <div class="post-content">
+                    Давайте вспомним старые байки. Про трамвайное депо, про Марковщину, про хрущёвки на ДСК, где пропадали люди. Про Бояра до того, как он стал пиздецом. Каким был город в 2000-х? Я тогда был школотой. Помню, мать запрещала мне ездить на 7-м трамвае вечером. Говорила, что там "дядя забирает непослушных детей".
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 20:15:00</span> <span class="post-number">№230005</span></div>
+                <div class="post-content">
+                    7-й трамвай — это легенда. Я помню в 2003 году ехал на нём. Кондуктор не вышла на смену. Трамвай ехал пустой по маршруту. Водитель вышел на конечной, открыл двери, а внутри на сиденьях лежали 24 билета. Все прокомпостированные. Водитель уволился в тот же день. Говорят, это был ритуал Бояра. Он проверял территорию.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 20:30:00</span> <span class="post-number">№230010</span></div>
+                <div class="post-content">
+                    А помните пожар на обувной фабрике в 2006? Где Мымра работала. Все думали, несчастный случай. А это Бояр отжимал. Мымра тогда "случайно" забыла закрыть склад с краской. Трое рабочих сгорели. Бояр пришёл на похороны в чёрном костюме, дал семьям по 24 тысячи рублей. Все молчали. Город продался за копейки.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 21:00:00</span> <span class="post-number">№230045</span></div>
+                <div class="post-content">
+                    Марковщина — это гетто. Там до сих пор стоит заброшенный гараж, где Бояр держал первых "зайцев". Стены там обиты вагонкой. Если посветить фонариком, видно, что вагонка в глубоких царапинах. Это люди гвоздями писали имена. Просили о пощаде. Гараж не сносят. Мымра платит, чтобы он стоял. Как памятник.
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 21:24:00</span> <span class="post-number">№230050</span></div>
+                <div class="post-content">
+                    Смоленский рынок. 2008 год. Я покупал картошку. Подходит мужик, лицо всё в шрамах. Спрашивает: "Сдачу не забыл?". Я гляжу — в руке у него 24 рубля. Я говорю: "Не моё". А он сует мне в руку и шепчет: "Теперь твоё. И ты теперь мой". Я охуел, бросил картошку и убежал. Думал, шизик. А это был вербовщик Бояра. Меня потом целый год преследовали звонки с просьбой прийти на склад. Я сменил номер.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 22:00:00</span> <span class="post-number">№230100</span></div>
+                <div class="post-content">
+                    У нас в школе (№24, кто знает) в подвале были запасы тушёнки "24РУБЛЯ". Нам её давали на обед. Мясо было странным. Резиновое. Один раз я нашел в котлете кусок с татуировкой. Синий узор. Я показал поварихе. Она побледнела, забрала тарелку и сказала, что это жилы. На следующий день её уволили. А я с тех пор не ем мясо.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 22:30:00</span> <span class="post-number">№230130</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;230100</span><br>
+                    Бля, я помню эту тушёнку! У меня от неё живот болел неделю. А потом я узнал, что школа закупала её по тендеру. Тендер выигрывала компания, аффилированная с "БТК-Логистик". Они спускали просрочку и "брак" в школы и детсады. Бояр кормил городом мёртвых — живых.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">20.07.2024 23:00:00</span> <span class="post-number">№230160</span></div>
+                <div class="post-content">
+                    А кто-нибудь видел кабинет Бояра? На Правды, 24. Я был там один раз, в 2019. Возил мебель. Верхний этаж. Панорамное окно. На стене — огромная карта всех трамвайных маршрутов Витебска. Каждая остановка — кнопка. И красная линия, которая идёт от его стола к трамвайному депо. На столе — 24 компостера. И чёрный телефон прямой связи с Мымрой. Без номеронабирателя. Поднимаешь трубку — она уже отвечает. "Да, Денис Владимирович". Жуткое место. Энергетика такая, что хотелось сдохнуть на месте.
+                </div>
+            </div>
+        </div>
 
-                // Черный экран смерти
-                blackoutScreen.style.display = 'block';
-            }, 4500);
-        });
+        <!-- ТРЕД 9: ТЕКСТОВЫЕ КОПИПАСТЫ -->
+        <div class="thread">
+            <div class="thread-title">📜 /b/ — КОПИПАСТЫ. ВАШ ЛЮБИМЫЙ БОЯР-КОНТЕНТ (142 ответа)</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 11:00:00</span> <span class="post-number">№250000</span></div>
+                <div class="post-content">
+                    Скидываем сюда все местные мемасы и копипасты. Начну.<br><br>
+                    "Заходишь как-то в 24РУБЛЯ. Берёшь шашлык. А продавщица смотрит на тебя пустыми глазами и говорит: 'Свежий. Сегодня утром привезли. Сам Денис Владимирович фасовал'. Ты платишь 24 рубля. Она даёт сдачу. Сдача — это палец. Твой палец. Ты смотришь на руку, а пальца нет. И компостер щёлкает. 'Клак'. И ты понимаешь, что ты уже в базе. И твой долг — 24 жизни."
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 11:24:00</span> <span class="post-number">№250004</span></div>
+                <div class="post-content">
+                    "Бояр не пьёт водку. Бояр пьёт кровь зайцев, смешанную с уксусом 24-процентным. Поэтому он всегда бледный. А Мымра не пьёт вообще. Она питается данными. Если в базе есть ошибка, она высасывает душу оператора через порт USB. Был свидетель. Но он стал удобрением на Смоленском рынке."
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 12:00:00</span> <span class="post-number">№250024</span></div>
+                <div class="post-content">
+                    <span class="redtext">САП, АНОНЫ. Я МЫМРА. Я ЗНАЮ, ЧТО ВЫ ЧИТАЕТЕ ЭТО С ПОДЪЕЗДА ДСК. СВЕТ В ВАШЕМ ОКНЕ ГОРИТ. ОН ПОГАСНЕТ В 3:24. ВАШ БИЛЕТ ПРОКОМПОСТИРОВАН.</span>
+                </div>
+            </div>
+             <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 12:30:00</span> <span class="post-number">№250040</span></div>
+                <div class="post-content">
+                    "Как стать штурмовиком? 1. Убей зайца. 2. Съешь его сердце. 3. Принеси Мымре 24 пальца. 4. Она выдаст тебе планшет. 5. Теперь ты бог. Но если ты ошибёшься в Excel... Туко приедет с арматурой. И ты станешь шашлыком 'от шефа'. Цикл замкнулся. 24."
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 13:00:00</span> <span class="post-number">№250060</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;Туко приедет с арматурой</span><br>
+                    Проиграл с подливой. Арматура — это база. Туко вообще не умеет стрелять, он только арматурой и монтировкой работает. Бояр его нашёл на стройке, где Туко забил арматурой прораба за то, что тот не дал ему 24 рубля аванс. Идеальный солдат.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 14:00:00</span> <span class="post-number">№250100</span></div>
+                <div class="post-content">
+                    "Ты заходишь в трамвай. Берёшь билет. Номер 000024. Ты думаешь, это удача. А кондуктор смотрит на тебя и улыбается. У неё зубы золотые. Она компостирует билет. 'Клак'. И говорит: 'С вас 24 тысячи'. Ты: 'Как? Цена 24 рубля!'. Она: 'Был 24 рубля. Стал 24 тысячи. Долг растёт. Иди с нами, зайчик'. И ты видишь, что трамвай едет не по рельсам. Он едет в подвал 'Волны'. А на руле — Бояр. Мёртвый, но улыбающийся."
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">11.09.2024 15:24:00</span> <span class="post-number">№250124</span></div>
+                <div class="post-content">
+                    "Гольдберг сидит в офисе. Закуривает сигару. Звонит Бояр: 'Сёма, там менты кипиш подняли. Нужно списать Вишкевича'. Гольдберг вздыхает: 'Денис, я юрист, я списываю долги, а не людей'. Бояр: 'Ты списываешь то, что я скажу. Иначе я спишу твой долг в банке вместе с тобой'. Гольдберг: 'Ладно. 24 штуки с его счёта. И 24 куска его тела в пакет. Работаем'. Вот так делаются дела в Витебске."
+                </div>
+            </div>
+        </div>
 
-        // ДВИЖЕНИЕ НАСЕКОМЫХ РЫВКАМИ И ПОВОРОТАМИ
-        function spawnMadBug() {
-            const bug = document.createElement('div');
-            bug.className = 'bug';
-            bug.style.fontSize = (Math.random() * 25 + 45) + 'px'; // Большие размеры
-            bug.innerText = bugTypes[Math.floor(Math.random() * bugTypes.length)]; 
-            document.body.appendChild(bug);
+        <!-- ТРЕД 10: ПОСЛЕДНИЕ ДНИ ФОРУМА -->
+        <div class="thread">
+            <div class="thread-title">⏳ /b/ — ПОЧЕМУ ФОРУМ ЗАКРЫЛИ. ХРОНИКА ПАДЕНИЯ (88 ответов) [ПОСЛЕДНИЙ ТРЕД]</div>
+            <div class="post op">
+                <div class="post-header"><span class="post-name">Admin</span> <span class="post-date">14.07.2026 14:10:55</span> <span class="post-number">№300000</span></div>
+                <div class="post-content">
+                    Это мой последний пост. Сайт уходит в архив. Нас нашли. Не менты. Мымра. Она выследила сервер в Польше. Мы держались 18 лет. Но 24 — это проклятое число. Тот, кто слил базу зайцев, утонул. Тот, кто выложил фото подвала "Волны", разбился. Меня нашли вчера. Подбросили в почтовый ящик билет. Прокомпостированный. С моим именем. Долг: 24.<br>
+                    Я выключаю запись. Если вы читаете это — вы в безопасности. Пока. Но если свет в вашей комнате моргнёт 24 раза... прощайте. <span class="redtext">24byan — это не сайт. Это квитанция.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">14.07.2026 14:30:00</span> <span class="post-number">№300001</span></div>
+                <div class="post-content">
+                    Админ, удачи. Я удаляю куки. Сношу жёсткий диск. Уезжаю в Минск. Хватит с меня этого города.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">14.07.2026 15:00:00</span> <span class="post-number">№300002</span></div>
+                <div class="post-content">
+                    Прощай, 24byan. Ты был лучшим, что случилось с этим проклятым городом.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">14.07.2026 16:24:00</span> <span class="post-number">№300003</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;уезжаю в Минск</span><br>
+                    Глупец. Минские — это и есть заказчики. Бояр был их псом. Туко — их пёс. Мымра работает на них. Никуда не деться. 24 — это глобальная сеть. Витебск — только полигон. <span class="redtext">БИЛЕТ ДЕЙСТВИТЕЛЕН ВЕЗДЕ.</span>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">14.07.2026 17:00:00</span> <span class="post-number">№300004</span></div>
+                <div class="post-content">
+                    <pre>
+    _____________________________
+   |                             |
+   |   ФОРУМ 24byan ЗАКРЫТ.      |
+   |   ДОЛГ ГОРОДА: 24 ДУШИ.     |
+   |   ОПЛАЧЕНО.                 |
+   |_____________________________|
+                    </pre>
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Мымра</span> <span class="post-date">14.07.2026 18:24:00</span> <span class="post-number">№300024</span></div>
+                <div class="post-content">
+                    Баланс сведён. Сервер будет отключён в 03:24. Спасибо за сотрудничество. Ваш билет прокомпостирован.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">14.07.2026 19:00:00</span> <span class="post-number">№300025</span></div>
+                <div class="post-content">
+                    Пиздец. Оно пишет от её имени. Сайт захвачен. Бежим.
+                </div>
+            </div>
+            <div class="post"><div class="post-header"><span class="post-name">Аноним</span> <span class="post-date">14.07.2026 20:00:00</span> <span class="post-number">№300026</span></div>
+                <div class="post-content">
+                    <span class="quote">&gt;&gt;300025</span><br>
+                    Уже поздно. Я слышу звук трамвая на улице. Но трамваи не ходят после 23:00. А сейчас 20:00. И он едет по нашей улице. Без рельсов. <span class="redtext">КЛАК. КЛАК. КЛАК.</span>
+                </div>
+            </div>
+        </div>
 
-            let x = Math.random() * window.innerWidth;
-            let y = Math.random() * window.innerHeight;
-            let angle = Math.random() * 360;
+    </div>
 
-            bug.style.left = '0px';
-            bug.style.top = '0px';
+    <div class="footer">
+        <a href="#">24byan</a> © 2008–2026 | 
+        <a href="#">Контакты</a> | 
+        <a href="#">Политика конфиденциальности</a> | 
+        <a href="#" id="secret-link">Для сотрудников</a> <br>
+        Сервер расположен в <a href="#">Витебске</a>. Запросы к IP: <span style="font-weight:bold; color: #ff3333;">192.168.24.24</span><br>
+        <div class="counter">
+            Посетителей сегодня: 000024 | Активных зайцев: 000024 | Ваш IP: 127.0.0.1
+        </div>
+        <div style="margin-top: 10px; font-size: 9px; color: #333;">
+            В этой вселенной никто не свободен. У каждого есть своя цена. И чаще всего это 24 рубля.
+        </div>
+    </div>
+</div>
 
-            setInterval(() => {
-                let speed = Math.random() > 0.6 ? Math.random() * 110 + 40 : Math.random() * 20;
-                angle += (Math.random() - 0.5) * 90;
-                let rad = angle * Math.PI / 180;
-                
-                x += Math.cos(rad) * speed;
-                y += Math.sin(rad) * speed;
-
-                if (x < -60) x = window.innerWidth;
-                if (x > window.innerWidth + 60) x = -50;
-                if (y < -60) y = window.innerHeight;
-                if (y > window.innerHeight + 60) y = -50;
-
-                bug.style.transform = `translate(${x}px, ${y}px) rotate(${angle + 90}deg)`;
-            }, 75);
+<script>
+    document.getElementById('secret-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        let pass = prompt("ВВЕДИТЕ ПАРОЛЬ. НАПОМИНАЮ: СТОИМОСТЬ ПРОЕЗДА.");
+        if (pass === "24") {
+            alert("ДОСТУП РАЗРЕШЁН.\nМымра уже выехала. Свет погаснет через 24 минуты.");
+        } else {
+            alert("НЕВЕРНЫЙ ПАРОЛЬ.\nВаш билет не прокомпостирован. Ожидайте штурмовиков.");
         }
-    </script>
+    });
+</script>
 </body>
 </html>
